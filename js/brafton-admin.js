@@ -31,7 +31,7 @@ jQuery( document ).ready( function() {
 	function get_tab_panel_selector( selected_nav_tab ){
 		var  index = jQuery( ".nav-tab").index( selected_nav_tab );
 	    index++;
-	    var pane = '.tab-pane:nth-of-type('+index+')';
+	    var pane = '.tab-pane:nth-of-type( 'index' )';
 	    return pane;
 	}
 

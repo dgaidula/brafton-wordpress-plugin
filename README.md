@@ -1,4 +1,4 @@
 Brafton Content Importer
 ==================
-~Current Version:1.3.5~
+~Current Version:1.3.7~
 #todo
