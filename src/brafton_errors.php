@@ -59,7 +59,7 @@ function brafton_log( $report ) {
  * @param Array $report 
  */
 function add_brafton_log_entry($log, $report) {
-    $report['message'] = date("m/d/Y h:i:s A") . " - " . $report['message'] . "\n";
+    $report['message'] = date( 'Y-m-d H:i:s', current_time( 'timestamp', 0 ) ) . " - " . $report['message'] . "\n";
     if( $log['limit'] == NULL || $log['limit'] >= $log['count'] )
     {
         //push new message to front of old log array.

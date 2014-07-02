@@ -2,7 +2,7 @@
 /*
 Plugin Name: Brafton WordPress Plugin
 Plugin URI: http://www.brafton.com/support/wordpress
-version: 1.3.5
+version: 1.3.6
 Description: Automates Brafton Inc,  ContentLEAD, and Castleford Media content publishing.  
 Author: Brafton Inc
 Author URI: http://www.brafton.com/support/wordpress
