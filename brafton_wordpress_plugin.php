@@ -2,7 +2,7 @@
 /*
 Plugin Name: Brafton WordPress Plugin
 Plugin URI: http://www.brafton.com/support/wordpress
-version: 1.4.2
+version: 1.4.3
 Requires at least: 3.8
 Tested up to: 3.9.1
 Description: Automates Brafton Inc,  ContentLEAD, and Castleford Media content publishing.  
@@ -308,6 +308,7 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         run_video_import( $cron );
         brafton_log( array( 'message' => "Import successfully triggered by wp cron." ) );
         brafton_schedule_import();
+        $brafton_options = Brafton_options::get_instance();
         $brafton_options->update_option( "brafton_options", "brafton_import_trigger_count", $brafton_options->get_option( "brafton_options", "brafton_import_trigger_count") + 1, 0);
 
         //update_option("brafton_import_trigger_count", get_option("brafton_import_trigger_count") + 1);
