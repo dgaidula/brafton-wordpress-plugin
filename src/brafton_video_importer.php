@@ -77,6 +77,9 @@ class Brafton_Video_Importer
 					'post_category'
 					);
 
+				//for articles imported as drafts. let publish date be determined by articles.
+				if( ! $post_status == "publish" )
+					$video_article['post_date'];
 
 				$post_id = $this->brafton_video->insert_video_article( $video_article, $brafton_id );
 				

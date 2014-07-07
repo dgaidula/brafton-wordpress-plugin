@@ -103,6 +103,10 @@ if ( !class_exists( 'Article_Importer' ) )
 								/* 'tags_input' */
 							); 	
 
+				//for articles imported as drafts. let publish date be determined by articles.
+				if( ! $post_status == "publish" )
+					$article['post_date'];
+
 					if( isset( $input_tags) )
 						$article['tags_input'] = $input_tags;
 
