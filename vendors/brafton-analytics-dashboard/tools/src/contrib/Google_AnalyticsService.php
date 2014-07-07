@@ -12,8 +12,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-
   /**
    * The "data" collection of methods.
    * Typical usage is:
@@ -23,9 +21,7 @@
    *  </code>
    */
   class Google_DataServiceResource extends Google_ServiceResource {
-
   }
-
   /**
    * The "ga" collection of methods.
    * Typical usage is:
@@ -35,7 +31,6 @@
    *  </code>
    */
   class Google_DataGaServiceResource extends Google_ServiceResource {
-
     /**
      * Returns Analytics data for a view (profile). (ga.get)
      *
@@ -73,7 +68,6 @@
    *  </code>
    */
   class Google_DataMcfServiceResource extends Google_ServiceResource {
-
     /**
      * Returns Analytics Multi-Channel Funnels data for a view (profile). (mcf.get)
      *
@@ -110,7 +104,6 @@
    *  </code>
    */
   class Google_DataRealtimeServiceResource extends Google_ServiceResource {
-
     /**
      * Returns real-time data for a view (profile). (realtime.get)
      *
@@ -135,7 +128,6 @@
       }
     }
   }
-
   /**
    * The "management" collection of methods.
    * Typical usage is:
@@ -145,9 +137,7 @@
    *  </code>
    */
   class Google_ManagementServiceResource extends Google_ServiceResource {
-
   }
-
   /**
    * The "accounts" collection of methods.
    * Typical usage is:
@@ -157,7 +147,6 @@
    *  </code>
    */
   class Google_ManagementAccountsServiceResource extends Google_ServiceResource {
-
     /**
      * Lists all accounts to which the user has access. (accounts.list)
      *
@@ -187,7 +176,6 @@
    *  </code>
    */
   class Google_ManagementCustomDataSourcesServiceResource extends Google_ServiceResource {
-
     /**
      * List custom data sources to which the user has access.
      * (customDataSources.list)
@@ -220,7 +208,6 @@
    *  </code>
    */
   class Google_ManagementDailyUploadsServiceResource extends Google_ServiceResource {
-
     /**
      * Delete uploaded data for the given date. (dailyUploads.delete)
      *
@@ -295,7 +282,6 @@
    *  </code>
    */
   class Google_ManagementExperimentsServiceResource extends Google_ServiceResource {
-
     /**
      * Delete an experiment. (experiments.delete)
      *
@@ -426,7 +412,6 @@
    *  </code>
    */
   class Google_ManagementGoalsServiceResource extends Google_ServiceResource {
-
     /**
      * Lists goals to which the user has access. (goals.list)
      *
@@ -459,7 +444,6 @@
    *  </code>
    */
   class Google_ManagementProfilesServiceResource extends Google_ServiceResource {
-
     /**
      * Lists views (profiles) to which the user has access. (profiles.list)
      *
@@ -491,7 +475,6 @@
    *  </code>
    */
   class Google_ManagementSegmentsServiceResource extends Google_ServiceResource {
-
     /**
      * Lists advanced segments to which the user has access. (segments.list)
      *
@@ -521,7 +504,6 @@
    *  </code>
    */
   class Google_ManagementWebpropertiesServiceResource extends Google_ServiceResource {
-
     /**
      * Lists web properties to which the user has access. (webproperties.list)
      *
@@ -543,7 +525,6 @@
       }
     }
   }
-
 /**
  * Service definition for Google_Analytics (v3).
  *
@@ -579,7 +560,6 @@ class Google_AnalyticsService extends Google_Service {
     $this->servicePath = 'analytics/v3/';
     $this->version = 'v3';
     $this->serviceName = 'analytics';
-
     $client->addService($this->serviceName, $this->version);
     $this->data_ga = new Google_DataGaServiceResource($this, $this->serviceName, 'ga', json_decode('{"methods": {"get": {"id": "analytics.data.ga.get", "path": "data/ga", "httpMethod": "GET", "parameters": {"dimensions": {"type": "string", "location": "query"}, "end-date": {"type": "string", "required": true, "location": "query"}, "filters": {"type": "string", "location": "query"}, "ids": {"type": "string", "required": true, "location": "query"}, "max-results": {"type": "integer", "format": "int32", "location": "query"}, "metrics": {"type": "string", "required": true, "location": "query"}, "segment": {"type": "string", "location": "query"}, "sort": {"type": "string", "location": "query"}, "start-date": {"type": "string", "required": true, "location": "query"}, "start-index": {"type": "integer", "format": "int32", "minimum": "1", "location": "query"}}, "response": {"$ref": "GaData"}, "scopes": ["https://www.googleapis.com/auth/analytics", "https://www.googleapis.com/auth/analytics.readonly"]}}}', true));
     $this->data_mcf = new Google_DataMcfServiceResource($this, $this->serviceName, 'mcf', json_decode('{"methods": {"get": {"id": "analytics.data.mcf.get", "path": "data/mcf", "httpMethod": "GET", "parameters": {"dimensions": {"type": "string", "location": "query"}, "end-date": {"type": "string", "required": true, "location": "query"}, "filters": {"type": "string", "location": "query"}, "ids": {"type": "string", "required": true, "location": "query"}, "max-results": {"type": "integer", "format": "int32", "location": "query"}, "metrics": {"type": "string", "required": true, "location": "query"}, "sort": {"type": "string", "location": "query"}, "start-date": {"type": "string", "required": true, "location": "query"}, "start-index": {"type": "integer", "format": "int32", "minimum": "1", "location": "query"}}, "response": {"$ref": "McfData"}, "scopes": ["https://www.googleapis.com/auth/analytics", "https://www.googleapis.com/auth/analytics.readonly"]}}}', true));
@@ -592,12 +572,8 @@ class Google_AnalyticsService extends Google_Service {
     $this->management_profiles = new Google_ManagementProfilesServiceResource($this, $this->serviceName, 'profiles', json_decode('{"methods": {"list": {"id": "analytics.management.profiles.list", "path": "management/accounts/{accountId}/webproperties/{webPropertyId}/profiles", "httpMethod": "GET", "parameters": {"accountId": {"type": "string", "required": true, "location": "path"}, "max-results": {"type": "integer", "format": "int32", "location": "query"}, "start-index": {"type": "integer", "format": "int32", "minimum": "1", "location": "query"}, "webPropertyId": {"type": "string", "required": true, "location": "path"}}, "response": {"$ref": "Profiles"}, "scopes": ["https://www.googleapis.com/auth/analytics", "https://www.googleapis.com/auth/analytics.readonly"]}}}', true));
     $this->management_segments = new Google_ManagementSegmentsServiceResource($this, $this->serviceName, 'segments', json_decode('{"methods": {"list": {"id": "analytics.management.segments.list", "path": "management/segments", "httpMethod": "GET", "parameters": {"max-results": {"type": "integer", "format": "int32", "location": "query"}, "start-index": {"type": "integer", "format": "int32", "minimum": "1", "location": "query"}}, "response": {"$ref": "Segments"}, "scopes": ["https://www.googleapis.com/auth/analytics", "https://www.googleapis.com/auth/analytics.readonly"]}}}', true));
     $this->management_webproperties = new Google_ManagementWebpropertiesServiceResource($this, $this->serviceName, 'webproperties', json_decode('{"methods": {"list": {"id": "analytics.management.webproperties.list", "path": "management/accounts/{accountId}/webproperties", "httpMethod": "GET", "parameters": {"accountId": {"type": "string", "required": true, "location": "path"}, "max-results": {"type": "integer", "format": "int32", "location": "query"}, "start-index": {"type": "integer", "format": "int32", "minimum": "1", "location": "query"}}, "response": {"$ref": "Webproperties"}, "scopes": ["https://www.googleapis.com/auth/analytics", "https://www.googleapis.com/auth/analytics.readonly"]}}}', true));
-
   }
 }
-
-
-
 class Google_Account extends Google_Model {
   protected $__childLinkType = 'Google_AccountChildLink';
   protected $__childLinkDataType = '';
@@ -651,7 +627,6 @@ class Google_Account extends Google_Model {
     return $this->updated;
   }
 }
-
 class Google_AccountChildLink extends Google_Model {
   public $href;
   public $type;
@@ -668,7 +643,6 @@ class Google_AccountChildLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_Accounts extends Google_Model {
   protected $__itemsType = 'Google_Account';
   protected $__itemsDataType = 'array';
@@ -730,7 +704,6 @@ class Google_Accounts extends Google_Model {
     return $this->username;
   }
 }
-
 class Google_CustomDataSource extends Google_Model {
   public $accountId;
   protected $__childLinkType = 'Google_CustomDataSourceChildLink';
@@ -829,7 +802,6 @@ class Google_CustomDataSource extends Google_Model {
     return $this->webPropertyId;
   }
 }
-
 class Google_CustomDataSourceChildLink extends Google_Model {
   public $href;
   public $type;
@@ -846,7 +818,6 @@ class Google_CustomDataSourceChildLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_CustomDataSourceParentLink extends Google_Model {
   public $href;
   public $type;
@@ -863,7 +834,6 @@ class Google_CustomDataSourceParentLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_CustomDataSources extends Google_Model {
   protected $__itemsType = 'Google_CustomDataSource';
   protected $__itemsDataType = 'array';
@@ -925,7 +895,6 @@ class Google_CustomDataSources extends Google_Model {
     return $this->username;
   }
 }
-
 class Google_DailyUpload extends Google_Model {
   public $accountId;
   public $appendCount;
@@ -1010,7 +979,6 @@ class Google_DailyUpload extends Google_Model {
     return $this->webPropertyId;
   }
 }
-
 class Google_DailyUploadAppend extends Google_Model {
   public $accountId;
   public $appendNumber;
@@ -1062,7 +1030,6 @@ class Google_DailyUploadAppend extends Google_Model {
     return $this->webPropertyId;
   }
 }
-
 class Google_DailyUploadParentLink extends Google_Model {
   public $href;
   public $type;
@@ -1079,7 +1046,6 @@ class Google_DailyUploadParentLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_DailyUploadRecentChanges extends Google_Model {
   public $change;
   public $time;
@@ -1096,7 +1062,6 @@ class Google_DailyUploadRecentChanges extends Google_Model {
     return $this->time;
   }
 }
-
 class Google_DailyUploads extends Google_Model {
   protected $__itemsType = 'Google_DailyUpload';
   protected $__itemsDataType = 'array';
@@ -1158,7 +1123,6 @@ class Google_DailyUploads extends Google_Model {
     return $this->username;
   }
 }
-
 class Google_Experiment extends Google_Model {
   public $accountId;
   public $created;
@@ -1355,7 +1319,6 @@ class Google_Experiment extends Google_Model {
     return $this->winnerFound;
   }
 }
-
 class Google_ExperimentParentLink extends Google_Model {
   public $href;
   public $type;
@@ -1372,7 +1335,6 @@ class Google_ExperimentParentLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_ExperimentVariations extends Google_Model {
   public $name;
   public $status;
@@ -1410,7 +1372,6 @@ class Google_ExperimentVariations extends Google_Model {
     return $this->won;
   }
 }
-
 class Google_Experiments extends Google_Model {
   protected $__itemsType = 'Google_Experiment';
   protected $__itemsDataType = 'array';
@@ -1472,7 +1433,6 @@ class Google_Experiments extends Google_Model {
     return $this->username;
   }
 }
-
 class Google_GaData extends Google_Model {
   protected $__columnHeadersType = 'Google_GaDataColumnHeaders';
   protected $__columnHeadersDataType = 'array';
@@ -1574,7 +1534,6 @@ class Google_GaData extends Google_Model {
     return $this->totalsForAllResults;
   }
 }
-
 class Google_GaDataColumnHeaders extends Google_Model {
   public $columnType;
   public $dataType;
@@ -1598,7 +1557,6 @@ class Google_GaDataColumnHeaders extends Google_Model {
     return $this->name;
   }
 }
-
 class Google_GaDataProfileInfo extends Google_Model {
   public $accountId;
   public $internalWebPropertyId;
@@ -1643,7 +1601,6 @@ class Google_GaDataProfileInfo extends Google_Model {
     return $this->webPropertyId;
   }
 }
-
 class Google_GaDataQuery extends Google_Model {
   public $dimensions;
   public $end_date;
@@ -1718,7 +1675,6 @@ class Google_GaDataQuery extends Google_Model {
     return $this->start_index;
   }
 }
-
 class Google_Goal extends Google_Model {
   public $accountId;
   public $active;
@@ -1857,7 +1813,6 @@ class Google_Goal extends Google_Model {
     return $this->webPropertyId;
   }
 }
-
 class Google_GoalEventDetails extends Google_Model {
   protected $__eventConditionsType = 'Google_GoalEventDetailsEventConditions';
   protected $__eventConditionsDataType = 'array';
@@ -1877,7 +1832,6 @@ class Google_GoalEventDetails extends Google_Model {
     return $this->useEventValue;
   }
 }
-
 class Google_GoalEventDetailsEventConditions extends Google_Model {
   public $comparisonType;
   public $comparisonValue;
@@ -1915,7 +1869,6 @@ class Google_GoalEventDetailsEventConditions extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_GoalParentLink extends Google_Model {
   public $href;
   public $type;
@@ -1932,7 +1885,6 @@ class Google_GoalParentLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_GoalUrlDestinationDetails extends Google_Model {
   public $caseSensitive;
   public $firstStepRequired;
@@ -1973,7 +1925,6 @@ class Google_GoalUrlDestinationDetails extends Google_Model {
     return $this->url;
   }
 }
-
 class Google_GoalUrlDestinationDetailsSteps extends Google_Model {
   public $name;
   public $number;
@@ -1997,7 +1948,6 @@ class Google_GoalUrlDestinationDetailsSteps extends Google_Model {
     return $this->url;
   }
 }
-
 class Google_GoalVisitNumPagesDetails extends Google_Model {
   public $comparisonType;
   public $comparisonValue;
@@ -2014,7 +1964,6 @@ class Google_GoalVisitNumPagesDetails extends Google_Model {
     return $this->comparisonValue;
   }
 }
-
 class Google_GoalVisitTimeOnSiteDetails extends Google_Model {
   public $comparisonType;
   public $comparisonValue;
@@ -2031,7 +1980,6 @@ class Google_GoalVisitTimeOnSiteDetails extends Google_Model {
     return $this->comparisonValue;
   }
 }
-
 class Google_Goals extends Google_Model {
   protected $__itemsType = 'Google_Goal';
   protected $__itemsDataType = 'array';
@@ -2093,7 +2041,6 @@ class Google_Goals extends Google_Model {
     return $this->username;
   }
 }
-
 class Google_McfData extends Google_Model {
   protected $__columnHeadersType = 'Google_McfDataColumnHeaders';
   protected $__columnHeadersDataType = 'array';
@@ -2197,7 +2144,6 @@ class Google_McfData extends Google_Model {
     return $this->totalsForAllResults;
   }
 }
-
 class Google_McfDataColumnHeaders extends Google_Model {
   public $columnType;
   public $dataType;
@@ -2221,7 +2167,6 @@ class Google_McfDataColumnHeaders extends Google_Model {
     return $this->name;
   }
 }
-
 class Google_McfDataProfileInfo extends Google_Model {
   public $accountId;
   public $internalWebPropertyId;
@@ -2266,7 +2211,6 @@ class Google_McfDataProfileInfo extends Google_Model {
     return $this->webPropertyId;
   }
 }
-
 class Google_McfDataQuery extends Google_Model {
   public $dimensions;
   public $end_date;
@@ -2341,7 +2285,6 @@ class Google_McfDataQuery extends Google_Model {
     return $this->start_index;
   }
 }
-
 class Google_McfDataRows extends Google_Model {
   protected $__conversionPathValueType = 'Google_McfDataRowsConversionPathValue';
   protected $__conversionPathValueDataType = 'array';
@@ -2361,7 +2304,6 @@ class Google_McfDataRows extends Google_Model {
     return $this->primitiveValue;
   }
 }
-
 class Google_McfDataRowsConversionPathValue extends Google_Model {
   public $interactionType;
   public $nodeValue;
@@ -2378,7 +2320,6 @@ class Google_McfDataRowsConversionPathValue extends Google_Model {
     return $this->nodeValue;
   }
 }
-
 class Google_Profile extends Google_Model {
   public $accountId;
   protected $__childLinkType = 'Google_ProfileChildLink';
@@ -2525,7 +2466,6 @@ class Google_Profile extends Google_Model {
     return $this->websiteUrl;
   }
 }
-
 class Google_ProfileChildLink extends Google_Model {
   public $href;
   public $type;
@@ -2542,7 +2482,6 @@ class Google_ProfileChildLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_ProfileParentLink extends Google_Model {
   public $href;
   public $type;
@@ -2559,7 +2498,6 @@ class Google_ProfileParentLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_Profiles extends Google_Model {
   protected $__itemsType = 'Google_Profile';
   protected $__itemsDataType = 'array';
@@ -2621,7 +2559,6 @@ class Google_Profiles extends Google_Model {
     return $this->username;
   }
 }
-
 class Google_RealtimeData extends Google_Model {
   protected $__columnHeadersType = 'Google_RealtimeDataColumnHeaders';
   protected $__columnHeadersDataType = 'array';
@@ -2695,7 +2632,6 @@ class Google_RealtimeData extends Google_Model {
     return $this->totalsForAllResults;
   }
 }
-
 class Google_RealtimeDataColumnHeaders extends Google_Model {
   public $columnType;
   public $dataType;
@@ -2719,7 +2655,6 @@ class Google_RealtimeDataColumnHeaders extends Google_Model {
     return $this->name;
   }
 }
-
 class Google_RealtimeDataProfileInfo extends Google_Model {
   public $accountId;
   public $internalWebPropertyId;
@@ -2764,7 +2699,6 @@ class Google_RealtimeDataProfileInfo extends Google_Model {
     return $this->webPropertyId;
   }
 }
-
 class Google_RealtimeDataQuery extends Google_Model {
   public $dimensions;
   public $filters;
@@ -2811,7 +2745,6 @@ class Google_RealtimeDataQuery extends Google_Model {
     return $this->sort;
   }
 }
-
 class Google_Segment extends Google_Model {
   public $created;
   public $definition;
@@ -2870,7 +2803,6 @@ class Google_Segment extends Google_Model {
     return $this->updated;
   }
 }
-
 class Google_Segments extends Google_Model {
   protected $__itemsType = 'Google_Segment';
   protected $__itemsDataType = 'array';
@@ -2932,7 +2864,6 @@ class Google_Segments extends Google_Model {
     return $this->username;
   }
 }
-
 class Google_Webproperties extends Google_Model {
   protected $__itemsType = 'Google_Webproperty';
   protected $__itemsDataType = 'array';
@@ -2994,7 +2925,6 @@ class Google_Webproperties extends Google_Model {
     return $this->username;
   }
 }
-
 class Google_Webproperty extends Google_Model {
   public $accountId;
   protected $__childLinkType = 'Google_WebpropertyChildLink';
@@ -3099,7 +3029,6 @@ class Google_Webproperty extends Google_Model {
     return $this->websiteUrl;
   }
 }
-
 class Google_WebpropertyChildLink extends Google_Model {
   public $href;
   public $type;
@@ -3116,7 +3045,6 @@ class Google_WebpropertyChildLink extends Google_Model {
     return $this->type;
   }
 }
-
 class Google_WebpropertyParentLink extends Google_Model {
   public $href;
   public $type;

@@ -15,7 +15,6 @@ $profile = $tools->get_selected_profile ( $GADASH_Config->options ['ga_dash_prof
 <?php }?>
   _gaq.push(['_setAccount', '<?php echo $profile[2]; ?>']);
   _gaq.push(['_trackPageview']<?php if ($GADASH_Config->options ['ga_dash_anonim']) {?>, ['_gat._anonymizeIp']<?php }?>);
-
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 <?php if ($GADASH_Config->options ['ga_dash_remarketing']) { ?>

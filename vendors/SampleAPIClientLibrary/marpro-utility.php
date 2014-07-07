@@ -8,7 +8,6 @@
  * @subpackage Post
  * @since 1.5.0
  */
-
 //*******************************************************************************************
 //*******************************************************************************************
 //*******************************************************************************************
@@ -19,7 +18,6 @@
 // Marpro Dependency. WordPress default update post method sanitizes content body. Brafton
 // Plugin needs javascript in post content to persist even when post is updated for Marpro
 // product line to work properly.
-
 /**
  * Update a post with new post data.
  *
@@ -38,33 +36,27 @@ function marpro_wp_update_post( $postarr = array(), $wp_error = false ) {
 		$postarr = get_object_vars($postarr);
 		$postarr = wp_slash($postarr);
 	}
-
 	// First, get all of the original fields
 	$post = get_post($postarr['ID'], ARRAY_A);
-
 	if ( is_null( $post ) ) {
 		if ( $wp_error )
 			return new WP_Error( 'invalid_post', __( 'Invalid post ID.' ) );
 		return 0;
 	}
-
 	// Escape data pulled from DB.
 	$post = wp_slash($post);
-
 	// Passed post category list overwrites existing category list if not empty.
 	if ( isset($postarr['post_category']) && is_array($postarr['post_category'])
 			 && 0 != count($postarr['post_category']) )
 		$post_cats = $postarr['post_category'];
 	else
 		$post_cats = $post['post_category'];
-
 	// Drafts shouldn't be assigned a date unless explicitly done so by the user
 	if ( isset( $post['post_status'] ) && in_array($post['post_status'], array('draft', 'pending', 'auto-draft')) && empty($postarr['edit_date']) &&
 			 ('0000-00-00 00:00:00' == $post['post_date_gmt']) )
 		$clear_date = true;
 	else
 		$clear_date = false;
-
 	// Merge old and new fields with new fields overwriting old ones.
 	$postarr = array_merge($post, $postarr);
 	$postarr['post_category'] = $post_cats;
@@ -72,14 +64,10 @@ function marpro_wp_update_post( $postarr = array(), $wp_error = false ) {
 		$postarr['post_date'] = current_time('mysql');
 		$postarr['post_date_gmt'] = '';
 	}
-
 	if ($postarr['post_type'] == 'attachment')
 		return wp_insert_attachment($postarr);
-
 	return marpro_wp_insert_post( $postarr, $wp_error);
 }
-
-
 /**
  * Insert or update a post.
  *
@@ -117,30 +105,22 @@ function marpro_wp_update_post( $postarr = array(), $wp_error = false ) {
  */
 function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 	global $wpdb;
-
 	$user_id = get_current_user_id();
-
 	$defaults = array('post_status' => 'draft', 'post_type' => 'post', 'post_author' => $user_id,
 		'ping_status' => get_option('default_ping_status'), 'post_parent' => 0,
 		'menu_order' => 0, 'to_ping' =>  '', 'pinged' => '', 'post_password' => '',
 		'guid' => '', 'post_content_filtered' => '', 'post_excerpt' => '', 'import_id' => 0,
 		'post_content' => '', 'post_title' => '');
-
 	$postarr = wp_parse_args($postarr, $defaults);
-
 	unset( $postarr[ 'filter' ] );
-
 	//$postarr = sanitize_post($postarr, 'db');
-
 	// export array as variables
 	extract($postarr, EXTR_SKIP);
-
 	// Are we updating or creating?
 	$post_ID = 0;
 	$update = false;
 	if ( ! empty( $ID ) ) {
 		$update = true;
-
 		// Get the post ID and GUID
 		$post_ID = $ID;
 		$post_before = get_post( $post_ID );
@@ -149,16 +129,13 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 				return new WP_Error( 'invalid_post', __( 'Invalid post ID.' ) );
 			return 0;
 		}
-
 		$guid = get_post_field( 'guid', $post_ID );
 		$previous_status = get_post_field('post_status', $ID);
 	} else {
 		$previous_status = 'new';
 	}
-
 	$maybe_empty = ! $post_content && ! $post_title && ! $post_excerpt && post_type_supports( $post_type, 'editor' )
 		&& post_type_supports( $post_type, 'title' ) && post_type_supports( $post_type, 'excerpt' );
-
 	/**
 	 * Filter whether the post should be considered "empty".
 	 *
@@ -181,16 +158,12 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 		else
 			return 0;
 	}
-
 	if ( empty($post_type) )
 		$post_type = 'post';
-
 	if ( empty($post_status) )
 		$post_status = 'draft';
-
 	if ( !empty($post_category) )
 		$post_category = array_filter($post_category); // Filter out empty terms
-
 	// Make sure we set a valid category.
 	if ( empty($post_category) || 0 == count($post_category) || !is_array($post_category) ) {
 		// 'post' requires at least one category.
@@ -199,14 +172,11 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 		else
 			$post_category = array();
 	}
-
 	if ( empty($post_author) )
 		$post_author = $user_id;
-
 	// Don't allow contributors to set the post slug for pending review posts
 	if ( 'pending' == $post_status && !current_user_can( 'publish_posts' ) )
 		$post_name = '';
-
 	// Create a valid post name. Drafts and pending posts are allowed to have an empty
 	// post name.
 	if ( empty($post_name) ) {
@@ -222,11 +192,9 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 		else // new post, or slug has changed.
 			$post_name = sanitize_title($post_name);
 	}
-
 	// If the post date is empty (due to having been new or a draft) and status is not 'draft' or 'pending', set date to now
 	if ( empty($post_date) || '0000-00-00 00:00:00' == $post_date )
 		$post_date = current_time('mysql');
-
 		// validate the date
 		$mm = substr( $post_date, 5, 2 );
 		$jj = substr( $post_date, 8, 2 );
@@ -238,14 +206,12 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 			else
 				return 0;
 		}
-
 	if ( empty($post_date_gmt) || '0000-00-00 00:00:00' == $post_date_gmt ) {
 		if ( !in_array( $post_status, array( 'draft', 'pending', 'auto-draft' ) ) )
 			$post_date_gmt = get_gmt_from_date($post_date);
 		else
 			$post_date_gmt = '0000-00-00 00:00:00';
 	}
-
 	if ( $update || '0000-00-00 00:00:00' == $post_date ) {
 		$post_modified     = current_time( 'mysql' );
 		$post_modified_gmt = current_time( 'mysql', 1 );
@@ -253,7 +219,6 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 		$post_modified     = $post_date;
 		$post_modified_gmt = $post_date_gmt;
 	}
-
 	if ( 'publish' == $post_status ) {
 		$now = gmdate('Y-m-d H:i:59');
 		if ( mysql2date('U', $post_date_gmt, false) > mysql2date('U', $now, false) )
@@ -263,7 +228,6 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 		if ( mysql2date('U', $post_date_gmt, false) <= mysql2date('U', $now, false) )
 			$post_status = 'publish';
 	}
-
 	if ( empty($comment_status) ) {
 		if ( $update )
 			$comment_status = 'closed';
@@ -272,20 +236,16 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 	}
 	if ( empty($ping_status) )
 		$ping_status = get_option('default_ping_status');
-
 	if ( isset($to_ping) )
 		$to_ping = sanitize_trackback_urls( $to_ping );
 	else
 		$to_ping = '';
-
 	if ( ! isset($pinged) )
 		$pinged = '';
-
 	if ( isset($post_parent) )
 		$post_parent = (int) $post_parent;
 	else
 		$post_parent = 0;
-
 	/**
 	 * Filter the post parent -- used to check for and prevent hierarchy loops.
 	 *
@@ -297,20 +257,15 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 	 * @param array $postarr     Array of sanitized, but otherwise unmodified post data.
 	 */
 	$post_parent = apply_filters( 'wp_insert_post_parent', $post_parent, $post_ID, compact( array_keys( $postarr ) ), $postarr );
-
 	if ( isset($menu_order) )
 		$menu_order = (int) $menu_order;
 	else
 		$menu_order = 0;
-
 	if ( !isset($post_password) || 'private' == $post_status )
 		$post_password = '';
-
 	$post_name = wp_unique_post_slug($post_name, $post_ID, $post_status, $post_type, $post_parent);
-
 	// expected_slashed (everything!)
 	$data = compact( array( 'post_author', 'post_date', 'post_date_gmt', 'post_content', 'post_content_filtered', 'post_title', 'post_excerpt', 'post_status', 'post_type', 'comment_status', 'ping_status', 'post_password', 'post_name', 'to_ping', 'pinged', 'post_modified', 'post_modified_gmt', 'post_parent', 'menu_order', 'guid' ) );
-
 	/**
 	 * Filter slashed post data just before it is inserted into the database.
 	 *
@@ -322,7 +277,6 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 	$data = apply_filters( 'wp_insert_post_data', $data, $postarr );
 	$data = wp_unslash( $data );
 	$where = array( 'ID' => $post_ID );
-
 	if ( $update ) {
 		/**
 		 * Fires immediately before an existing post is updated in the database.
@@ -356,22 +310,17 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 				return 0;
 		}
 		$post_ID = (int) $wpdb->insert_id;
-
 		// use the newly generated $post_ID
 		$where = array( 'ID' => $post_ID );
 	}
-
 	if ( empty($data['post_name']) && !in_array( $data['post_status'], array( 'draft', 'pending', 'auto-draft' ) ) ) {
 		$data['post_name'] = sanitize_title($data['post_title'], $post_ID);
 		$wpdb->update( $wpdb->posts, array( 'post_name' => $data['post_name'] ), $where );
 	}
-
 	if ( is_object_in_taxonomy($post_type, 'category') )
 		wp_set_post_categories( $post_ID, $post_category );
-
 	if ( isset( $tags_input ) && is_object_in_taxonomy($post_type, 'post_tag') )
 		wp_set_post_tags( $post_ID, $tags_input );
-
 	// new-style support for all custom taxonomies
 	if ( !empty($tax_input) ) {
 		foreach ( $tax_input as $taxonomy => $tags ) {
@@ -382,17 +331,12 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 				wp_set_post_terms( $post_ID, $tags, $taxonomy );
 		}
 	}
-
 	$current_guid = get_post_field( 'guid', $post_ID );
-
 	// Set GUID
 	if ( !$update && '' == $current_guid )
 		$wpdb->update( $wpdb->posts, array( 'guid' => get_permalink( $post_ID ) ), $where );
-
 	clean_post_cache( $post_ID );
-
 	$post = get_post($post_ID);
-
 	if ( !empty($page_template) && 'page' == $data['post_type'] ) {
 		$post->page_template = $page_template;
 		$page_templates = wp_get_theme()->get_page_templates( $post );
@@ -404,9 +348,7 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 		}
 		update_post_meta($post_ID, '_wp_page_template',  $page_template);
 	}
-
 	wp_transition_post_status($data['post_status'], $previous_status, $post);
-
 	if ( $update ) {
 		/**
 		 * Fires once an existing post has been updated.
@@ -418,7 +360,6 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 		 */
 		do_action( 'edit_post', $post_ID, $post );
 		$post_after = get_post($post_ID);
-
 		/**
 		 * Fires once an existing post has been updated.
 		 *
@@ -430,7 +371,6 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 		 */
 		do_action( 'post_updated', $post_ID, $post_after, $post_before);
 	}
-
 	/**
 	 * Fires once a post has been saved.
 	 *
@@ -444,7 +384,6 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 	 * @param bool    $update  Whether this is an existing post being updated or not.
 	 */
 	do_action( "save_post_{$post->post_type}", $post_ID, $post, $update );
-
 	/**
 	 * Fires once a post has been saved.
 	 *
@@ -455,7 +394,6 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 	 * @param bool    $update  Whether this is an existing post being updated or not.
 	 */
 	do_action( 'save_post', $post_ID, $post, $update );
-
 	/**
 	 * Fires once a post has been saved.
 	 *
@@ -466,10 +404,8 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 	 * @param bool    $update  Whether this is an existing post being updated or not.
 	 */
 	do_action( 'wp_insert_post', $post_ID, $post, $update );
-
 	return $post_ID;
 }
-
 //*******************************************************************************************
 //*******************************************************************************************
 //*******************************************************************************************
@@ -477,4 +413,3 @@ function marpro_wp_insert_post( $postarr, $wp_error = false ) {
 //*******************************************************************************************
 //*******************************************************************************************
 //*******************************************************************************************
-

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Credentials object used for OAuth 2.0 Signed JWT assertion grants.
  *
@@ -22,7 +21,6 @@
  */
 class Google_AssertionCredentials {
   const MAX_TOKEN_LIFETIME_SECS = 3600;
-
   public $serviceAccountName;
   public $scopes;
   public $privateKey;
@@ -34,7 +32,6 @@ class Google_AssertionCredentials {
    * @link http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-06
    */
   public $prn;
-
   /**
    * @param $serviceAccountName
    * @param $scopes array List of scopes
@@ -59,10 +56,8 @@ class Google_AssertionCredentials {
     $this->sub = $sub;
     $this->prn = $sub;
   }
-
   public function generateAssertion() {
     $now = time();
-
     $jwtParams = array(
           'aud' => Google_OAuth2::OAUTH2_TOKEN_URI,
           'scope' => $this->scopes,
@@ -70,16 +65,13 @@ class Google_AssertionCredentials {
           'exp' => $now + self::MAX_TOKEN_LIFETIME_SECS,
           'iss' => $this->serviceAccountName,
     );
-
     if ($this->sub !== false) {
       $jwtParams['sub'] = $this->sub;
     } else if ($this->prn !== false) {
       $jwtParams['prn'] = $this->prn;
     }
-
     return $this->makeSignedJwt($jwtParams);
   }
-
   /**
    * Creates a signed JWT.
    * @param array $payload
@@ -87,17 +79,14 @@ class Google_AssertionCredentials {
    */
   private function makeSignedJwt($payload) {
     $header = array('typ' => 'JWT', 'alg' => 'RS256');
-
     $segments = array(
       Google_Utils::urlSafeB64Encode(json_encode($header)),
       Google_Utils::urlSafeB64Encode(json_encode($payload))
     );
-
     $signingInput = implode('.', $segments);
     $signer = new Google_P12Signer($this->privateKey, $this->privateKeyPassword);
     $signature = $signer->sign($signingInput);
     $segments[] = Google_Utils::urlSafeB64Encode($signature);
-
     return implode(".", $segments);
   }
 }

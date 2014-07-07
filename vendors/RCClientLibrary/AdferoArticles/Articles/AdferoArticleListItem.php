@@ -1,7 +1,5 @@
 <?php
-
 include_once dirname(__FILE__) . '/../AdferoEntityBase.php';
-
 /**
  * Represents an article list item
  *
@@ -10,5 +8,4 @@ include_once dirname(__FILE__) . '/../AdferoEntityBase.php';
 class AdferoArticleListItem extends AdferoEntityBase {
     
 }
-
 ?>

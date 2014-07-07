@@ -8,7 +8,6 @@
  * @package SamplePHPApi
  */
 class PhotoInstance  {
-
     /**
      * @var int $width
      */
@@ -21,7 +20,6 @@ class PhotoInstance  {
      * @var string $width
      */
     private $url;
-
     /**
      * @return PhotoItem
      */

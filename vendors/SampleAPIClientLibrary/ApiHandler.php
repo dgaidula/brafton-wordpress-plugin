@@ -2,20 +2,17 @@
 /** 
  * @package SamplePHPApi
 */
-
 /** 
  * Include Files
 */
 include_once 'XMLHandler.php';
 include_once 'NewsItem.php';
-
 /**
  * class ApiHandler has a contructor which takes an API KEY and a baseurl as parameters
  * and will throw an exception if either are incorrect 
  * @package SamplePHPApi
  */
 class ApiHandler {
-
     /**
      * @var Feed $feed
      */
@@ -25,7 +22,6 @@ class ApiHandler {
     private $categoryUrl;
     private $commentUrl;
     private $feedName;	 
-
     public function __construct($API_KEY, $apiUrl){
         $this->API_KEY = $API_KEY;
         $trimmedUrl =  rtrim($apiUrl, "/");
@@ -38,7 +34,6 @@ class ApiHandler {
         $this->commentUrl = $xh->getHrefValue("comments");
         $this->feedName = $xh->getValue("name");
     }
-
     /**
      * @return NewsItem[]
      */
@@ -66,7 +61,6 @@ class ApiHandler {
     public function getLatestComments(){
         return NewsComment::getComments($this->commentUrl);
     }
-
     /**
      * @return String
      */

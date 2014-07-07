@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * This class defines attributes, valid values, and usage which is generated from
  * a given json schema. http://tools.ietf.org/html/draft-zyp-json-schema-03#section-5
@@ -30,7 +29,6 @@ class Google_Model {
       $this->mapTypes($array);
     }
   }
-
   /**
    * Initialize this object's properties from an array.
    *
@@ -40,7 +38,6 @@ class Google_Model {
   protected function mapTypes($array) {
     foreach ($array as $key => $val) {
       $this->$key = $val;
-
       $keyTypeName = "__$key" . 'Type';
       $keyDataType = "__$key" . 'DataType';
       if ($this->useObjects() && property_exists($this, $keyTypeName)) {
@@ -63,7 +60,6 @@ class Google_Model {
       }
     }
   }
-
   /**
    * Returns true only if the array is associative.
    * @param array $array
@@ -81,7 +77,6 @@ class Google_Model {
     }
     return false;
   }
-
   /**
    * Given a variable name, discover its type.
    *
@@ -93,12 +88,10 @@ class Google_Model {
     $type = $this->$name;
     return new $type($item);
   }
-
   protected function useObjects() {
     global $apiConfig;
     return (isset($apiConfig['use_objects']) && $apiConfig['use_objects']);
   }
-
   /**
    * Verify if $obj is an array.
    * @throws Google_Exception Thrown if $obj isn't an array.

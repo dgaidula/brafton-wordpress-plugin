@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * A persistent storage class based on the memcache, which is not
  * really very persistent, as soon as you restart your memcache daemon
@@ -25,7 +24,6 @@
  */
 class Google_MemcacheCache extends Google_Cache {
   private $connection = false;
-
   public function __construct() {
     global $apiConfig;
     if (! function_exists('memcache_connect')) {
@@ -37,7 +35,6 @@ class Google_MemcacheCache extends Google_Cache {
       throw new Google_CacheException("You need to supply a valid memcache host and port");
     }
   }
-
   private function isLocked($key) {
     $this->check();
     if ((@memcache_get($this->connection, $key . '.lock')) === false) {
@@ -45,20 +42,17 @@ class Google_MemcacheCache extends Google_Cache {
     }
     return true;
   }
-
   private function createLock($key) {
     $this->check();
     // the interesting thing is that this could fail if the lock was created in the meantime..
     // but we'll ignore that out of convenience
     @memcache_add($this->connection, $key . '.lock', '', 0, 5);
   }
-
   private function removeLock($key) {
     $this->check();
     // suppress all warnings, if some other process removed it that's ok too
     @memcache_delete($this->connection, $key . '.lock');
   }
-
   private function waitForLock($key) {
     $this->check();
     // 20 x 250 = 5 seconds
@@ -74,7 +68,6 @@ class Google_MemcacheCache extends Google_Cache {
       $this->removeLock($key);
     }
   }
-
   // I prefer lazy initialization since the cache isn't used every request
   // so this potentially saves a lot of overhead
   private function connect() {
@@ -82,13 +75,11 @@ class Google_MemcacheCache extends Google_Cache {
       throw new Google_CacheException("Couldn't connect to memcache server");
     }
   }
-
   private function check() {
     if (! $this->connection) {
       $this->connect();
     }
   }
-
   /**
    * @inheritDoc
    */
@@ -103,7 +94,6 @@ class Google_MemcacheCache extends Google_Cache {
     }
     return $ret['data'];
   }
-
   /**
    * @inheritDoc
    * @param string $key
@@ -118,7 +108,6 @@ class Google_MemcacheCache extends Google_Cache {
       throw new Google_CacheException("Couldn't store data in cache");
     }
   }
-
   /**
    * @inheritDoc
    * @param String $key

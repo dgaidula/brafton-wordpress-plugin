@@ -1,26 +1,21 @@
 <?php
-
 require_once dirname(__FILE__) . '/../../AdferoArticles/AdferoHelpers.php';
 require_once dirname(__FILE__) . '/AdferoVideoOutput.php';
 require_once dirname(__FILE__) . '/AdferoVideoOutputListItem.php';
 require_once dirname(__FILE__) . '/AdferoVideoOutputList.php';
-
 /**
  * Client that provides video output related functions.
  *
  */
 class AdferoVideoOutputsClient {
-
     /**
      * @var string
      */
     private $baseUri;
-
     /**
      * @var Credentials
      */
     private $credentials;
-
     /**
      * Initialises a new instance of the Video Outputs Client
      * @param string $apiRoot Uri of the API provided by your account manager
@@ -30,7 +25,6 @@ class AdferoVideoOutputsClient {
         $this->baseUri = $baseUri;
         $this->credentials = $credentials;
     }
-
     /**
      * Gets the video output with the provided id.
      *
@@ -42,10 +36,8 @@ class AdferoVideoOutputsClient {
         if (!isset($id)) {
             throw new InvalidArgumentException("id is required");
         }
-
         return $this->GetVideoOutput($id, null, null);
     }
-
     /**
      * Gets the raw output from the api as a string.
      *
@@ -58,14 +50,11 @@ class AdferoVideoOutputsClient {
         if (!isset($id)) {
             throw new InvalidArgumentException("id is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
-
         return $this->GetVideoOutputRaw($id, null, null, $format);
     }
-
     /**
      * Lists the video outputs under a particular article.
      *
@@ -79,18 +68,15 @@ class AdferoVideoOutputsClient {
         if (!isset($articleId)) {
             throw new InvalidArgumentException("articleId is required");
         }
-
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
         
         return $this->ListVideoOutputsForArticle($articleId, $offset, $limit, null, null);
     }
-
     /**
      * Gets the raw output from the api as a string.
      * $format is either "xml" or "json"
@@ -106,22 +92,18 @@ class AdferoVideoOutputsClient {
         if (!isset($articleId)) {
             throw new InvalidArgumentException("feedId is required");
         }
-
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
         
         return $this->ListVideoOutputsForArticleRaw($articleId, $offset, $limit, null, null, $format);
     }
-
     /**
      * Gets the video output with the provided id 
      *
@@ -136,7 +118,6 @@ class AdferoVideoOutputsClient {
         $xmlString = AdferoHelpers::GetXMLFromUri($uri);
         return $this->GetVideoOutputFromXmlString($xmlString);
     }
-
     /**
      * Gets the response from the api in string format
      * 
@@ -159,11 +140,9 @@ class AdferoVideoOutputsClient {
                 throw new \InvalidArgumentException($format . 'format not supported');
                 break;
         }
-
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri);
     }
-
     /**
      * Gets the response from the api in string format
      * 
@@ -188,11 +167,9 @@ class AdferoVideoOutputsClient {
                 throw new \InvalidArgumentException($format . 'format not supported');
                 break;
         }
-
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri);
     }
-
     /**
      * Gets the video output from xml string
      *
@@ -221,10 +198,8 @@ class AdferoVideoOutputsClient {
                     break;
             }
         }
-
         return $videoOutput;
     }
-
     /**
      *  Lists the video outputs under a particular article.
      *
@@ -244,7 +219,6 @@ class AdferoVideoOutputsClient {
         $videoOutputs->offset = $offset;
         return $videoOutputs;
     }
-
     /**
      * Gets video output listing from xml string.
      *
@@ -255,7 +229,6 @@ class AdferoVideoOutputsClient {
         $xml = new \SimpleXMLElement($xml);
         $totalCount = intval($xml->videoOutputs['totalCount']);
         $videoOutputItems = array();
-
         foreach ($xml->videoOutputs->videoOutput as $child) {
             foreach ($child->id as $videoOutputId) {
                 $videoOutput = new AdferoVideoOutputListItem();
@@ -263,13 +236,11 @@ class AdferoVideoOutputsClient {
                 array_push($videoOutputItems, $videoOutput);
             }
         }
-
         $videoOutputs = new AdferoVideoOutputList();
         $videoOutputs->items = $videoOutputItems;
         $videoOutputs->totalCount = $totalCount;
         return $videoOutputs;
     }
-
     /**
      * Generates the URI from requested pararmeters.
      *
@@ -284,20 +255,16 @@ class AdferoVideoOutputsClient {
      */
     private function GetUri($id, $identifier, $format, $properties, $fields, $offset, $limit) {
         $data = array();
-
         if ($properties != null) {
             $properties = implode(",", $properties);
             $data["properties"] = $properties;
         }
-
         if ($fields != null) {
             $fields = implode(",", $fields);
             $data["fields"] = $fields;
         }
-
         if (($identifier != null || $identifier != "") || ($offset != null || $limit !=
                 null)) {
-
             $data["offset"] = $offset;
             $data["limit"] = $limit;
             $data = array_merge(array($identifier => $id), $data);
@@ -309,7 +276,5 @@ class AdferoVideoOutputsClient {
                     $querystring;
         }
     }
-
 }
-
 ?>

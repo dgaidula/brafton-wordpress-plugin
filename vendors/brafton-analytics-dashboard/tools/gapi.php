@@ -610,12 +610,10 @@ if (! class_exists ( 'GADASH_GAPI' )) {
 			}
 			
 			$ga_dash_statsdata = "";
-
 			$max_array = array ();
 			foreach ( $data ['rows'] as $item ) {
 				$max_array [] = $item [3];
 			}
-
 			$max = max ( $max_array ) ? max ( $max_array ) : 1;
 			
 			for($i = 0; $i < $data ['totalResults']; $i ++) {

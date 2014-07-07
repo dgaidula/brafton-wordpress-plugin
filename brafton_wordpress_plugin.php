@@ -22,11 +22,9 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_errors.php' );
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_video_helper.php' );
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_video_importer.php' );
-
     class WP_Brafton_Article_Importer
     {   
         public $brafton_options; 
-
         /**
          * Construct the plugin object
          */
@@ -48,9 +46,7 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
                 //only log when importer is executed.
                 if( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true )
                     brafton_log( array( 'message' => "Article post type is ready for more content. Article custom post type id: " . $article_post_type) );
-
             }
-
             $video_post_type = $brafton_options->options['brafton_video_post_type'];
             $video_post_type_name = $brafton_options->brafton_get_post_type( $video_post_type );
             if( $video_post_type ){ 
@@ -58,17 +54,12 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
                 if( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true )
                     brafton_log( array( 'message' => "Video post type is ready for more content. Video custom post type id: " . $video_post_type) );
             }
-
-
         } // END public function __construct
-
         /**
          * Activate the plugin
          */
         public static function activate()
         {
-
-
             //add actions and filters here: 
             // Do nothing
         } // END public static function activate
@@ -91,12 +82,9 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
                 $brafton_options->purge_articles(); 
                 //$brafton_optinos->purge_options();
             }
-
             //Flush rewrite rules if custom post types are enabled.
             if( $brafton_options->options['brafton_article_post_type'] != "" || $brafton_options->options['brafton_video_post_type'] != "" ) 
                 flush_rewrite_rules();
-
-
             // Do nothing
         } // END public static function deactivate
     } // END class WP_Brafton_Article_Importer
@@ -114,7 +102,6 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
     // Add a link to the settings page onto the plugin page
     if( isset( $WP_Brafton_Article_Importer ) )
     {
-
         // Add the settings link to the plugins page
         function plugin_settings_link( $links )
         { 
@@ -131,11 +118,9 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         //Run video and article importers when archives form is saved
         add_action( 'load-brafton_page_brafton_archives', 'brafton_run_hourly_import' );
         require_once plugin_dir_path( __FILE__ ) . '/vendors/tgm-activation.php';
-
         add_action( 'load-brafton_page_WP_Brafton_Article_Importer', 'brafton_admin_notice' );
         add_action( 'tgmpa_register', 'brafton_setup_recommended_plugins' );
         function brafton_setup_recommended_plugins(){
-
             $plugins = array(
                 array(
                     'name'      => 'Brafton Analytics Dashboard', // The plugin name
@@ -143,7 +128,6 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                     'source'    => plugin_dir_path( __FILE__ ) . 'vendors/recommended-plugins/brafton-analytics-dashboard.zip', // The plugin source
                     'required'  => false, // If false, the plugin is only 'recommended' instead of required
                     'force_activation' => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch
-
                 ),
                 
                 array(
@@ -158,13 +142,11 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                     'required' => true,
                     'force_activation' => true, 
                 ),
-
                 array(
                     'name' => 'Google Analytics for WordPress',
                     'slug' => 'google-analytics-for-wordpress',
                     'required' => false,    
                 ),
-
                 array( 
                     'name' => 'Google Sitemap Generator',
                     'slug' => 'google-sitemap-generator', 
@@ -177,7 +159,6 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                     'required' => false,
                 )        
             );
-
             $config = array(
                 'id'           => 'brafton_tgmpa',                 // Unique ID for hashing notices for multiple instances of TGMPA.
                 'default_path' => '',                      // Default absolute path to pre-packaged plugins.
@@ -204,17 +185,15 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                     'nag_type'                        => 'updated' // Determines admin notice type - can only be 'updated', 'update-nag' or 'error'.
                 )
             );
-
             tgmpa( $plugins, $config );
             
         }
-
         /**
          * Run the article importer
          */
-        function run_article_import(){
-            //Wait until settings are saved before attempting to import articles
-            if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true || isset( $_POST['option_page'] ) && $_POST['option_page'] == 'brafton_archives' )
+        function run_article_import( $cron = null ){
+            //Wait until settings are saved or cron is triggered before attempting to import articles
+            if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true || isset( $_POST['option_page'] ) && $_POST['option_page'] == 'brafton_archives' || $cron )
             {
                 //Grab saved options.
                 $brafton_options = Brafton_options::get_instance();
@@ -253,11 +232,14 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         
          /**
          * Run importer for video articles
+         * 
+         * 
+         * @param bool $cron 
          */
-        function run_video_import()
+        function run_video_import( $cron = null )
         {
-            //Wait until settings are saved before attempting to import articles
-            if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true ) 
+            //Wait until settings are saved or cron is triggered before attempting to import articles
+            if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true  || $cron ) 
             {
                 $brafton_options = Brafton_options::get_instance();
                 if( $brafton_options->options['brafton_enable_video'] === 'off' ) {
@@ -315,17 +297,16 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                 unset($crons[$timestamp][$hook]);
         _set_cron_array( $crons );
     }
-
     /**  
      * This is the scheduling hook for our plugin that is triggered by cron
      */
     add_action('brafton_import_trigger_hook', 'brafton_run_hourly_import', 10, 2);
     function brafton_run_hourly_import()
     {
-        run_article_import();
-        run_video_import();
+        $cron = true;
+        run_article_import( $cron );
+        run_video_import( $cron );
         brafton_log( array( 'message' => "Import successfully triggered by wp cron." ) );
-
         brafton_schedule_import();
         //update_option("brafton_import_trigger_count", get_option("brafton_import_trigger_count") + 1);
         // HACK: posts are duplicated due to a lack of cron lock resolution (see http://core.trac.wordpress.org/ticket/19700)
@@ -333,11 +314,9 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         // if ( version_compare( $wpVersion, '3.4', '<') )
         //     duplicateKiller();
     }
-
     function brafton_schedule_import(){
         //Use wp_next_scheduled to check if import is already scheduled
         $timestamp = wp_next_scheduled( "brafton_import_trigger_hook" );
-
         //If $timestamp == false schedule hourly imports since it hasn't been done previously
         if( $timestamp == false  ){
            //Schedule the event for right now, then hourly until importing is disabled.
@@ -345,7 +324,6 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         }
        
     }    
-
   //Load the admin page Stylesheet. 
     function wp_brafton_article_importer_settings_style() {
         $siteurl = get_option( 'siteurl' );

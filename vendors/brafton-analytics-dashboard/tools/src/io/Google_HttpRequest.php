@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * HTTP Request to be executed by apiIO classes. Upon execution, the
  * responseHttpCode, responseHeaders and responseBody will be filled in.
@@ -31,25 +30,21 @@ class Google_HttpRequest {
     'MIME-Version' => '1.0',
     'Content-Length' => ''
   );
-
   protected $url;
   protected $requestMethod;
   protected $requestHeaders;
   protected $postBody;
   protected $userAgent;
-
   protected $responseHttpCode;
   protected $responseHeaders;
   protected $responseBody;
   
   public $accessKey;
-
   public function __construct($url, $method = 'GET', $headers = array(), $postBody = null) {
     $this->setUrl($url);
     $this->setRequestMethod($method);
     $this->setRequestHeaders($headers);
     $this->setPostBody($postBody);
-
     global $apiConfig;
     if (empty($apiConfig['application_name'])) {
       $this->userAgent = self::USER_AGENT_SUFFIX;
@@ -57,7 +52,6 @@ class Google_HttpRequest {
       $this->userAgent = $apiConfig['application_name'] . " " . self::USER_AGENT_SUFFIX;
     }
   }
-
   /**
    * Misc function that returns the base url component of the $url
    * used by the OAuth signing class to calculate the base string
@@ -70,7 +64,6 @@ class Google_HttpRequest {
     }
     return $this->url;
   }
-
   /**
    * Misc function that returns an array of the query parameters of the current
    * url used by the OAuth signing class to calculate the signature
@@ -85,35 +78,30 @@ class Google_HttpRequest {
     }
     return array();
   }
-
   /**
    * @return string HTTP Response Code.
    */
   public function getResponseHttpCode() {
     return (int) $this->responseHttpCode;
   }
-
   /**
    * @param int $responseHttpCode HTTP Response Code.
    */
   public function setResponseHttpCode($responseHttpCode) {
     $this->responseHttpCode = $responseHttpCode;
   }
-
   /**
    * @return $responseHeaders (array) HTTP Response Headers.
    */
   public function getResponseHeaders() {
     return $this->responseHeaders;
   }
-
   /**
    * @return string HTTP Response Body
    */
   public function getResponseBody() {
     return $this->responseBody;
   }
-
   /**
    * @param array $headers The HTTP response headers
    * to be normalized.
@@ -123,10 +111,8 @@ class Google_HttpRequest {
     if ($this->responseHeaders) {
       $headers = array_merge($this->responseHeaders, $headers);
     }
-
     $this->responseHeaders = $headers;
   }
-
   /**
    * @param string $key
    * @return array|boolean Returns the requested HTTP header or
@@ -137,36 +123,30 @@ class Google_HttpRequest {
         ? $this->responseHeaders[$key]
         : false;
   }
-
   /**
    * @param string $responseBody The HTTP response body.
    */
   public function setResponseBody($responseBody) {
     $this->responseBody = $responseBody;
   }
-
   /**
    * @return string $url The request URL.
    */
-
   public function getUrl() {
     return $this->url;
   }
-
   /**
    * @return string $method HTTP Request Method.
    */
   public function getRequestMethod() {
     return $this->requestMethod;
   }
-
   /**
    * @return array $headers HTTP Request Headers.
    */
   public function getRequestHeaders() {
     return $this->requestHeaders;
   }
-
   /**
    * @param string $key
    * @return array|boolean Returns the requested HTTP header or
@@ -177,14 +157,12 @@ class Google_HttpRequest {
         ? $this->requestHeaders[$key]
         : false;
   }
-
   /**
    * @return string $postBody HTTP Request Body.
    */
   public function getPostBody() {
     return $this->postBody;
   }
-
   /**
    * @param string $url the url to set
    */
@@ -200,7 +178,6 @@ class Google_HttpRequest {
       $this->url = $apiConfig['basePath'] . $url;
     }
   }
-
   /**
    * @param string $method Set he HTTP Method and normalize
    * it to upper-case, as required by HTTP.
@@ -209,7 +186,6 @@ class Google_HttpRequest {
   public function setRequestMethod($method) {
     $this->requestMethod = strtoupper($method);
   }
-
   /**
    * @param array $headers The HTTP request headers
    * to be set and normalized.
@@ -221,14 +197,12 @@ class Google_HttpRequest {
     }
     $this->requestHeaders = $headers;
   }
-
   /**
    * @param string $postBody the postBody to set
    */
   public function setPostBody($postBody) {
     $this->postBody = $postBody;
   }
-
   /**
    * Set the User-Agent Header.
    * @param string $userAgent The User-Agent.
@@ -236,14 +210,12 @@ class Google_HttpRequest {
   public function setUserAgent($userAgent) {
     $this->userAgent = $userAgent;
   }
-
   /**
    * @return string The User-Agent.
    */
   public function getUserAgent() {
     return $this->userAgent;
   }
-
   /**
    * Returns a cache key depending on if this was an OAuth signed request
    * in which case it will use the non-signed url and access key to make this
@@ -252,18 +224,14 @@ class Google_HttpRequest {
    */
   public function getCacheKey() {
     $key = $this->getUrl();
-
     if (isset($this->accessKey)) {
       $key .= $this->accessKey;
     }
-
     if (isset($this->requestHeaders['authorization'])) {
       $key .= $this->requestHeaders['authorization'];
     }
-
     return md5($key);
   }
-
   public function getParsedCacheControl() {
     $parsed = array();
     $rawCacheControl = $this->getResponseHeader('cache-control');
@@ -271,10 +239,8 @@ class Google_HttpRequest {
       $rawCacheControl = str_replace(', ', '&', $rawCacheControl);
       parse_str($rawCacheControl, $parsed);
     }
-
     return $parsed;
   }
-
   /**
    * @param string $id
    * @return string A string representation of the HTTP Request.
@@ -284,21 +250,17 @@ class Google_HttpRequest {
     foreach($this->batchHeaders as $key => $val) {
       $str .= $key . ': ' . $val . "\n";
     }
-
     $str .= "Content-ID: $id\n";
     $str .= "\n";
-
     $path = parse_url($this->getUrl(), PHP_URL_PATH);
     $str .= $this->getRequestMethod() . ' ' . $path . " HTTP/1.1\n";
     foreach($this->getRequestHeaders() as $key => $val) {
       $str .= $key . ': ' . $val . "\n";
     }
-
     if ($this->getPostBody()) {
       $str .= "\n";
       $str .= $this->getPostBody();
     }
-
     return $str;
   }
 }

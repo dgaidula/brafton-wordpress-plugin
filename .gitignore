@@ -15,4 +15,3 @@ sitemap.xml.gz
 tests/
 phpunit.xml.dist
 .travis.yml
-

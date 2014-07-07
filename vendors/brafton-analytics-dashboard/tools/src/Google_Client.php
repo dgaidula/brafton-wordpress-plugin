@@ -14,24 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 // Check for the json extension, the Google APIs PHP Client won't function
 // without it.
 if (! function_exists('json_decode')) {
   throw new Exception('Google PHP API Client requires the JSON PHP extension');
 }
-
 if (! function_exists('http_build_query')) {
   throw new Exception('Google PHP API Client requires http_build_query()');
 }
-
 if (! ini_get('date.timezone') && function_exists('date_default_timezone_set')) {
   date_default_timezone_set('UTC');
 }
-
 // hack around with the include paths a bit so the library 'just works'
 set_include_path(dirname(__FILE__) . PATH_SEPARATOR . get_include_path());
-
 require_once "config.php";
 // If a local configuration file is found, merge it's values with the default configuration
 if (file_exists(dirname(__FILE__)  . '/local_config.php')) {
@@ -39,7 +34,6 @@ if (file_exists(dirname(__FILE__)  . '/local_config.php')) {
   require_once (dirname(__FILE__)  . '/local_config.php');
   $apiConfig = array_merge($defaultConfig, $apiConfig);
 }
-
 // Include the top level classes, they each include their own dependencies
 require_once 'service/Google_Model.php';
 require_once 'service/Google_Service.php';
@@ -53,7 +47,6 @@ require_once 'auth/Google_Auth.php';
 require_once 'cache/Google_Cache.php';
 require_once 'io/Google_IO.php';
 require_once('service/Google_MediaFileUpload.php');
-
 /**
  * The Google API Client
  * http://code.google.com/p/google-api-php-client/
@@ -67,37 +60,29 @@ class Google_Client {
    * @var Google_Auth $auth
    */
   static $auth;
-
   /**
    * @static
    * @var Google_IO $io
    */
   static $io;
-
   /**
    * @static
    * @var Google_Cache $cache
    */
   static $cache;
-
   /**
    * @static
    * @var boolean $useBatch
    */
   static $useBatch = false;
-
   /** @var array $scopes */
   protected $scopes = array();
-
   /** @var bool $useObjects */
   protected $useObjects = false;
-
   // definitions of services that are discovered.
   protected $services = array();
-
   // Used to track authenticated state, can't discover services after doing authenticate()
   private $authenticated = false;
-
   public function __construct($config = array()) {
     global $apiConfig;
     $apiConfig = array_merge($apiConfig, $config);
@@ -105,7 +90,6 @@ class Google_Client {
     self::$auth = new $apiConfig['authClass']();
     self::$io = new $apiConfig['ioClass']();
   }
-
   /**
    * Add a service
    */
@@ -120,13 +104,11 @@ class Google_Client {
       $this->services[$service] = array_merge($this->services[$service], $apiConfig['services'][$service]);
     }
   }
-
   public function authenticate($code = null) {
     $service = $this->prepareService();
     $this->authenticated = true;
     return self::$auth->authenticate($service, $code);
   }
-
   /**
    * @return array
    * @visible For Testing
@@ -155,7 +137,6 @@ class Google_Client {
     $service['scope'] = implode(' ', $scopes);
     return $service;
   }
-
   /**
    * Set the OAuth 2.0 access token using the string that resulted from calling authenticate()
    * or Google_Client#getAccessToken().
@@ -169,7 +150,6 @@ class Google_Client {
     }
     self::$auth->setAccessToken($accessToken);
   }
-
   /**
    * Set the type of Auth class the client should use.
    * @param string $authClassName
@@ -177,7 +157,6 @@ class Google_Client {
   public function setAuthClass($authClassName) {
     self::$auth = new $authClassName();
   }
-
   /**
    * Construct the OAuth 2.0 authorization request URI.
    * @return string
@@ -186,7 +165,6 @@ class Google_Client {
     $service = $this->prepareService();
     return self::$auth->createAuthUrl($service['scope']);
   }
-
   /**
    * Get the OAuth 2.0 access token.
    * @return string $accessToken JSON encoded string in the following format:
@@ -197,7 +175,6 @@ class Google_Client {
     $token = self::$auth->getAccessToken();
     return (null == $token || 'null' == $token) ? null : $token;
   }
-
   /**
    * Returns if the access_token is expired.
    * @return bool Returns True if the access_token is expired.
@@ -205,7 +182,6 @@ class Google_Client {
   public function isAccessTokenExpired() {
     return self::$auth->isAccessTokenExpired();
   }
-
   /**
    * Set the developer key to use, these are obtained through the API Console.
    * @see http://code.google.com/apis/console-help/#generatingdevkeys
@@ -214,7 +190,6 @@ class Google_Client {
   public function setDeveloperKey($developerKey) {
     self::$auth->setDeveloperKey($developerKey);
   }
-
   /**
    * Set OAuth 2.0 "state" parameter to achieve per-request customization.
    * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-22#section-3.1.2.2
@@ -223,7 +198,6 @@ class Google_Client {
   public function setState($state) {
     self::$auth->setState($state);
   }
-
   /**
    * @param string $accessType Possible values for access_type include:
    *  {@code "offline"} to request offline access from the user. (This is the default value)
@@ -232,7 +206,6 @@ class Google_Client {
   public function setAccessType($accessType) {
     self::$auth->setAccessType($accessType);
   }
-
   /**
    * @param string $approvalPrompt Possible values for approval_prompt include:
    *  {@code "force"} to force the approval UI to appear. (This is the default value)
@@ -241,7 +214,6 @@ class Google_Client {
   public function setApprovalPrompt($approvalPrompt) {
     self::$auth->setApprovalPrompt($approvalPrompt);
   }
-
   /**
    * Set the application name, this is included in the User-Agent HTTP header.
    * @param string $applicationName
@@ -250,7 +222,6 @@ class Google_Client {
     global $apiConfig;
     $apiConfig['application_name'] = $applicationName;
   }
-
   /**
    * Set the OAuth 2.0 Client ID.
    * @param string $clientId
@@ -260,14 +231,12 @@ class Google_Client {
     $apiConfig['oauth2_client_id'] = $clientId;
     self::$auth->clientId = $clientId;
   }
-
   /**
    * Get the OAuth 2.0 Client ID.
    */
   public function getClientId() {
     return self::$auth->clientId;
   }
-
   /**
    * Set the OAuth 2.0 Client Secret.
    * @param string $clientSecret
@@ -277,14 +246,12 @@ class Google_Client {
     $apiConfig['oauth2_client_secret'] = $clientSecret;
     self::$auth->clientSecret = $clientSecret;
   }
-
   /**
    * Get the OAuth 2.0 Client Secret.
    */
   public function getClientSecret() {
     return self::$auth->clientSecret;
   }
-
   /**
    * Set the OAuth 2.0 Redirect URI.
    * @param string $redirectUri
@@ -294,14 +261,12 @@ class Google_Client {
     $apiConfig['oauth2_redirect_uri'] = $redirectUri;
     self::$auth->redirectUri = $redirectUri;
   }
-
   /**
    * Get the OAuth 2.0 Redirect URI.
    */
   public function getRedirectUri() {
     return self::$auth->redirectUri;
   }
-
   /**
    * Fetches a fresh OAuth 2.0 access token with the given refresh token.
    * @param string $refreshToken
@@ -310,7 +275,6 @@ class Google_Client {
   public function refreshToken($refreshToken) {
     self::$auth->refreshToken($refreshToken);
   }
-
   /**
    * Revoke an OAuth2 access token or refresh token. This method will revoke the current access
    * token, if a token isn't provided.
@@ -321,7 +285,6 @@ class Google_Client {
   public function revokeToken($token = null) {
     self::$auth->revokeToken($token);
   }
-
   /**
    * Verify an id_token. This method will verify the current id_token, if one
    * isn't provided.
@@ -333,7 +296,6 @@ class Google_Client {
   public function verifyIdToken($token = null) {
     return self::$auth->verifyIdToken($token);
   }
-
   /**
    * @param Google_AssertionCredentials $creds
    * @return void
@@ -341,7 +303,6 @@ class Google_Client {
   public function setAssertionCredentials(Google_AssertionCredentials $creds) {
     self::$auth->setAssertionCredentials($creds);
   }
-
   /**
    * This function allows you to overrule the automatically generated scopes,
    * so that you can ask for more or less permission in the auth flow
@@ -351,7 +312,6 @@ class Google_Client {
   public function setScopes($scopes) {
     $this->scopes = is_string($scopes) ? explode(" ", $scopes) : $scopes;
   }
-
   /**
    * Returns the list of scopes set on the client
    * @return array the list of scopes
@@ -360,7 +320,6 @@ class Google_Client {
   public function getScopes() {
      return $this->scopes;
   }
-
   /**
    * If 'plus.login' is included in the list of requested scopes, you can use
    * this method to define types of app activities that your app will write.
@@ -373,7 +332,6 @@ class Google_Client {
     self::$auth->requestVisibleActions =
             join(" ", $requestVisibleActions);
   }
-
   /**
    * Declare if objects should be returned by the api service classes.
    *
@@ -385,7 +343,6 @@ class Google_Client {
     global $apiConfig;
     $apiConfig['use_objects'] = $useObjects;
   }
-
   /**
    * Declare if objects should be returned by the api service classes.
    *
@@ -396,7 +353,6 @@ class Google_Client {
   public function setUseBatch($useBatch) {
     self::$useBatch = $useBatch;
   }
-
   /**
    * @static
    * @return Google_Auth the implementation of apiAuth.
@@ -404,7 +360,6 @@ class Google_Client {
   public static function getAuth() {
     return Google_Client::$auth;
   }
-
   /**
    * @static
    * @return Google_IO the implementation of apiIo.
@@ -412,7 +367,6 @@ class Google_Client {
   public static function getIo() {
     return Google_Client::$io;
   }
-
   /**
    * @return Google_Cache the implementation of apiCache.
    */
@@ -420,7 +374,6 @@ class Google_Client {
     return Google_Client::$cache;
   }
 }
-
 // Exceptions that the Google PHP API Library can throw
 class Google_Exception extends Exception {}
 class Google_AuthException extends Google_Exception {}
@@ -431,7 +384,6 @@ class Google_ServiceException extends Google_Exception {
    * Optional list of errors returned in a JSON body of an HTTP error response.
    */
   protected $errors = array();
-
   /**
    * Override default constructor to add ability to set $errors.
    *
@@ -448,10 +400,8 @@ class Google_ServiceException extends Google_Exception {
     } else {
       parent::__construct($message, $code);
     }
-
     $this->errors = $errors;
   }
-
   /**
    * An example of the possible errors returned.
    *

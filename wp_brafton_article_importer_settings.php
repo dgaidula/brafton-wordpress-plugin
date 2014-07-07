@@ -394,7 +394,6 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
                 )
             );
         }
-
         /**
          * Register archive page fields 
          */
@@ -460,7 +459,6 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
                 array( &$this, 'brafton_archives_page' ) 
             );
             add_action( 'admin_print_scripts-' . $admin_page, array( &$this, 'scripts' ) );
-
            if( $this->brafton_options->options['brafton_enable_errors'] == "on" ) { 
                 $error_page = add_submenu_page( 
                     'WP_Brafton_Article_Importer', 
@@ -472,7 +470,6 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
                 );
             add_action( 'admin_print_scripts-' . $error_page, array( &$this, 'scripts' ) );
             }
-
         } // END public function add_menu()
        
         /**
@@ -494,7 +491,6 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
             {
                 wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
             }
-
             // Render the settings template
             include( sprintf( "%s/src/templates/error_log.php", dirname( __FILE__ ) ) );
         }

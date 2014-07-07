@@ -1,25 +1,20 @@
 <?php
-
 include_once dirname(__FILE__) . '/../AdferoHelpers.php';
 include_once dirname(__FILE__) . '/AdferoArticle.php';
 include_once dirname(__FILE__) . '/AdferoArticleListItem.php';
 include_once dirname(__FILE__) . '/AdferoArticleList.php';
-
 /**
  *  Client that provides article related functions.
  */
 class AdferoArticlesClient {
-
     /**
      * @var string
      */
     private $baseUri;
-
     /**
      * @var AdferoCredentials
      */
     private $credentials;
-
     /**
      * Initialises a new instance of the Articles Client
      * @param string $baseUri Uri of the API provided by your account manager
@@ -29,7 +24,6 @@ class AdferoArticlesClient {
         $this->baseUri = $baseUri;
         $this->credentials = $credentials;
     }
-
     /**
      * Gets the article with the provided article Id.
      *
@@ -41,10 +35,8 @@ class AdferoArticlesClient {
         if (!isset($id)) {
             throw new InvalidArgumentException("id is required");
         }
-
         return $this->GetArticle($id, null, null);
     }
-
     /**
      * Returns the raw response from the api for the article with the provided article Id.
      *     
@@ -57,14 +49,11 @@ class AdferoArticlesClient {
         if (!isset($id)) {
             throw new InvalidArgumentException("id is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
-
         return $this->GetArticleRaw($id, null, null, $format);
     }
-
     /**
      * Lists the articles under a particular brief.
      *
@@ -79,22 +68,17 @@ class AdferoArticlesClient {
         if (!isset($briefId)) {
             throw new InvalidArgumentException("briefId is required");
         }
-
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         if (!isset($state)) {
             throw new InvalidArgumentException("state is required");
         }
-
         return $this->ListArticlesForBrief($briefId, $offset, $limit, $state, null, null);
     }
-
     /**
      * Gets the raw output from the api as a string.
      *
@@ -110,26 +94,20 @@ class AdferoArticlesClient {
         if (!isset($briefId)) {
             throw new InvalidArgumentException("briefId is required");
         }
-
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         if (!isset($state)) {
             throw new InvalidArgumentException("state is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
-
         return $this->ListArticlesForBriefRaw($briefId, $offset, $limit, $state, null, null, $format);
     }
-
     /**
      * Lists the articles under a particular feed.
      *
@@ -144,22 +122,17 @@ class AdferoArticlesClient {
         if (!isset($feedId)) {
             throw new InvalidArgumentException("feedId is required");
         }
-
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         if (!isset($state)) {
             throw new InvalidArgumentException("state is required");
         }
-
         return $this->ListArticlesForFeed($feedId, $offset, $limit, $state, null, null);
     }
-
     /**
      * Gets the raw output from the api as a string.
      * 
@@ -175,26 +148,20 @@ class AdferoArticlesClient {
         if (!isset($feedId)) {
             throw new InvalidArgumentException("feedId is required");
         }
-
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         if (!isset($state)) {
             throw new InvalidArgumentException("state is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
-
         return $this->ListArticlesForFeedRaw($feedId, $offset, $limit, $state, null, null, $format);
     }
-
     /**
      * Lists the articles under a particular brief.
      * 
@@ -215,7 +182,6 @@ class AdferoArticlesClient {
         $articles->offset = $offset;
         return $articles;
     }
-
     /**
      * Gets the response from the api in string format
      *
@@ -244,7 +210,6 @@ class AdferoArticlesClient {
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri . "&state=" . $state);
     }
-
     /**
      *  Lists the articles under a particular feed.
      *
@@ -265,7 +230,6 @@ class AdferoArticlesClient {
         $articles->offset = $offset;
         return $articles;
     }
-
     /**
      * Gets the response from the api in string format
      * 
@@ -293,7 +257,6 @@ class AdferoArticlesClient {
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri . "&state=" . $state);
     }
-
     /**
      * Gets the article with the provided id 
      *
@@ -308,7 +271,6 @@ class AdferoArticlesClient {
         $xmlString = AdferoHelpers::GetXMLFromUri($uri);
         return $this->GetArticleFromXmlString($xmlString);
     }
-
     /**
      * Gets the response from the api in string format
      * 
@@ -334,7 +296,6 @@ class AdferoArticlesClient {
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri);
     }
-
     /**
      * Gets the article from xml string
      *
@@ -368,11 +329,9 @@ class AdferoArticlesClient {
                     };
             }
         }
-
         $article->setFields($fields);
         return $article;
     }
-
     /**
      * Gets article listing from xml string.
      *
@@ -383,7 +342,6 @@ class AdferoArticlesClient {
         $xml = new SimpleXMLElement($xml);
         $totalCount = intval($xml->articles['totalCount']);
         $articleItems = array();
-
         foreach ($xml->articles->article as $child) {
             foreach ($child->id as $articleId) {
                 $article = new AdferoArticleListItem();
@@ -391,13 +349,11 @@ class AdferoArticlesClient {
                 array_push($articleItems, $article);
             }
         }
-
         $articles = new AdferoArticleList();
         $articles->items = $articleItems;
         $articles->totalCount = $totalCount;
         return $articles;
     }
-
     /**
      * Generates the URI from requested pararmeters.
      *
@@ -412,20 +368,16 @@ class AdferoArticlesClient {
      */
     private function GetUri($id, $identifier, $format, $properties, $fields, $offset, $limit) {
         $data = array();
-
         if ($properties != null) {
             $properties = implode(",", $properties);
             $data["properties"] = $properties;
         }
-
         if ($fields != null) {
             $fields = implode(",", $fields);
             $data["fields"] = $fields;
         }
-
         if (($identifier != null || $identifier != "") || ($offset != null || $limit !=
                 null)) {
-
             $data["offset"] = $offset;
             $data["limit"] = $limit;
             $data = array_merge(array($identifier => $id), $data);
@@ -437,7 +389,5 @@ class AdferoArticlesClient {
                     $querystring;
         }
     }
-
 }
-
 ?>

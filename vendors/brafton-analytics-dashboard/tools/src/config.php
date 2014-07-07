@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 global $apiConfig;
 $apiConfig = array(
     // True if objects should be returned by the service classes.
@@ -23,33 +22,27 @@ $apiConfig = array(
   
     // The application_name is included in the User-Agent HTTP header.
     'application_name' => 'Google Analytics Dashboard for Brafton WP Plugin',
-
     // OAuth2 Settings, you can get these keys at https://code.google.com/apis/console
     'oauth2_client_id' => '692240795393-01ra96go8up8537vp0ming76qm7ra90t.apps.googleusercontent.com',
     'oauth2_client_secret' => 'Ho-2buY8DDgY1MDDo8ZuihUd',
     'oauth2_redirect_uri' => 'urn:ietf:wg:oauth:2.0:oob',
-
     // The developer key, you get this at https://code.google.com/apis/console
     'developer_key' => 'AIzaSyCuTFvtLH8j51EI-211U1gQfIze92f5S6k',
   
     // Site name to show in the Google's OAuth 1 authentication screen.
     'site_name' => 'brafton.com',
-
     // Which Authentication, Storage and HTTP IO classes to use.
     'authClass'    => 'Google_OAuth2',
     'ioClass'      => 'Google_CurlIO',
     'cacheClass'   => 'Google_FileCache',
-
     // Don't change these unless you're working against a special development or testing environment.
     'basePath' => 'https://www.googleapis.com',
-
     // IO Class dependent configuration, you only have to configure the values
     // for the class that was configured as the ioClass above
     'ioFileCache_directory'  =>
         (function_exists('get_temp_dir') ?
             get_temp_dir() . '/Google_Client' :
         '/tmp/Google_Client'),
-
     // Definition of service specific values like scopes, oauth token URLs, etc
     'services' => array(
       'analytics' => array('scope' => array('https://www.googleapis.com/auth/analytics.readonly','scope' => 'https://www.googleapis.com/auth/analytics')),

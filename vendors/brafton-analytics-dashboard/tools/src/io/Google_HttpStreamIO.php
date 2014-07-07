@@ -14,28 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Http Streams based implementation of Google_IO.
  *
  * @author Stuart Langley <slangley@google.com>
  */
-
 require_once 'Google_CacheParser.php';
-
 class Google_HttpStreamIO extends Google_IO {
-
   private static $ENTITY_HTTP_METHODS = array("POST" => null, "PUT" => null);
-
   private static $DEFAULT_HTTP_CONTEXT = array(
     "follow_location" => 0,
     "ignore_errors" => 1,
   );
-
   private static $DEFAULT_SSL_CONTEXT = array(
     "verify_peer" => true,
   );
-
   /**
    * Perform an authenticated / signed apiHttpRequest.
    * This function takes the apiHttpRequest, calls apiAuth->sign on it
@@ -50,7 +43,6 @@ class Google_HttpStreamIO extends Google_IO {
     $request = Google_Client::$auth->sign($request);
     return $this->makeRequest($request);
   }
-
   /**
    * Execute a apiHttpRequest
    *
@@ -67,20 +59,16 @@ class Google_HttpStreamIO extends Google_IO {
         return $cached;
       }
     }
-
     $default_options = stream_context_get_options(stream_context_get_default());
-
     $requestHttpContext = array_key_exists('http', $default_options) ?
         $default_options['http'] : array();
     if (array_key_exists($request->getRequestMethod(),
           self::$ENTITY_HTTP_METHODS)) {
       $request = $this->processEntityRequest($request);
     }
-
     if ($request->getPostBody()) {
       $requestHttpContext["content"] = $request->getPostBody();
     }
-
     $requestHeaders = $request->getRequestHeaders();
     if ($requestHeaders && is_array($requestHeaders)) {
       $headers = "";
@@ -89,41 +77,31 @@ class Google_HttpStreamIO extends Google_IO {
       }
       $requestHttpContext["header"] = $headers;
     }
-
     $requestHttpContext["method"] = $request->getRequestMethod();
     $requestHttpContext["user_agent"] = $request->getUserAgent();
-
     $requestSslContext = array_key_exists('ssl', $default_options) ?
         $default_options['ssl'] : array();
-
     if (!array_key_exists("cafile", $requestSslContext)) {
       $requestSslContext["cafile"] = dirname(__FILE__) . '/cacerts.pem';
     }
-
     $options = array("http" => array_merge(self::$DEFAULT_HTTP_CONTEXT,
                                                  $requestHttpContext),
                      "ssl" => array_merge(self::$DEFAULT_SSL_CONTEXT,
                                           $requestSslContext));
-
     $context = stream_context_create($options);
-
     $response_data = file_get_contents($request->getUrl(),
                                        false,
                                        $context);
-
     if (false === $response_data) {
       throw new Google_IOException("HTTP Error: Unable to connect");
     }
-
     $respHttpCode = $this->getHttpResponseCode($http_response_header);
     $responseHeaders = $this->getHttpResponseHeaders($http_response_header);
-
     if ($respHttpCode == 304 && $cached) {
       // If the server responded NOT_MODIFIED, return the cached request.
       $this->updateCachedRequest($cached, $responseHeaders);
       return $cached;
     }
-
     $request->setResponseHttpCode($respHttpCode);
     $request->setResponseHeaders($responseHeaders);
     $request->setResponseBody($response_data);
@@ -132,17 +110,14 @@ class Google_HttpStreamIO extends Google_IO {
     $this->setCachedRequest($request);
     return $request;
   }
-
   /**
    * Set options that update the transport implementation's behavior.
    * @param $options
    */
   public function setOptions($options) {
   }
-
   private function getHttpResponseCode($response_headers) {
     $header_count = count($response_headers);
-
     for ($i = 0; $i < $header_count; $i++) {
       $header = $response_headers[$i];
       if (strncasecmp("HTTP", $header, strlen("HTTP")) == 0) {
@@ -152,11 +127,9 @@ class Google_HttpStreamIO extends Google_IO {
     }
     return 'UNKNOWN';
   }
-
   private function getHttpResponseHeaders($response_headers) {
     $header_count = count($response_headers);
     $headers = array();
-
     for ($i = 0; $i < $header_count; $i++) {
       $header = $response_headers[$i];
       $header_parts = explode(':', $header);
@@ -164,7 +137,6 @@ class Google_HttpStreamIO extends Google_IO {
         $headers[$header_parts[0]] = $header_parts[1];
       }
     }
-
     return $headers;
   }
 }

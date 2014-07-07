@@ -61,7 +61,6 @@ class GADASH_Settings {
 		if (isset ( $_REQUEST ['options']['ga_dash_hidden'] )) {
 			$message = "<div class='updated'><p><strong>" . __( "Options saved.", 'ga-dash' ) . "</strong></p></div>";
 		}
-
 		if (!$GADASH_Config->options ['ga_dash_tableid_jail'] OR !$GADASH_Config->options ['ga_dash_token']){
 						$message = "<div class='error'><p><strong>" . __( "Something went wrong, you need to", 'ga-dash' ) . "</strong> <a href='".menu_page_url ( 'gadash_settings', false )."'>".__('auhorize the plugin','ga-dash')."</a><strong> ".__( "or properly configure your", 'ga-dash' ). '</strong> <a href="http://deconf.com/how-to-set-up-google-analytics-on-your-website/" target="_blank">'.__('Google Analytics account','ga-dash')."</a>"."<stong>!</strong></p></div>";
 		}		
@@ -69,7 +68,6 @@ class GADASH_Settings {
 		?>
 <form name="ga_dash_form" method="post"
 	action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
-
 	<div class="wrap">
 	<?php echo "<h2>" . __( "Google Analytics Frontend Settings", 'ga-dash' ) . "</h2>"; ?><hr>
 	</div>
@@ -116,7 +114,6 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_frontend_stats]"
 											value="1" class="onoffswitch-checkbox"
@@ -128,12 +125,10 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " show page visits and visitors in frontend (after each article)", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox"
 											name="options[ga_dash_frontend_keywords]" value="1"
@@ -146,12 +141,10 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " show page searches (after each article)", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2" class="submit"><input type="submit"
@@ -160,7 +153,6 @@ class GADASH_Settings {
 							</tr>
 						</table>
 						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
-
 </form>
 <?php
 		self::output_sidebar ();
@@ -185,7 +177,6 @@ class GADASH_Settings {
 		?>
 <form name="ga_dash_form" method="post"
 	action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
-
 	<div class="wrap">
 			<?php echo "<h2>" . __( "Google Analytics Dashboard Settings", 'ga-dash' ) . "</h2>"; ?><hr>
 	</div>
@@ -230,10 +221,8 @@ class GADASH_Settings {
                                     </table>
 							</td>
 							</tr>
-
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_jailadmins]"
 											value="1" class="onoffswitch-checkbox"
@@ -245,7 +234,6 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( "disable Switch Profile/View functionality", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -266,7 +254,6 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_map]" value="1"
 											class="onoffswitch-checkbox" id="ga_dash_map"
@@ -277,7 +264,6 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " show Geo Map chart for visits", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -299,7 +285,6 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_traffic]"
 											value="1" class="onoffswitch-checkbox" id="ga_dash_traffic"
@@ -310,12 +295,10 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " show traffic overview", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_pgd]" value="1"
 											class="onoffswitch-checkbox" id="ga_dash_pgd"
@@ -326,13 +309,10 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " show top pages", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
-
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_rd]" value="1"
 											class="onoffswitch-checkbox" id="ga_dash_rd"
@@ -343,13 +323,10 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " show top referrers", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
-
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_sd]" value="1"
 											class="onoffswitch-checkbox" id="ga_dash_sd"
@@ -360,14 +337,10 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " show top searches", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
-
-
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2" class="submit"><input type="submit"
@@ -376,7 +349,6 @@ class GADASH_Settings {
 							</tr>
 						</table>
 						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
-
 </form>
 <?php
 		self::output_sidebar ();
@@ -407,7 +379,6 @@ class GADASH_Settings {
 		?>
 <form name="ga_dash_form" method="post"
 	action="<?php echo str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
-
 	<div class="wrap">
 			<?php echo "<h2>" . __( "Google Analytics Tracking Code", 'ga-dash' ) . "</h2>"; ?><hr>
 	</div>
@@ -465,7 +436,6 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_anonim]"
 											value="1" class="onoffswitch-checkbox" id="ga_dash_anonim"
@@ -476,12 +446,10 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " anonymize IPs while tracking", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_enhanced_links]"
 											value="1" class="onoffswitch-checkbox" id="ga_enhanced_links"
@@ -492,12 +460,10 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " enable enhanced link attribution", 'ga-dash' );?></div>
-
 								</td>
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_dash_remarketing]"
 											value="1" class="onoffswitch-checkbox" id="ga_dash_remarketing"
@@ -508,7 +474,6 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e ( " enable remarketing, demographics and interests reports", 'ga-dash' );?></div>
-
 								</td>
 							</tr>														
 							<?php
@@ -526,7 +491,6 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2" class="title">
-
 									<div class="onoffswitch">
 										<input type="checkbox" name="options[ga_event_tracking]"
 											value="1" class="onoffswitch-checkbox" id="ga_event_tracking"
@@ -537,7 +501,6 @@ class GADASH_Settings {
 										</label>
 									</div>
 									<div class="switch-desc"><?php _e(" track downloads, mailto and outbound links", 'ga-dash' ); ?></div>
-
 								</td>
 							</tr>
 							<tr>
@@ -584,7 +547,6 @@ class GADASH_Settings {
 		?>									
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2" class="submit"><input type="submit"
@@ -593,7 +555,6 @@ class GADASH_Settings {
 							</tr>
 						</table>
 						<input type="hidden" name="options[ga_dash_hidden]" value="Y">
-
 </form>
 <?php
 		self::output_sidebar ();
@@ -607,7 +568,6 @@ class GADASH_Settings {
 		*/
 		include_once ($GADASH_Config->plugin_path . '/tools/tools.php');
 		$tools = new GADASH_Tools ();
-
 		if (!current_user_can ( 'manage_options' )) {
 			return;
 		}		
@@ -693,7 +653,6 @@ class GADASH_Settings {
 <div class="wrap">
 	<?php echo "<h2>" . __( "Google Analytics Settings", 'ga-dash' ) . "</h2>"; ?><hr>
 </div>
-
 <div id="poststuff">
 	<div id="post-body" class="metabox-holder columns-2">
 		<div id="post-body-content">
@@ -774,12 +733,10 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2"><?php echo "<h2>" . __( "General Settings", 'ga-dash' ) . "</h2>"; ?></td>
 							</tr>
-
 							<tr>
 								<td class="title"><label for="ga_dash_tableid_jail"><?php _e("Select Domain: ", 'ga-dash' ); ?></label></td>
 								<td><select id="ga_dash_tableid_jail"
@@ -817,7 +774,6 @@ class GADASH_Settings {
 							<?php
 				}
 				?>
-
 							<tr>
 								<td class="title"><label for="ga_dash_style"><?php _e("Theme Color: ", 'ga-dash' ); ?></label></td>
 								<td><input type="text" id="ga_dash_style" class="ga_dash_style"
@@ -832,7 +788,6 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>							
 							<tr>
 								<td class="debugging"><?php echo "<h2>" . __( "Debugging Data", 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
@@ -880,7 +835,6 @@ class GADASH_Settings {
 				?>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>
 							<tr>
 								<td colspan="2"><input type="submit" name="Authorize"
@@ -892,7 +846,6 @@ class GADASH_Settings {
 							</tr>
 							<tr>
 								<td colspan="2"><hr></td>
-
 							</tr>		
 							<tr>
 								<td class="debugging"><?php echo "<h2>" . __( "Debugging Data", 'ga-dash' ) . "</h2></td>".'<td><a href="#" id="show_hide" class="show_hide">Show Log</a>'; ?></td>
@@ -937,10 +890,8 @@ class GADASH_Settings {
 				return;
 			}
 			?>						
-
 					</table>
 					</form>
-
 <?php
 		}
 		self::output_sidebar ();
@@ -950,7 +901,6 @@ class GADASH_Settings {
 </div>
 			</div>
 		</div>
-
 		<div id="postbox-container-1" class="postbox-container">
 			<div class="meta-box-sortables">
 				<div class="postbox">

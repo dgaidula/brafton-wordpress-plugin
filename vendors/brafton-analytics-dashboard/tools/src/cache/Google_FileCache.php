@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /*
  * This class implements a basic on disk storage. While that does
  * work quite well it's not the most elegant and scalable solution.
@@ -26,17 +25,14 @@
  */
 class Google_FileCache extends Google_Cache {
   private $path;
-
   public function __construct() {
     global $apiConfig;
     $this->path = $apiConfig['ioFileCache_directory'];
   }
-
   private function isLocked($storageFile) {
     // our lock file convention is simple: /the/file/path.lock
     return file_exists($storageFile . '.lock');
   }
-
   private function createLock($storageFile) {
     $storageDir = dirname($storageFile);
     if (! is_dir($storageDir)) {
@@ -51,12 +47,10 @@ class Google_FileCache extends Google_Cache {
     }
     @touch($storageFile . '.lock');
   }
-
   private function removeLock($storageFile) {
     // suppress all warnings, if some other process removed it that's ok too
     @unlink($storageFile . '.lock');
   }
-
   private function waitForLock($storageFile) {
     // 20 x 250 = 5 seconds
     $tries = 20;
@@ -73,18 +67,15 @@ class Google_FileCache extends Google_Cache {
       $this->removeLock($storageFile);
     }
   }
-
   private function getCacheDir($hash) {
     // use the first 2 characters of the hash as a directory prefix
     // this should prevent slowdowns due to huge directory listings
     // and thus give some basic amount of scalability
     return $this->path . '/' . substr($hash, 0, 2);
   }
-
   private function getCacheFile($hash) {
     return $this->getCacheDir($hash) . '/' . $hash;
   }
-
   public function get($key, $expiration = false) {
     $storageFile = $this->getCacheFile(md5($key));
     // See if this storage file is locked, if so we wait up to 5 seconds for the lock owning process to
@@ -104,7 +95,6 @@ class Google_FileCache extends Google_Cache {
     }
     return false;
   }
-
   public function set($key, $value) {
     $storageDir = $this->getCacheDir(md5($key));
     $storageFile = $this->getCacheFile(md5($key));
@@ -127,7 +117,6 @@ class Google_FileCache extends Google_Cache {
     }
     $this->removeLock($storageFile);
   }
-
   public function delete($key) {
     $file = $this->getCacheFile(md5($key));
     if (! @unlink($file)) {

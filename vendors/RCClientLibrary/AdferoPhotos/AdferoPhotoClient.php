@@ -1,18 +1,14 @@
 <?php
-
 include_once dirname(__FILE__) . '/Photos/AdferoPhoto.php';
 include_once dirname(__FILE__) . '/Photos/AdferoPhotosClient.php';
 include_once dirname(__FILE__) . '/Photos/AdferoScaleAxis.php';
-
 /**
  * Provides functions for accessing the Photo service API. Instantiate this
  * client with the domain, provided by your account manager.
  *
  */
 class AdferoPhotoClient {
-
     protected $baseUri;
-
     /**
      * Initialises a new instance of the Client class
      * @param string $baseUri Uri of the API provided by your account manager
@@ -27,7 +23,6 @@ class AdferoPhotoClient {
         }
         $this->baseUri = $baseUri;
     }
-
     /**
      * Gets a new instance of the AdferoPhotos client.
      * @return AdferoPhotossClient 
@@ -36,5 +31,4 @@ class AdferoPhotoClient {
         return new AdferoPhotosClient($this->baseUri);
     }
 }
-
 ?>

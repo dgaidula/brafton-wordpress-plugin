@@ -7,7 +7,6 @@
  * @package Brafton Importer
  * 
  */
-
 /**
  * Use of this method assumes the existance of a log object stored in a wp options field 
  * Initialize a new log object with brafton_initialize_log()
@@ -16,7 +15,6 @@
  * 
  * @param Array $report 
  */
-
 function brafton_log( $report ) {
     //Store all reports in brafton_error_log by default
     $brafton_default_report = array(
@@ -25,8 +23,6 @@ function brafton_log( $report ) {
                         'priority' => 0, //0 - log only when brafton errors enabled; 1- log regardless if errors are enabled
                         'message' => '',  //log entry message.
                     );
-
-
     // Parse and merge given $report with $defaults
     $report = wp_parse_args($report, $brafton_default_report);
 	//retrieve log from wp options table.
@@ -51,7 +47,6 @@ function brafton_log( $report ) {
         //Blame web server. Send the error report to appropriate error handling routine defined by web server.
     	error_log( $report ); 
 }
-
 /**
  * Not intended to be used directly. Exists to avoid repetitive code and 
  * excessive nested if statements in brafton_log function.
@@ -81,7 +76,6 @@ function add_brafton_log_entry($log, $report) {
         update_option( $report['option'], $log ); 
     }
 }
-
 /**
  * Initializes a new log object. Can also be used to overwrite an existing log. 
  * 
@@ -91,7 +85,6 @@ function add_brafton_log_entry($log, $report) {
 function brafton_initialize_log($option, $log = NULL ){
     //retrieve old log if one exists.
     $log = get_option( $option , $log );
-
     $brafton_default_log = array(
                             'count' => 0, //number of reports stored. Empty initially.
                             'limit' => 2000, //ingeger -limit log entries capacity
@@ -103,7 +96,6 @@ function brafton_initialize_log($option, $log = NULL ){
     //initialize log field. 
     $option_value =  update_option( $option, $log );
 }
-
 /**
  * Display notice in admin area. 
  */
@@ -112,7 +104,6 @@ function brafton_initialize_log($option, $log = NULL ){
   * Displays admin notices
   */
 function brafton_admin_notice( $messages ) {
-
     global $current_user;
     $user_id = $current_user->ID;
     $brafton_options = Brafton_Options::get_instance();
@@ -127,7 +118,6 @@ function brafton_admin_notice( $messages ) {
                         'class' => 'error', 
                         'ignore' => true 
                     );
-
     //Video importer is disabled.
     if( $brafton_options->options['brafton_video_secret'] === ""  && $brafton_options->options['brafton_enable_video'] === "off" )
         $notices[] = array(
@@ -135,7 +125,6 @@ function brafton_admin_notice( $messages ) {
                     'class' => 'error', 
                     'ignore' => true
                 );   
-
     //Overwrite is enabled.
     if( $brafton_options->options['brafton_overwrite'] === "on" && ! $brafton_options->options['brafton_api_key'] === "" )
         $notices[] = array(
@@ -143,7 +132,6 @@ function brafton_admin_notice( $messages ) {
                     'class' => 'update-nag', 
                     'ignore' => true
                 );
-
     //Brafton settings page notice
     if( isset( $_GET['page'] ) && $_GET['page'] == 'WP_Brafton_Article_Importer' ) { 
         //Error Logging is enabled.
@@ -161,7 +149,6 @@ function brafton_admin_notice( $messages ) {
                         'ignore' => true
                     );
     }    
-
     //Brafton import page notices.
     if( isset( $_GET['page'] ) && $_GET['page'] == 'brafton_archives' ) { 
          //We need curl to upload via archives.
@@ -171,7 +158,6 @@ function brafton_admin_notice( $messages ) {
                             'class' => 'error', 
                             'ignore' => true 
                         );
-
         //We need to raise limit when php safe mode is disabled. Article imports take that long!
         //if( ini_get('safe_mode') ){
             $php_execution_limit  = ini_get('max_execution_time'); 
@@ -180,9 +166,7 @@ function brafton_admin_notice( $messages ) {
                             'class' => 'error', 
                             'ignore' => false // currently can ignore only one message in notices array. Need to add new meta_keys for usermeta table.
                         );
-
         //}
-
         //Article importer is disabled.
         if( $brafton_options->options['brafton_api_key'] === "" && $brafton_options->options['brafton_import_articles'] === 'off' )
             $notices[] = array(
@@ -206,7 +190,6 @@ function brafton_admin_notice( $messages ) {
             echo sprintf( '<div id="brafton_error" class="%s"><p>%s</p></div>', $n['class'], $n['message'] );
     }
 }
-
 add_action('admin_init', 'brafton_nag_ignore');
 /**
  * Helper method for hiding PHP Safe Mode notification.

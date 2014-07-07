@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * A persistent storage class based on the APC cache, which is not
  * really very persistent, as soon as you restart your web server
@@ -24,31 +23,26 @@
  * @author Chris Chabot <chabotc@google.com>
  */
 class googleApcCache extends Google_Cache {
-
   public function __construct() {
     if (! function_exists('apc_add')) {
       throw new Google_CacheException("Apc functions not available");
     }
   }
-
   private function isLocked($key) {
     if ((@apc_fetch($key . '.lock')) === false) {
       return false;
     }
     return true;
   }
-
   private function createLock($key) {
     // the interesting thing is that this could fail if the lock was created in the meantime..
     // but we'll ignore that out of convenience
     @apc_add($key . '.lock', '', 5);
   }
-
   private function removeLock($key) {
     // suppress all warnings, if some other process removed it that's ok too
     @apc_delete($key . '.lock');
   }
-
   private function waitForLock($key) {
     // 20 x 250 = 5 seconds
     $tries = 20;
@@ -63,12 +57,10 @@ class googleApcCache extends Google_Cache {
       $this->removeLock($key);
     }
   }
-
    /**
    * @inheritDoc
    */
   public function get($key, $expiration = false) {
-
     if (($ret = @apc_fetch($key)) === false) {
       return false;
     }
@@ -78,7 +70,6 @@ class googleApcCache extends Google_Cache {
     }
     return unserialize($ret['data']);
   }
-
   /**
    * @inheritDoc
    */
@@ -87,7 +78,6 @@ class googleApcCache extends Google_Cache {
       throw new Google_CacheException("Couldn't store data");
     }
   }
-
   /**
    * @inheritDoc
    * @param String $key

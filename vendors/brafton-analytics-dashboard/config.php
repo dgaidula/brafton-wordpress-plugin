@@ -16,9 +16,7 @@ if (! class_exists ( 'GADASH_Config' )) {
 			
 			// get plugin options
 			$this->get_plugin_options ();
-
 		}
-
 		public function set_plugin_options() {
 			if (current_user_can ( 'manage_options' )){
 				update_option ( 'gadash_options', json_encode ( $this->options ) );
@@ -32,7 +30,6 @@ if (! class_exists ( 'GADASH_Config' )) {
 			$this->plugin_path = dirname ( __FILE__ );
 			$this->plugin_url = plugins_url ( "", __FILE__ );
 		}
-
 		private function get_plugin_options() {
 			/*
 			 * Get plugin options
@@ -44,7 +41,6 @@ if (! class_exists ( 'GADASH_Config' )) {
 			
 			//Maintain Compatibility
 			$this->maintain_compatibility();
-
 		}
 		
 		private function maintain_compatibility(){
@@ -61,7 +57,6 @@ if (! class_exists ( 'GADASH_Config' )) {
 				$this->options['ga_dash_access_front'] = array();
 				$this->options['ga_dash_access_front'][] = 'administrator';
 			}
-
 			if (!is_array($this->options['ga_dash_access_back']) OR empty($this->options['ga_dash_access_back'])){
 				$this->options['ga_dash_access_back'] = array();
 				$this->options['ga_dash_access_back'][] = 'administrator';
@@ -75,9 +70,7 @@ if (! class_exists ( 'GADASH_Config' )) {
 		
 	}
 }
-
 if (!isset($GLOBALS ['GADASH_Config'])){
 	$GLOBALS ['GADASH_Config'] = new GADASH_Config ();
 }
-
 	

@@ -1,7 +1,5 @@
 <?php
-
 include_once dirname(__FILE__) . '/../../AdferoArticles/AdferoEntityBase.php';
-
 /**
  * Represents a video output list item
  *
@@ -10,5 +8,4 @@ include_once dirname(__FILE__) . '/../../AdferoArticles/AdferoEntityBase.php';
 class AdferoVideoOutputListItem extends AdferoEntityBase {
     
 }
-
 ?>

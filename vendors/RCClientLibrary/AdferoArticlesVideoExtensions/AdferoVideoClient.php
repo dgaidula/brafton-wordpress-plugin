@@ -1,11 +1,8 @@
 <?php
-
 include_once dirname(__FILE__) . '/../AdferoArticles/AdferoCredentials.php';
 include_once dirname(__FILE__) . '/../AdferoArticles/AdferoClient.php';
 include_once dirname(__FILE__) . '/VideoOutputs/AdferoVideoOutputsClient.php';
 include_once dirname(__FILE__) . '/VideoPlayers/AdferoVideoPlayersClient.php';
-
-
 /**
  * Provides functions for accessing the ReelContent v2 XML API. Instantiate the
  * client with the domain, username and password provided by your account manager then 
@@ -13,7 +10,6 @@ include_once dirname(__FILE__) . '/VideoPlayers/AdferoVideoPlayersClient.php';
  *
  */
 class AdferoVideoClient extends AdferoClient{
-
     /**
      * Initialises a new instance of the Client class
      * @param string $baseUri Uri of the API provided by your account manager
@@ -31,7 +27,6 @@ class AdferoVideoClient extends AdferoClient{
         $this->baseUri = $baseUri;
         $this->credentials = new AdferoCredentials($publicKey, $secretKey);
     }
-
     /**
      * Gets a new instance of the VideoOutputs client.
      * @return AdferoVideoOutputsClient 
@@ -39,7 +34,6 @@ class AdferoVideoClient extends AdferoClient{
     public function VideoOutputs() {
         return new AdferoVideoOutputsClient($this->baseUri, $this->credentials);
     }
-
     /**
      * Gets a new instance of the VideoPlayers client.
      * @return AdferoVideoPlayersClient 

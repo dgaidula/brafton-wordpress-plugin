@@ -17,18 +17,14 @@ class NewsCategory {
      * @var String
      */
     private $name;
-
     function __construct(){
-
     }
-
     /**
      * @param String $url
      * @return array[int]Category
      */
     public static function getCategories($url){
         $xh = new XMLHandler($url);
-
         $nl = $xh->getNodes("category");
         $catList = array();
         foreach ($nl as $n) {

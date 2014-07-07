@@ -1,27 +1,22 @@
 <?php
-
 include_once dirname(__FILE__) . '/../AdferoHelpers.php';
 include_once dirname(__FILE__) . '/AdferoFeed.php';
 include_once dirname(__FILE__) . '/AdferoFeedListItem.php';
 include_once dirname(__FILE__) . '/AdferoFeedList.php';
-
 /**
  * Client that provides feed related functions.
  *
  * 
  */
 class AdferoFeedsClient {
-
     /**
      * @var string
      */
     private $baseUri;
-
     /**
      * @var AdferoCredentials
      */
     private $credentials;
-
     /**
      * Initialises a new instance of the Feeds Client
      * 
@@ -32,7 +27,6 @@ class AdferoFeedsClient {
         $this->baseUri = $baseUri;
         $this->credentials = $credentials;
     }
-
     /**
      * Gets the feed with the provided id.
      *
@@ -44,10 +38,8 @@ class AdferoFeedsClient {
         if (!isset($id)) {
             throw new InvalidArgumentException("id is required");
         }
-
         return $this->GetFeed($id, null, null);
     }
-
     /**
      * Gets the raw output from the api as a string.
      * $format is either "xml" or "json"
@@ -61,14 +53,11 @@ class AdferoFeedsClient {
         if (!isset($id)) {
             throw new InvalidArgumentException("id is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
-
         return $this->GetFeedRaw($id, null, null, $format);
     }
-
     /**
      * Lists the feeds under a particular feed.
      *
@@ -81,14 +70,11 @@ class AdferoFeedsClient {
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         return $this->ListFeedsForFeed($offset, $limit, null, null);
     }
-
     /**
      * Gets the raw output from the api as a string.
      * $format is either "xml" or "json"
@@ -103,18 +89,14 @@ class AdferoFeedsClient {
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
-
         return $this->ListFeedsForFeedRaw($offset, $limit, null, null, $format);
     }
-
     /**
      * Gets the feed with the provided id 
      *
@@ -129,7 +111,6 @@ class AdferoFeedsClient {
         $xmlString = AdferoHelpers::GetXMLFromUri($uri);
         return $this->GetFeedFromXmlString($xmlString);
     }
-
     /**
      * Gets the response from the api in string format
      * 
@@ -155,7 +136,6 @@ class AdferoFeedsClient {
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri);
     }
-
     /**
      * Gets the response from the api in string format
      * 
@@ -182,7 +162,6 @@ class AdferoFeedsClient {
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri);
     }
-
     /**
      * Gets the feed from xml string
      *
@@ -207,10 +186,8 @@ class AdferoFeedsClient {
                     break;
             }
         }
-
         return $feed;
     }
-
     /**
      *  Lists the feeds.
      *
@@ -229,7 +206,6 @@ class AdferoFeedsClient {
         $feeds->offset = $offset;
         return $feeds;
     }
-
     /**
      * Gets feed listing from xml string.
      *
@@ -240,7 +216,6 @@ class AdferoFeedsClient {
         $xml = new SimpleXMLElement($xml);
         $totalCount = intval($xml->feeds['totalCount']);
         $feedItems = array();
-
         foreach ($xml->feeds->feed as $child) {
             foreach ($child->id as $feedId) {
                 $feed = new AdferoFeedListItem();
@@ -248,13 +223,11 @@ class AdferoFeedsClient {
                 array_push($feedItems, $feed);
             }
         }
-
         $feeds = new AdferoFeedList();
         $feeds->items = $feedItems;
         $feeds->totalCount = $totalCount;
         return $feeds;
     }
-
     /**
      * Generates the URI from requested pararmeters.
      * 
@@ -269,20 +242,16 @@ class AdferoFeedsClient {
      */
     private function GetUri($id, $identifier, $format, $properties, $fields, $offset, $limit) {
         $data = array();
-
         if ($properties != null) {
             $properties = implode(",", $properties);
             $data["properties"] = $properties;
         }
-
         if ($fields != null) {
             $fields = implode(",", $fields);
             $data["fields"] = $fields;
         }
-
         if (($id == null && $identifier == null) || ($offset != null || $limit !=
                 null)) {
-
             $data["offset"] = $offset;
             $data["limit"] = $limit;
             $querystring = urldecode(http_build_query($data));
@@ -293,7 +262,5 @@ class AdferoFeedsClient {
                     $querystring;
         }
     }
-
 }
-
 ?>

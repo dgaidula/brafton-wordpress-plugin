@@ -11,21 +11,18 @@ if(!class_exists('Brafton_Article_Template'))
          * Custom Post Type id. Set by 
          */ 
 		public $post_type_id;
-
         /**
          * Singular and Plural versions of CPT Name. 
          * 
          * Array
          */
         public $product_names;
-
         /**
          * Custom Meta Box values.
          * 
          * Array 
          */ 
 		private $_meta;
-
         public $brafton_options;
 		
     	/**
@@ -36,7 +33,6 @@ if(!class_exists('Brafton_Article_Template'))
                 $this->brafton_options = $brafton_options;
                 $this->post_type_id = $post_type_option;
                 $this->product_names = $product_names;
-
                 $this->_meta = $_meta;
     		// register actions
     		add_action('init', array(&$this, 'init'));
@@ -44,7 +40,6 @@ if(!class_exists('Brafton_Article_Template'))
             //brafton_log( array( 'message' => "Successfully created " . $product_names['singular'] .  " custom post type with id: " . $this->post_type_id ) );
            
     	} // END public function __construct()
-
     	/**
     	 * hook into WP's init action hook
     	 */
@@ -54,7 +49,6 @@ if(!class_exists('Brafton_Article_Template'))
     		$this->create_brafton_post_type();
     		add_action('save_post', array(&$this, 'save_post'));
     	} // END public function init()
-
     	/**
     	 * Create the post type
     	 */
@@ -63,7 +57,6 @@ if(!class_exists('Brafton_Article_Template'))
             // $post_slug = $this->brafton_options->options['brafton_custom_post_slug'];
             // if( !$post_slug )
             //     $post_slug = 'blog'; 
-
      		register_post_type($this->post_type_id,
     			array(
     				'labels' => array(
@@ -110,7 +103,6 @@ if(!class_exists('Brafton_Article_Template'))
     			return;
     		} // if($_POST['post_type'] == $this->post_type_id && current_user_can('edit_post', $post_id))
     	} // END public function save_post($post_id)
-
     	/**
     	 * hook into WP's admin_init action hook
     	 */
@@ -124,7 +116,6 @@ if(!class_exists('Brafton_Article_Template'))
                     break;
                 case 'Articles' : 
                     add_action('add_meta_boxes', array(&$this, 'add_article_meta_boxes'));
-
                     break; 
             }
                 
@@ -157,7 +148,6 @@ if(!class_exists('Brafton_Article_Template'))
                 'side'
     	    );					
     	} // END public function add_meta_boxes()
-
         /**
          * called off of the add video meta box
          */     
@@ -174,7 +164,6 @@ if(!class_exists('Brafton_Article_Template'))
 			// Render the job order metabox
 			include( sprintf( "%s/templates/brafton_article_template_metabox.php", dirname( __FILE__ ), $this->post_type_id ) );			
 		} // END public function add_inner_meta_boxes($post)
-
         /**
          * Flush rewrite rules. 
          * Method runs after post type is activated and anytime settings are updated as long as custom post type option exists.
@@ -184,17 +173,13 @@ if(!class_exists('Brafton_Article_Template'))
             if( isset( $_GET['page'] ) && $_GET['page'] =='WP_Brafton_Article_Importer' && isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] )
             {
                 echo 'in brafton flush';
-
                 $brafton_options = Brafton_options::get_instance();
-
                 if( $brafton_options->options['brafton_article_post_type'] != "" || $brafton_options->options['brafton_video_post_type'] !=" " ){
                   flush_rewrite_rules();
                   echo 'flushed rewrite rules';                  
                 }
              
             }
-
         }
-
 	} // END class Brafton_Article
 } // END if(!class_exists('Brafton_Article'))

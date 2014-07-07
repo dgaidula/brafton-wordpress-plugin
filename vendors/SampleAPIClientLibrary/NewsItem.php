@@ -8,7 +8,6 @@
 include_once 'NewsCategory.php';
 include_once 'Photo.php';
 include_once 'NewsComment.php';
-
 /**
  * Constant Definitions for XML elements and attributes
  */
@@ -97,11 +96,9 @@ class NewsItem	{
 	private $categories;
 	/* @var NewsComment[] */
 	private $comments;
-
 	/** @return NewsItem **/
 	function __construct(){
 	}
-
 	/** @return XMLHandler **/
 	private function getFullNewsXML(){
 		if(empty($this->xh)){
@@ -110,7 +107,6 @@ class NewsItem	{
 		}
 		return $this->xh;
 	}
-
 	/**
 	 * @param String $url
 	 * @return NewsItem[]
@@ -118,12 +114,10 @@ class NewsItem	{
 	public static function getNewsList($url, $format) {
 		//Exception thrown in XMLHandler constructor if url is incorrect	
 		$xh = new XMLHandler($url);
-
 		$newsList = array();
 		if(isset($xh)){
 			$news = $xh->getNodes(NEWS_LIST_ITEM);
 			$exceptionList = array();
-
 			foreach($news as $n){
 				/* @var $n DomElement */
 				$ni = new NewsItem();
@@ -136,12 +130,10 @@ class NewsItem	{
 					if($n->getElementsByTagName(PUBLISH_DATE)->length==0)throw new XMLNodeException("Element " . PUBLISH_DATE . " for " . NEWS_LIST_ITEM . " with id: " . $ni->id);
 					if(!$n->getAttribute(HREF))throw new XMLNodeException("Attribute " . HREF . " for " . NEWS_LIST_ITEM . " with id: " . $ni->id);
 					if($n->getElementsByTagName(HEADLINE)->length==0)throw new XMLNodeException("Element " . HEADLINE . " for " . NEWS_LIST_ITEM . " with id: " . $ni->id);
-
 					//Check if date is valid if not throw exception
 					$ni->publishDate = $n->getElementsByTagName(PUBLISH_DATE)->item(0)->textContent;
 					$dateIsValid = date_parse($ni->publishDate);
 					if(!$dateIsValid)throw new DateParseException("Invalid Date for " . PUBLISH_DATE . "  on " . NEWS_LIST_ITEM . " with id: " . $ni->id . "<br />\n");
-
 					//Set the value of all other required elements
 					$ni->href = $n->getAttribute(HREF);
 					$ni->headline = $n->getElementsByTagName(HEADLINE)->item(0)->textContent;
@@ -164,7 +156,6 @@ class NewsItem	{
 		}
 		return $newsList;
 	}
-
 	/** @return String **/
 	public function getEncoding() {
 		if(empty($this->encoding)){
@@ -173,7 +164,6 @@ class NewsItem	{
 		}
 		return $this->encoding;
 	}
-
 	/** @return int **/
 	public function getId() {
 		if(empty($this->id)){
@@ -182,7 +172,6 @@ class NewsItem	{
 		}
 		return $this->id;
 	}
-
 	/** @return String **/
 	public function getPublishDate() {
 		if(empty($this->publishDate)){
@@ -191,7 +180,6 @@ class NewsItem	{
 		}
 		return $this->publishDate;
 	}
-
 	/** @return String **/
 	public function getHeadline() {
 		if(empty($this->headline)){
@@ -200,7 +188,6 @@ class NewsItem	{
 		}
 		return $this->headline;
 	}
-
 	/** @return String **/
 	public function getCategories() {
 		if(empty($this->categories)){
@@ -218,7 +205,6 @@ class NewsItem	{
 		}
 		return $this->keywords;
   }
-
 	/** @return String **/
 	public function getCreatedDate() {
 		if(empty($this->createdDate)){
@@ -228,7 +214,6 @@ class NewsItem	{
 		}
 		return $this->createdDate;
 	}
-
 	/** @return String **/
 	public function getLastModifiedDate() {
 		if(empty($this->lastModifiedDate)){
@@ -238,7 +223,6 @@ class NewsItem	{
 		}
 		return $this->lastModifiedDate;
 	}
-
 	/** @return String **/
 	public function getPhotos() {
 		if(empty($this->photos)){
@@ -247,7 +231,6 @@ class NewsItem	{
 		}
 		return $this->photos;
 	}
-
 	/** @return String **/
 	public function getComments() {
 		if(empty($this->comments)){
@@ -256,7 +239,6 @@ class NewsItem	{
 		}
 		return $this->comments;
 	}
-
 	/** @return String **/
 	public function getExtract() {
 		if(empty($this->extract)){
@@ -265,7 +247,6 @@ class NewsItem	{
 		}
 		return $this->extract;
 	}
-
 	/** @return String **/
 	public function getText() {
 		if(empty($this->text)){
@@ -275,7 +256,6 @@ class NewsItem	{
 		}
 		return $this->text;
 	}
-
 	/** @return String **/
 	public function getByLine() {
 		if(empty($this->byLine)){
@@ -284,7 +264,6 @@ class NewsItem	{
 		}
 		return $this->byLine;
 	}
-
 	/** @return String **/
 	public function getTweetText() {
 		if(empty($this->tweetText)){
@@ -293,7 +272,6 @@ class NewsItem	{
 		}
 		return $this->tweetText;
 	}
-
 	/** @return String **/
 	public function getSource() {
 		if(empty($this->source)){
@@ -302,7 +280,6 @@ class NewsItem	{
 		}
 		return $this->source;
 	}
-
 	/** @return String **/
 	public function getState() {
 		if(empty($this->state)){
@@ -312,7 +289,6 @@ class NewsItem	{
 		}
 		return $this->state;
 	}
-
 	/** @return String **/
 	public function getClientQuote() {
 		if(empty($this->clientQuote)){
@@ -321,7 +297,6 @@ class NewsItem	{
 		}
 		return $this->clientQuote;
 	}
-
 	/** @return String **/
 	public function getHtmlTitle() {
 		if(empty($this->htmlTitle)){
@@ -330,7 +305,6 @@ class NewsItem	{
 		}
 		return $this->htmlTitle;
 	}
-
 	/** @return String **/
 	public function getHtmlMetaDescription() {
 		if(empty($this->htmlMetaDescription)){
@@ -339,7 +313,6 @@ class NewsItem	{
 		}
 		return $this->htmlMetaDescription;
 	}
-
 	/** @return String **/
 	public function getHtmlMetaKeywords() {
 		if(empty($this->htmlMetaKeywords)){
@@ -348,7 +321,6 @@ class NewsItem	{
 		}
 		return $this->htmlMetaKeywords;
 	}
-
 	/** @return String **/
 	public function getHtmlMetaLanguage() {
 		if(empty($this->htmlMetaLanguage)){
@@ -357,7 +329,6 @@ class NewsItem	{
 		}
 		return $this->htmlMetaLanguage;
 	}
-
 	/** @return String **/
 	public function getTags() {
 		if(empty($this->tags)){
@@ -366,7 +337,6 @@ class NewsItem	{
 		}
 		return $this->tags;
 	}
-
 	/** @return int **/
 	public function getPriority() {
 		if(empty($this->priority)){
@@ -375,7 +345,6 @@ class NewsItem	{
 		}
 		return $this->priority;
 	}
-
 	/** @return String **/
 	public function getFormat() {
 		if(empty($this->format)){

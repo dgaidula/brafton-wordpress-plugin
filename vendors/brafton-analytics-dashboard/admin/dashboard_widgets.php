@@ -50,14 +50,12 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			}
 			
 			print_r(stripslashes(json_encode($GADASH_GAPI->gadash_realtime_data($GADASH_Config->options ['ga_dash_tableid'])))); 
-
 			die();
 		}
 		
 		function ga_dash_admin_actions() {
 			global $GADASH_Config;
 			global $wp_version;
-
 			if (current_user_can ( 'manage_options' )) {
 				include ($GADASH_Config->plugin_path . '/admin/ga_dash_settings.php');
 				
@@ -138,7 +136,6 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		function gadash_dashboard_widgets() {
 			global $GADASH_Config;
 			
-
 			
 			/*
 			 * Include GAPI
@@ -183,7 +180,6 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					} else if ($GADASH_Config->options['ga_dash_jailadmins'] AND $GADASH_Config->options ['ga_dash_tableid_jail']){
 						$GADASH_Config->options ['ga_dash_tableid'] = $GADASH_Config->options ['ga_dash_tableid_jail'];
 					}
-
 					$profile_switch .= '<select id="ga_dash_profile_select" name="ga_dash_profile_select" onchange="this.form.submit()">';
 					foreach ( $profiles as $profile ) {
 						if (! $GADASH_Config->options ['ga_dash_tableid']) {
@@ -255,7 +251,6 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 					$GADASH_Config->options ['ga_dash_default_dimension'] = $period;
 					$GADASH_Config->set_plugin_options ();
 				}
-
 			} else {
 					$period = isset($GADASH_Config->options ['ga_dash_default_dimension'])?$GADASH_Config->options ['ga_dash_default_dimension']:'30daysAgo';
 			}
@@ -268,7 +263,6 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 			}			
 			
 			?>
-
 	<select id="ga_dash_period" name="period" onchange="this.form.submit()">
 		<option value="realtime"
 			<?php selected ( "realtime", $period, true ); ?>><?php _e("Real-Time",'ga-dash'); ?></option>
@@ -364,7 +358,6 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 				if (! wp_script_is ( 'jquery-ui-position' )) {
 					wp_enqueue_script ( "jquery-ui-position" );
 				}
-
 				wp_register_script ( "jquery-ui-tooltip-html", $GADASH_Config->plugin_url . '/realtime/jquery/jquery.ui.tooltip.html.js' );				
 				wp_enqueue_script ( "jquery-ui-tooltip-html" );
 								
@@ -690,7 +683,6 @@ if (! class_exists ( 'GADASH_Widgets' )) {
 		}
 	}
 }
-
 if (is_admin ()) {
 	$GLOBALS ['GADASH_Widgets'] = new GADASH_Widgets ();
 }

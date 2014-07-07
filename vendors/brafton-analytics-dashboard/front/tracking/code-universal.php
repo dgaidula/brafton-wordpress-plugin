@@ -22,5 +22,4 @@ $rootdomain = $tools->get_root_domain ( $profile [3] );
   ga('require', 'linkid', 'linkid.js');
 <?php }?>
 <?php if ($GADASH_Config->options ['ga_dash_anonim']) {?>  ga('send', 'pageview', {'anonymizeIp': true});<?php } else {?>  ga('send', 'pageview');<?php }?>
-
 </script>

@@ -3,7 +3,6 @@
     require_once( sprintf(realpath(dirname(__FILE__) . '/..') .'/brafton_options.php'));
     $brafton_options = Brafton_options::get_instance(); 
  ?>
-
 <table> 
     <tr valign="top">
         <th class="metabox_label_column">
@@ -12,7 +11,6 @@
         <td>
             <input type="text" id="brafton_id" name="brafton_id" value="<?php echo @get_post_meta($post->ID, 'brafton_id', true); ?>" />
         </td>
-
     <tr>
     <tr valign="top">
         <th class="metabox_label_column">

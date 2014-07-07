@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * This class implements the RESTful transport of apiServiceRequest()'s
  *
@@ -38,7 +37,6 @@ class Google_REST {
         ? $decodedResponse['data'] : $decodedResponse;
     return $ret;
   }
-
   
   /**
    * Decode an HTTP Response.
@@ -62,7 +60,6 @@ class Google_REST {
       } else {
         $err .= ": ($code) $body";
       }
-
       throw new Google_ServiceException($err, $code, null, $decoded['error']['errors']);
     }
     
@@ -75,7 +72,6 @@ class Google_REST {
     }
     return $decoded;
   }
-
   /**
    * Parse/expand request parameters and create a fully qualified
    * request uri.
@@ -94,7 +90,6 @@ class Google_REST {
       if (! isset($paramSpec['location'])) {
         $paramSpec['location'] = $paramSpec['restParameterType'];
       }
-
       if ($paramSpec['type'] == 'boolean') {
         $paramSpec['value'] = ($paramSpec['value']) ? 'true' : 'false';
       }
@@ -110,7 +105,6 @@ class Google_REST {
         }
       }
     }
-
     if (count($uriTemplateVars)) {
       $uriTemplateParser = new URI_Template_Parser($requestUrl);
       $requestUrl = $uriTemplateParser->expand($uriTemplateVars);
@@ -118,11 +112,9 @@ class Google_REST {
     //FIXME work around for the the uri template lib which url encodes
     // the @'s & confuses our servers.
     $requestUrl = str_replace('%40', '@', $requestUrl);
-
     if (count($queryVars)) {
       $requestUrl .= '?' . implode($queryVars, '&');
     }
-
     return $requestUrl;
   }
 }

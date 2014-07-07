@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Class to hold information about an authenticated login.
  *
@@ -22,13 +21,10 @@
  */
 class Google_LoginTicket {
   const USER_ATTR = "id";
-
   // Information from id token envelope.
   private $envelope;
-
   // Information from id token payload.
   private $payload;
-
   /**
    * Creates a user based on the supplied token.
    *
@@ -39,7 +35,6 @@ class Google_LoginTicket {
     $this->envelope = $envelope;
     $this->payload = $payload;
   }
-
   /**
    * Returns the numeric identifier for the user.
    * @throws Google_AuthException
@@ -51,7 +46,6 @@ class Google_LoginTicket {
     }
     throw new Google_AuthException("No user_id in token");
   }
-
   /**
    * Returns attributes from the login ticket.  This can contain
    * various information about the user session.

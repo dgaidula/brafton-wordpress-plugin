@@ -1,12 +1,10 @@
 <?php
-
 include_once dirname(__FILE__) . '/AdferoCredentials.php';
 include_once dirname(__FILE__) . '/Articles/AdferoArticlesClient.php';
 include_once dirname(__FILE__) . '/ArticlePhotos/AdferoArticlePhotosClient.php';
 include_once dirname(__FILE__) . '/Briefs/AdferoBriefsClient.php';
 include_once dirname(__FILE__) . '/Categories/AdferoCategoriesClient.php';
 include_once dirname(__FILE__) . '/Feeds/AdferoFeedsClient.php';
-
 /**
  * Provides functions for accessing the DirectNews v2 XML API. Instantiate the
  * client with the domain, username and password provided by your account manager then 
@@ -14,9 +12,7 @@ include_once dirname(__FILE__) . '/Feeds/AdferoFeedsClient.php';
  *
  */
 class AdferoClient {
-
     protected $baseUri, $credentials;
-
     /**
      * Initialises a new instance of the Client class
      * @param string $baseUri Uri of the API provided by your account manager
@@ -34,7 +30,6 @@ class AdferoClient {
         $this->baseUri = $baseUri;
         $this->credentials = new AdferoCredentials($publicKey, $secretKey);
     }
-
     /**
      * Gets a new instance of the Articles client.
      * @return AdferoArticlesClient 
@@ -42,7 +37,6 @@ class AdferoClient {
     public function Articles() {
         return new AdferoArticlesClient($this->baseUri, $this->credentials);
     }
-
     /**
      * Gets a new instance of the ArticlePhotos client.
      * @return AdferoArticlePhotosClient 
@@ -50,7 +44,6 @@ class AdferoClient {
     public function ArticlePhotos() {
         return new AdferoArticlePhotosClient($this->baseUri, $this->credentials);
     }
-
     /**
      * Gets a new instance of the Briefs client.
      * @return AdferoBriefsClient 
@@ -58,7 +51,6 @@ class AdferoClient {
     public function Briefs() {
         return new AdferoBriefsClient($this->baseUri, $this->credentials);
     }
-
     /**
      * Gets a new instance of the Categories client.
      * @return AdferoCategoriesClient 
@@ -66,7 +58,6 @@ class AdferoClient {
     public function Categories() {
         return new AdferoCategoriesClient($this->baseUri, $this->credentials);
     }
-
     /**
      * Gets a new instance of the Feeds client.
      * @return AdferoFeedsClient 
@@ -74,6 +65,4 @@ class AdferoClient {
     public function Feeds() {
         return new AdferoFeedsClient($this->baseUri, $this->credentials);
     }
-
 }
-

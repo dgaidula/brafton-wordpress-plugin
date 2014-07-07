@@ -1,42 +1,34 @@
 .wp-admin #wpfooter {
 	display: none;
 }
-
 .wrap form {
 	width: 100%;
 }
-
 #braftonxml_sched_API_KEY {
 	width: 295px;
 }
-
 .enable-dynamic-authorship:nth-of-type(2):hover:after {
 	content: " - Use post author as defined in feed bylines field. Only available for Brafton Articles.";
 	font-size: 11px;
 	display: inline;
 }
-
 .api-key:after {
 	content: " - ex: dada3480-9d3b-4989-876a-663fdbe48be8" ;
 	display: block;
 }
-
 .metabox_label_column label {
 	font-size: 12px;
 }
-
 .brafton-post-slug:hover:after {
 	content: " - Distingish existing content from imported content using a different post type.";
 	font-size: 11px;
 	display: inline;
 }
-
 .brafton-import-articles:nth-of-type(2):hover:after {
 	content: " - Import new articles hourly.";
 	font-size: 11px;
 	display: inline;
 }
-
 .brafton-enable-video:nth-of-type(2):hover:after {
 	content: " - Import new videos hourly.";
 	font-size: 11px;
@@ -47,37 +39,31 @@
 	font-size: 11px;
 	display: inline;
 }
-
 .brafton-overwrite:nth-of-type(2):hover:after {
 	content: " - Update previously imported content with feed edits. Overwrites edits made through wordpress editor.";
 	font-size: 11px;
 	display: inline;
 }
-
 .brafton-enable-errors:nth-of-type(2):hover:after {
 	content: " - Log plugin errors in wp-options table as meta_key named brafton_error_log.";
 	font-size: 11px;
 	display: inline;
 }
-
 .ui-tabs-nav {
 	border-bottom: 1px solid #ccc;
 	height: 27px;
 	margin: 20px 0;
 	padding: 0;
 }
-
 .ui-tabs-nav li {
 	display: block;
 	float: left;
 	margin: 0;
 }
-
 .ui-tabs-nav li a {
 	padding: 4px 20px 6px;
 	font-weight: bold;
 }
-
 .ui-tabs-nav li a {
 	border-style: solid;
 	border-color: #CCC #CCC #F9F9F9;
@@ -96,17 +82,14 @@
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 }
-
 .ui-tabs-nav li.ui-tabs-selected a,
 .ui-tabs-nav li.ui-state-active a {
 	border-width: 1px;
 	color: #464646;
 }
-
 .ui-tabs-panel {
 	clear: both;
 }
-
 .ui-tabs-panel h3 {
 	font: italic normal normal 24px/29px Georgia,"Times New Roman","Bitstream Charter",Times,serif;
 	margin: 0;
@@ -114,27 +97,20 @@
 	line-height: 35px;
 	text-shadow: 0 1px 0 #fff;
 }
-
 .ui-tabs-panel h4 {
 	font-size: 15px;
 	font-weight: bold;
 	margin: 1em 0;
 }
-
 .wrap h3, .wrap table {
 /*display: none;*/
 }
-
 #message {
 	display: none;
 }
-
 #robotsmessage { 
 	display: none;
 }
-
 .tab-pane  { display: none; }
-
 .tab-pane-active { display: block; }
-
 .simplePagerNav li { display: inline; padding-right: 5px; }

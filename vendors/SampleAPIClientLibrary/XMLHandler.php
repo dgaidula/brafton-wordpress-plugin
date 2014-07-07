@@ -6,23 +6,19 @@
  * class XMLHandler is a helper class to parse the XML feed data
  * @package SamplePHPApi
  */
-
 include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_errors.php' );
 class XMLHandler {
 	/** @var Document */
 	private $doc;
-
   	static $ch;
   	public $count = 0;
 	
-
 		/**
 	 * @param String $url
 	 * @return XMLHandler
 	 */
 	function __construct($url){
 		$this->count++;
-
 		if(!preg_match('/^http:\/\//', $url)){
 	      $url = 'file://' . $url;
 	    }
@@ -43,24 +39,19 @@ class XMLHandler {
 					brafton_log( array( 'message' => 'Failed to execute external web rquest: ' . $url . '. cURL returned error: ' . $error ) );
 			else
 				brafton_log( array( 'message' => 'Successfully executed external web request: ' . $url ) );
-
 	  	}
 	  	else {
 	  		//load wp_http class   
 			if( !class_exists( 'WP_Http' ) )
 			  	include_once( ABSPATH . WPINC . '/class-http.php' );
-
 		    $request = new WP_Http; 
 		    $result = $request->request( $url );
-
 		    $error = $result->get_error_message();
 		    if( $error )
 				brafton_log( array( 'message' => 'Failed to execute external web rquest: ' . $url . '. WP_HTTP returned error: ' . $error ) );
 			else
 				brafton_log( array( 'message' => 'Successfully executed external web request: ' . $url ) );
-
 		    $feed_string = $result['body'];
-
 	  	}  
     
 		if(!$this->doc->loadXML($feed_string)) {
@@ -73,14 +64,12 @@ class XMLHandler {
   /*
   public static function CURL_pull($url,$timeout) { // use CURL library to fetch remote file
     print 'called getfile '; flush();
-
     print ' execced curl ';
     if ( curl_getinfo($ch,CURLINFO_HTTP_CODE) != 200 ) {
       throw new Exception('Return Status: '.curl_getinfo($ch,CURLINFO_HTTP_CODE).', please try again after a while, could not load URL :'.$url);
           return false;
     } else { return $file_contents; }
   }*/
-
 	/**
 	 * @param String $element
 	 * @return String
@@ -90,7 +79,6 @@ class XMLHandler {
 		if($result->length != null) return $this->doc->getElementsByTagName($element)->item(0)->nodeValue;
 		else return null;
 	}
-
 	/**
 	 * @param String $element
 	 * @return String
@@ -102,11 +90,8 @@ class XMLHandler {
 			echo "Something went wrong. Try enabling brafton errors.";
 			exit;
 		}
-
-
 		return $this->doc->getElementsByTagName($element)->item(0)->getAttribute('href');
 	}
-
 	/**
 	 * @param String $element
 	 * @param String $attribute
@@ -115,7 +100,6 @@ class XMLHandler {
 	function getAttributeValue($element, $attribute){
 		return $this->doc->getElementsByTagName($element)->item(0)->getAttribute($attribute);
 	}
-
 	/**
 	 * @param String $element
 	 * @return DOMNodeList
@@ -123,7 +107,6 @@ class XMLHandler {
 	function getNodes($element){
 		return $this->doc->getElementsByTagName($element);
 	}
-
 	/**
 	 * @param String $element
 	 * @return String
@@ -133,13 +116,11 @@ class XMLHandler {
 		return $xh->getValue($element);
 	}
 }
-
 /**
  * Custom Exception XMLException
  * @package SamplePHPApi
  */
 class XMLException extends Exception{}
-
 /**
  * Custom Exception XMLLoadException thrown if an XML source file is not found
  * @package SamplePHPApi
@@ -149,7 +130,6 @@ class XMLLoadException extends XMLException{
 		$this->message = "Could not load URL: " . $message;
 	}
 }
-
 /**
  * Custom Exception XMLNodeException thrown if a required XML element is not found
  * @package SamplePHPApi

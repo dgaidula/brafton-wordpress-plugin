@@ -1,20 +1,16 @@
 <?php
-
 //include_once dirname(__FILE__) . '/../AdferoHelpers.php';
 include_once dirname(__FILE__) . '/AdferoPhoto.php';
-
 /**
  * Client that provides photo related functions.
  *
  * 
  */
 class AdferoPhotosClient {
-
     /**
      * @var string
      */
     private $baseUri;
-
     /**
      * Initialises a new instance of the Feeds Client
      * @param string $baseUri Uri of the API provided by your account manager
@@ -22,7 +18,6 @@ class AdferoPhotosClient {
     function __construct($baseUri) {
         $this->baseUri = $baseUri;
     }
-
     /**
      * Gets the location of the photo.
      * @param int $id Id of the photo to get location of.
@@ -32,14 +27,12 @@ class AdferoPhotosClient {
         if ($id < 0) {
             throw new InvalidArgumentException("id must be a positive integer.");
         }
-
         $locationUri = $this->GetPhotoBaseUri($id);
         $photo = new AdferoPhoto();
         $photo->id = $id;
         $photo->locationUri = $locationUri;
         return $photo;
     }
-
     /**
      * Gets the location of the photo with the requested actions.
      * @param int $id Id of the photo to get location of.
@@ -53,27 +46,21 @@ class AdferoPhotosClient {
         if ($id < 0) {
             throw new InvalidArgumentException("id must be a positive integer.");
         }
-
         if (!isset($cropWidth) && !isset($cropHeight)) {
             throw new InvalidArgumentException("At least one crop dimension must be provided.");
         }
-
         if (isset($cropWidth) && $cropWidth <= 0) {
             throw new InvalidArgumentException("cropWidth must be greater than 0.");
         }
-
         if (isset($cropHeight) && $cropHeight <= 0) {
             throw new InvalidArgumentException("cropHeight must be greater than 0.");
         }
-
         if (isset($focalPointX) && $focalPointX < 0) {
             throw new InvalidArgumentException("focalPointX must be a positive integer.");
         }
-
         if (isset($focalPointY) && $focalPointY < 0) {
             throw new InvalidArgumentException("focalPointY must be a positive integer.");
         }
-
         $uri = $this->GetPhotoBaseUri($id);
         $data = array();
         $data["action"] = "crop";
@@ -83,13 +70,11 @@ class AdferoPhotosClient {
         }
         $querystring = urldecode(http_build_query($data));
         $locationUri = $uri . "?" . $querystring;
-
         $photo = new AdferoPhoto();
         $photo->id = $id;
         $photo->locationUri = $locationUri;
         return $photo;
     }
-
     /**
      * Gets the uri of the photo with the requested actions.
      * @param int $id Id of the photo to get.
@@ -101,11 +86,9 @@ class AdferoPhotosClient {
         if ($id < 0) {
             throw new InvalidArgumentException("id must be a positive integer.");
         }
-
         if (isset($scale) && $scale <= 0) {
             throw new InvalidArgumentException("scale must be a greater than 0.");
         }
-
         $uri = $this->GetPhotoBaseUri($id);
         $data = array();
         $data["action"] = "scale";
@@ -116,13 +99,11 @@ class AdferoPhotosClient {
         }
         $querystring = urldecode(http_build_query($data));
         $locationUri = $uri . "?" . $querystring;
-
         $photo = new AdferoPhoto();
         $photo->id = $id;
         $photo->locationUri = $locationUri;
         return $photo;
     }
-
     /**
      *
      * Gets the location of the photo with the requested actions.
@@ -139,27 +120,21 @@ class AdferoPhotosClient {
         if ($id < 0) {
             throw new InvalidArgumentException("id must be a positive integer.");
         }
-
         if (!isset($cropWidth) && !isset($cropHeight)) {
             throw new InvalidArgumentException("At least one crop dimension must be provided.");
         }
-
         if (isset($cropWidth) && $cropWidth <= 0) {
             throw new InvalidArgumentException("cropWidth must be greater than 0.");
         }
-
         if (isset($cropHeight) && $cropHeight <= 0) {
             throw new InvalidArgumentException("cropHeight must be greater than 0.");
         }
-
         if (isset($focalPointX) && $focalPointX < 0) {
             throw new InvalidArgumentException("focalPointX must be a positive integer.");
         }
-
         if (isset($focalPointY) && $focalPointY < 0) {
             throw new InvalidArgumentException("focalPointY must be a positive integer.");
         }
-
         if (isset($scale) && $scale <= 0) {
             throw new InvalidArgumentException("scale must be a greater than 0.");
         }
@@ -178,17 +153,13 @@ class AdferoPhotosClient {
         }
         $querystring = urldecode(http_build_query($data));
         $locationUri = $uri . "?" . $querystring;
-
         $photo = new AdferoPhoto();
         $photo->id = $id;
         $photo->locationUri = $locationUri;
         return $photo;
     }
-
     private function GetPhotoBaseUri($id) {
         return $this->baseUri . "photo/" . $id . "." . "jpg";
     }
-
 }
-
 ?>

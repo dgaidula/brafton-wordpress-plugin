@@ -8,7 +8,6 @@
  * @package SamplePHPApi
  */
 class NewsComment  {
-
     /* @var id */
     private $id;
     /* @var String */
@@ -19,11 +18,8 @@ class NewsComment  {
     private $commentTxt;
     /* @var String */
     private $postDate;
-
     public function __construct(){
-
     }
-
     /**
      * @param string $url
      * @param int $id
@@ -45,7 +41,6 @@ class NewsComment  {
         }
         return $commentList;
     }
-
     /**
      * @return the id
      */
@@ -67,35 +62,30 @@ class NewsComment  {
     public function getLocation() {
         return $this->location;
     }
-
     /**
      * @param location the location to set
      */
     private function setLocation($location) {
         $this->location = $location;
     }
-
     /**
      * @return the user
      */
     public function getUser() {
         return $this->user;
     }
-
     /**
      * @param user the user to set
      */
     private function setUser($user) {
         $this->user = $user;
     }
-
     /**
      * @return the commentTxt
      */
     public function getCommentTxt() {
         return $this->commentTxt;
     }
-
     /**
      * @param commentTxt the commentTxt to set
      */

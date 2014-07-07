@@ -11,7 +11,6 @@ if ( !class_exists( 'Article_Importer' ) )
 	 *
 	 */
 	class Brafton_Article_Importer {
-
 		 public $brafton_article_log;
 		 public $brafton_article;
 		 public $brafton_images;
@@ -32,7 +31,6 @@ if ( !class_exists( 'Article_Importer' ) )
 			$this->brafton_article = $brafton_article; 
 			$this->brafton_image = $brafton_image;
 		}
-
 		/**
 		 * @uses Brafton_Article_Helper to retrieve an articles array containing NewsItem objects.
 		 * @uses ApiHandler indirectly through Brafton_Article_Helper to grab article specific metadata from client's xml uri.
@@ -72,24 +70,18 @@ if ( !class_exists( 'Article_Importer' ) )
 					if( $this->brafton_options->options['brafton_enable_categories'] == "on" ){ 
 						$cats = $a->getCategories(); 
 						$post_category = $this->brafton_cats->get_terms( $cats, 'category', null, $brafton_id );  
-
 					}
 					//prepare article tag id array
 					if( $this->brafton_options->options['brafton_enable_tags'] == "on" ){
 						$tags = $a->getTags();
 						$input_tags = $this->brafton_tags->get_terms( $tags, 'post_tag', null, $brafton_id );
 					}
-
 					//Get more video article meta data
 					$post_author = $this->brafton_options->options['brafton_post_author']; 
 					if( isset( $by_line ) ) {
 						$post_author = $this->brafton_article->get_blog_user_id( $by_line ); 
 					}
-
 					$post_status = $this->brafton_options->options['brafton_post_status'];
-
-
-
 					//prepare single article meta data array
 					$article = compact(
 								'brafton_id', 
@@ -102,14 +94,11 @@ if ( !class_exists( 'Article_Importer' ) )
 								'post_category'
 								/* 'tags_input' */
 							); 	
-
 				//for articles imported as drafts. let publish date be determined by articles.
 				if( ! $post_status == "publish" )
 					$article['post_date'];
-
 					if( isset( $input_tags) )
 						$article['tags_input'] = $input_tags;
-
 					//insert article to WordPress database
 					$post_id = $this->brafton_article->insert_article( $article );
 					
@@ -120,7 +109,6 @@ if ( !class_exists( 'Article_Importer' ) )
 					}
 				}
 				else{
-
 				 	brafton_log( array( 'message' => 'Article already exists and overwrite is disabled. Check the ' . get_post_type( $post_exists ) . " post type in your wp_posts table. Article Title: " . get_the_title( $post_exists ) . " Post ID: " . $post_exists ) );
 				 } 
 			}

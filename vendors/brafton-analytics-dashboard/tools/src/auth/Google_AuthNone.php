@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Do-nothing authentication implementation, use this if you want to make un-authenticated calls
  * @author Chris Chabot <chabotc@google.com>
@@ -22,14 +21,12 @@
  */
 class Google_AuthNone extends Google_Auth {
   public $key = null;
-
   public function __construct() {
     global $apiConfig;
     if (!empty($apiConfig['developer_key'])) {
       $this->setDeveloperKey($apiConfig['developer_key']);
     }
   }
-
   public function setDeveloperKey($key) {$this->key = $key;}
   public function authenticate($service) {/*noop*/}
   public function setAccessToken($accessToken) {/* noop*/}
@@ -37,7 +34,6 @@ class Google_AuthNone extends Google_Auth {
   public function createAuthUrl($scope) {return null;}
   public function refreshToken($refreshToken) {/* noop*/}
   public function revokeToken() {/* noop*/}
-
   public function sign(Google_HttpRequest $request) {
     if ($this->key) {
       $request->setUrl($request->getUrl() . ((strpos($request->getUrl(), '?') === false) ? '?' : '&')

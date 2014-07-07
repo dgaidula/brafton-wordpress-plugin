@@ -7,13 +7,10 @@
  * Version: 4.2.21 
  * Author URI: http://brafton.com
  */  
-
 define ( 'GADWP_CURRENT_VERSION', '4.2.21' );
-
 /*
  * Include Install
 */
-
 include_once (dirname ( __FILE__ ) . '/install/install.php');
 // $test = new GADASH_Install;
 // $test->install();
@@ -21,7 +18,6 @@ register_activation_hook ( __FILE__, array (
 		'GADASH_Install',
 		'install' 
 ) );
-
 /*
  * Include Uninstall
  */
@@ -30,28 +26,22 @@ register_uninstall_hook ( __FILE__, array (
 		'GADASH_Uninstall',
 		'uninstall' 
 ) );
-
 // Plugin i18n
 add_action ( 'plugins_loaded', 'ga_dash_load_i18n' );
-
 function ga_dash_load_i18n() {
 	load_plugin_textdomain ( 'ga-dash', false, basename(dirname ( __FILE__ )) . '/languages' );
 }
-
 if (is_admin()){
 	add_action( 'plugins_loaded', 'gadash_admin_init');
 } else {
 	add_action( 'plugins_loaded', 'gadash_front_init');
 }
-
-
 function gadash_admin_init(){
 	/*
 	 * Include config
 	 */
 	include_once (dirname ( __FILE__ ) . '/config.php');
 	global $GADASH_Config;
-
 	/*
 	 * Include Tools
 	*/
@@ -69,14 +59,12 @@ function gadash_admin_init(){
 	*/
 	include_once (dirname ( __FILE__ ) . '/front/widgets.php');	
 }
-
 function gadash_front_init(){
 	/*
 	 * Include config
 	*/
 	include_once (dirname ( __FILE__ ) . '/config.php');
 	global $GADASH_Config;
-
 	/*
 	 * Include Tools
 	*/

@@ -1,11 +1,9 @@
 <?php
-
 /**
  * Description of Helpers
  *
  */
 class AdferoHelpers {
-
     /**
      * Returns the xml as a string from the provided uri using SimpleXML
      * @param string $uri 
@@ -21,7 +19,6 @@ class AdferoHelpers {
        curl_close($ch);
        return $data;
     }
-
     /**
      * Gets the raw response from the API for the provided uri as a string
      * @param string $uri 
@@ -31,13 +28,9 @@ class AdferoHelpers {
         //load wp_http class   
         if( !class_exists( 'WP_Http' ) )
             include_once( ABSPATH . WPINC . '/class-http.php' );
-
         $request = new WP_Http; 
         $result = $request->request( $uri );
-
         return (string) $result['body'];
     }
-
 }
-
 ?>

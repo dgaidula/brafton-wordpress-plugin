@@ -12,8 +12,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-
   /**
    * The "reports" collection of methods.
    * Typical usage is:
@@ -23,7 +21,6 @@
    *  </code>
    */
   class Google_ReportsServiceResource extends Google_ServiceResource {
-
     /**
      * Retrieve your YouTube Analytics reports. (reports.query)
      *
@@ -53,7 +50,6 @@
       }
     }
   }
-
 /**
  * Service definition for Google_YouTubeAnalytics (v1).
  *
@@ -79,15 +75,10 @@ class Google_YouTubeAnalyticsService extends Google_Service {
     $this->servicePath = 'youtube/analytics/v1/';
     $this->version = 'v1';
     $this->serviceName = 'youtubeAnalytics';
-
     $client->addService($this->serviceName, $this->version);
     $this->reports = new Google_ReportsServiceResource($this, $this->serviceName, 'reports', json_decode('{"methods": {"query": {"id": "youtubeAnalytics.reports.query", "path": "reports", "httpMethod": "GET", "parameters": {"dimensions": {"type": "string", "location": "query"}, "end-date": {"type": "string", "required": true, "location": "query"}, "filters": {"type": "string", "location": "query"}, "ids": {"type": "string", "required": true, "location": "query"}, "max-results": {"type": "integer", "format": "int32", "minimum": "1", "location": "query"}, "metrics": {"type": "string", "required": true, "location": "query"}, "sort": {"type": "string", "location": "query"}, "start-date": {"type": "string", "required": true, "location": "query"}, "start-index": {"type": "integer", "format": "int32", "minimum": "1", "location": "query"}}, "response": {"$ref": "ResultTable"}, "scopes": ["https://www.googleapis.com/auth/yt-analytics-monetary.readonly", "https://www.googleapis.com/auth/yt-analytics.readonly"]}}}', true));
-
   }
 }
-
-
-
 class Google_ResultTable extends Google_Model {
   protected $__columnHeadersType = 'Google_ResultTableColumnHeaders';
   protected $__columnHeadersDataType = 'array';
@@ -115,7 +106,6 @@ class Google_ResultTable extends Google_Model {
     return $this->rows;
   }
 }
-
 class Google_ResultTableColumnHeaders extends Google_Model {
   public $columnType;
   public $dataType;

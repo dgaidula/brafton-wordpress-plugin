@@ -1,26 +1,21 @@
 <?php
-
 include_once dirname(__FILE__) . '/../AdferoHelpers.php';
 include_once dirname(__FILE__) . '/AdferoArticlePhoto.php';
 include_once dirname(__FILE__) . '/AdferoArticlePhotoListItem.php';
 include_once dirname(__FILE__) . '/AdferoArticlePhotoList.php';
-
 /**
  * Client that provides article photo related functions
  *
  */
 class AdferoArticlePhotosClient {
-
     /**
      * @var string
      */
     private $baseUri;
-
     /**
      * @var AdferoCredentials
      */
     private $credentials;
-
     /**
      * Initialises a new instance of the ArticlePhotos Client
      * @param string $baseUri Uri of the API provided by your account manager
@@ -30,7 +25,6 @@ class AdferoArticlePhotosClient {
         $this->baseUri = $baseUri;
         $this->credentials = $credentials;
     }
-
     /**
      * Gets the articlePhoto with the provided articlePhoto Id.
      *
@@ -42,10 +36,8 @@ class AdferoArticlePhotosClient {
         if (!isset($id)) {
             throw new InvalidArgumentException("id is required");
         }
-
         return $this->GetArticlePhoto($id, null, null);
     }
-
     /**
      * Returns the raw response from the api for the articlePhoto with the provided article photo Id. 
      *
@@ -58,14 +50,11 @@ class AdferoArticlePhotosClient {
         if (!isset($id)) {
             throw new InvalidArgumentException("id is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
-
         return $this->GetArticlePhotoRaw($id, null, null, $format);
     }
-
     /**
      * Lists the articlePhotos on a particular article.
      *
@@ -79,18 +68,14 @@ class AdferoArticlePhotosClient {
         if (!isset($articleId)) {
             throw new InvalidArgumentException("articleId is required");
         }
-
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         return $this->ListArticlePhotos($articleId, $offset, $limit, null, null);
     }
-
     /**
      * Returns the raw response from the api for the articlePhotos on a particular article.
      *
@@ -105,26 +90,20 @@ class AdferoArticlePhotosClient {
         if (!isset($articleId)) {
             throw new InvalidArgumentException("articleId is required");
         }
-
         if (!isset($offset)) {
             throw new InvalidArgumentException("offset is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         if (!isset($limit)) {
             throw new InvalidArgumentException("limit is required");
         }
-
         if (!isset($format)) {
             throw new InvalidArgumentException("format is required");
         }
-
         return $this->ListArticlesPhotosRaw($articleId, $offset, $limit, null, null, $format);
     }
-
     /**
      * Lists the article photos under a particular article.
      * 
@@ -144,7 +123,6 @@ class AdferoArticlePhotosClient {
         $articlePhotos->offset = $offset;
         return $articlePhotos;
     }
-
     /**
      * Gets the response from the api in string format
      *
@@ -172,7 +150,6 @@ class AdferoArticlePhotosClient {
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri);
     }
-
     /**
      * Gets the article photo with the provided id 
      *
@@ -187,7 +164,6 @@ class AdferoArticlePhotosClient {
         $xmlString = AdferoHelpers::GetXMLFromUri($uri);
         return $this->GetArticlePhotoFromXmlString($xmlString);
     }
-
     /**
      * Gets the response from the api in string format
      * 
@@ -213,7 +189,6 @@ class AdferoArticlePhotosClient {
         $uri = "http://" . $this->credentials->getPublicKey() . ":" . $this->credentials->getSecretKey() . "@" . str_replace("http://", "", $uri);
         return AdferoHelpers::GetRawResponse($uri);
     }
-
     /**
      * Gets the article photo from xml string
      *
@@ -241,11 +216,9 @@ class AdferoArticlePhotosClient {
                     };
             }
         }
-
         $articlePhoto->setFields($fields);
         return $articlePhoto;
     }
-
     /**
      * Gets article listing from xml string.
      *
@@ -256,7 +229,6 @@ class AdferoArticlePhotosClient {
         $xml = new SimpleXMLElement($xml);
         $totalCount = intval($xml->articlePhotos['totalCount']);
         $articlePhotoItems = array();
-
         foreach ($xml->articlePhotos->articlePhoto as $child) {
             foreach ($child->id as $articleId) {
                 $article = new AdferoArticlePhotoListItem();
@@ -264,13 +236,11 @@ class AdferoArticlePhotosClient {
                 array_push($articlePhotoItems, $article);
             }
         }
-
         $articlesPhotos = new AdferoArticlePhotoList();
         $articlesPhotos->items = $articlePhotoItems;
         $articlesPhotos->totalCount = $totalCount;
         return $articlesPhotos;
     }
-
     /**
      * Generates the URI from requested pararmeters.
      *
@@ -285,17 +255,14 @@ class AdferoArticlePhotosClient {
      */
     private function GetUri($id, $identifier, $format, $properties, $fields, $offset, $limit) {
         $data = array();
-
         if ($properties != null) {
             $properties = implode(",", $properties);
             $data["properties"] = $properties;
         }
-
         if ($fields != null) {
             $fields = implode(",", $fields);
             $data["fields"] = $fields;
         }
-
         if (($identifier != null || $identifier != "") || ($offset != null || $limit != null)) {
             $data["offset"] = $offset;
             $data["limit"] = $limit;
@@ -307,7 +274,5 @@ class AdferoArticlePhotosClient {
             return $this->baseUri . "articlePhotos" . "/" . $id . "." . $format . "?" . $querystring;
         }
     }
-
 }
-
 ?>

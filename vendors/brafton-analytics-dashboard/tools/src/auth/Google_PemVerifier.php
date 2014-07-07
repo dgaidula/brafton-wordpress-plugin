@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Verifies signatures using PEM encoded certificates.
  *
@@ -22,7 +21,6 @@
  */
 class Google_PemVerifier extends Google_Verifier {
   private $publicKey;
-
   /**
    * Constructs a verifier from the supplied PEM-encoded certificate.
    *
@@ -40,13 +38,11 @@ class Google_PemVerifier extends Google_Verifier {
       throw new Google_AuthException("Unable to parse PEM: $pem");
     }
   }
-
   function __destruct() {
     if ($this->publicKey) {
       openssl_x509_free($this->publicKey);
     }
   }
-
   /**
    * Verifies the signature on data.
    *

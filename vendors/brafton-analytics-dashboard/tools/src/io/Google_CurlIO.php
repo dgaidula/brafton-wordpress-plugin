@@ -14,22 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Curl based implementation of apiIO.
  *
  * @author Chris Chabot <chabotc@google.com>
  * @author Chirag Shah <chirags@google.com>
  */
-
 require_once 'Google_CacheParser.php';
-
 class Google_CurlIO extends Google_IO {
   private static $ENTITY_HTTP_METHODS = array("POST" => null, "PUT" => null);
   private static $HOP_BY_HOP = array(
       'connection', 'keep-alive', 'proxy-authenticate', 'proxy-authorization',
       'te', 'trailers', 'transfer-encoding', 'upgrade');
-
   private $curlParams = array (
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_FOLLOWLOCATION => 0,
@@ -38,7 +34,6 @@ class Google_CurlIO extends Google_IO {
       CURLOPT_HEADER => true,
       CURLOPT_VERBOSE => false,
   );
-
   /**
    * Check for cURL availability.
    */
@@ -48,7 +43,6 @@ class Google_CurlIO extends Google_IO {
         'Google CurlIO client requires the CURL PHP extension');
     }
   }
-
   /**
    * Perform an authenticated / signed apiHttpRequest.
    * This function takes the apiHttpRequest, calls apiAuth->sign on it
@@ -63,7 +57,6 @@ class Google_CurlIO extends Google_IO {
     $request = Google_Client::$auth->sign($request);
     return $this->makeRequest($request);
   }
-
   /**
    * Execute a apiHttpRequest
    *
@@ -80,19 +73,16 @@ class Google_CurlIO extends Google_IO {
         return $cached;
       }
     }
-
     if (array_key_exists($request->getRequestMethod(),
           self::$ENTITY_HTTP_METHODS)) {
       $request = $this->processEntityRequest($request);
     }
-
     $ch = curl_init();
     curl_setopt_array($ch, $this->curlParams);
     curl_setopt($ch, CURLOPT_URL, $request->getUrl());
     if ($request->getPostBody()) {
       curl_setopt($ch, CURLOPT_POSTFIELDS, $request->getPostBody());
     }
-
     $requestHeaders = $request->getRequestHeaders();
     if ($requestHeaders && is_array($requestHeaders)) {
       $parsed = array();
@@ -101,11 +91,9 @@ class Google_CurlIO extends Google_IO {
       }
       curl_setopt($ch, CURLOPT_HTTPHEADER, $parsed);
     }
-
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getRequestMethod());
     curl_setopt($ch, CURLOPT_USERAGENT, $request->getUserAgent());
     $respData = curl_exec($ch);
-
     // Retry if certificates are missing.
     if (curl_errno($ch) == CURLE_SSL_CACERT) {
       error_log('SSL certificate problem, verify that the CA cert is OK.'
@@ -113,7 +101,6 @@ class Google_CurlIO extends Google_IO {
       curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__) . '/cacerts.pem');
       $respData = curl_exec($ch);
     }
-
     $respHeaderSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     $respHttpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $curlErrorNum = curl_errno($ch);
@@ -122,17 +109,14 @@ class Google_CurlIO extends Google_IO {
     if ($curlErrorNum != CURLE_OK) {
       throw new Google_IOException("HTTP Error: ($respHttpCode) $curlError");
     }
-
     // Parse out the raw response into usable bits
     list($responseHeaders, $responseBody) =
           self::parseHttpResponse($respData, $respHeaderSize);
-
     if ($respHttpCode == 304 && $cached) {
       // If the server responded NOT_MODIFIED, return the cached request.
       $this->updateCachedRequest($cached, $responseHeaders);
       return $cached;
     }
-
     // Fill in the apiHttpRequest with the response values
     $request->setResponseHttpCode($respHttpCode);
     $request->setResponseHeaders($responseHeaders);
@@ -143,7 +127,6 @@ class Google_CurlIO extends Google_IO {
     // And finally return it
     return $request;
   }
-
   /**
    * Set options that update cURL's default behavior.
    * The list of accepted options are:
@@ -156,7 +139,6 @@ class Google_CurlIO extends Google_IO {
       $this->curlParams[$key] = $val;
     }
   }
-
   /**
    * @param $respData
    * @param $headerSize
@@ -166,21 +148,17 @@ class Google_CurlIO extends Google_IO {
     if (stripos($respData, parent::CONNECTION_ESTABLISHED) !== false) {
       $respData = str_ireplace(parent::CONNECTION_ESTABLISHED, '', $respData);
     }
-
     if ($headerSize) {
       $responseBody = substr($respData, $headerSize);
       $responseHeaders = substr($respData, 0, $headerSize);
     } else {
       list($responseHeaders, $responseBody) = explode("\r\n\r\n", $respData, 2);
     }
-
     $responseHeaders = self::parseResponseHeaders($responseHeaders);
     return array($responseHeaders, $responseBody);
   }
-
   private static function parseResponseHeaders($rawHeaders) {
     $responseHeaders = array();
-
     $responseHeaderLines = explode("\r\n", $rawHeaders);
     foreach ($responseHeaderLines as $headerLine) {
       if ($headerLine && strpos($headerLine, ':') !== false) {

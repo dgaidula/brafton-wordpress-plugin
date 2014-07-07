@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * @author Chirag Shah <chirags@google.com>
  *
@@ -23,28 +22,20 @@ class Google_MediaFileUpload {
   const UPLOAD_MEDIA_TYPE = 'media';
   const UPLOAD_MULTIPART_TYPE = 'multipart';
   const UPLOAD_RESUMABLE_TYPE = 'resumable';
-
   /** @var string $mimeType */
   public $mimeType;
-
   /** @var string $data */
   public $data;
-
   /** @var bool $resumable */
   public $resumable;
-
   /** @var int $chunkSize */
   public $chunkSize;
-
   /** @var int $size */
   public $size;
-
   /** @var string $resumeUri */
   public $resumeUri;
-
   /** @var int $progress */
   public $progress;
-
   /**
    * @param $mimeType string
    * @param $data string The bytes you want to upload.
@@ -63,11 +54,9 @@ class Google_MediaFileUpload {
     $this->chunkSize = $chunkSize;
     $this->progress = 0;
   }
-
   public function setFileSize($size) {
     $this->size = $size;
   }
-
   /**
    * @static
    * @param $meta
@@ -82,45 +71,37 @@ class Google_MediaFileUpload {
       // Process as a normal API request.
       return false;
     }
-
     // Process as a media upload request.
     $params['uploadType'] = array(
         'type' => 'string',
         'location' => 'query',
         'value' => $uploadType,
     );
-
     $mimeType = isset($params['mimeType'])
         ? $params['mimeType']['value']
         : false;
     unset($params['mimeType']);
-
     if (!$mimeType) {
       $mimeType = $payload['content-type'];
     }
-
     if (isset($params['file'])) {
       // This is a standard file upload with curl.
       $file = $params['file']['value'];
       unset($params['file']);
       return self::processFileUpload($file, $mimeType);
     }
-
     $data = isset($params['data'])
         ? $params['data']['value']
         : false;
     unset($params['data']);
-
     if (self::UPLOAD_RESUMABLE_TYPE == $uploadType) {
       $payload['content-type'] = $mimeType;
       $payload['postBody'] = is_string($meta) ? $meta : json_encode($meta);
-
     } elseif (self::UPLOAD_MEDIA_TYPE == $uploadType) {
       // This is a simple media upload.
       $payload['content-type'] = $mimeType;
       $payload['postBody'] = $data;
     }
-
     elseif (self::UPLOAD_MULTIPART_TYPE == $uploadType) {
       // This is a multipart/related upload.
       $boundary = isset($params['boundary']['value']) ? $params['boundary']['value'] : mt_rand();
@@ -136,10 +117,8 @@ class Google_MediaFileUpload {
       $related .= "--$boundary--";
       $payload['postBody'] = $related;
     }
-
     return $payload;
   }
-
   /**
    * Prepares a standard file upload via cURL.
    * @param $file
@@ -152,16 +131,13 @@ class Google_MediaFileUpload {
     if (substr($file, 0, 1) != '@') {
       $file = '@' . $file;
     }
-
     // This is a standard file upload with curl.
     $params = array('postBody' => array('file' => $file));
     if ($mime) {
       $params['content-type'] = $mime;
     }
-
     return $params;
   }
-
   /**
    * Valid upload types:
    * - resumable (UPLOAD_RESUMABLE_TYPE)
@@ -183,41 +159,31 @@ class Google_MediaFileUpload {
         return self::UPLOAD_RESUMABLE_TYPE;
       }
     }
-
     // Allow the developer to override the upload type.
     if (isset($params['uploadType'])) {
       return $params['uploadType']['value'];
     }
-
     $data = isset($params['data']['value'])
         ? $params['data']['value'] : false;
-
     if (false == $data && false == isset($params['file'])) {
       // No upload data available.
       return false;
     }
-
     if (isset($params['file'])) {
       return self::UPLOAD_MEDIA_TYPE;
     }
-
     if (false == $meta) {
       return self::UPLOAD_MEDIA_TYPE;
     }
-
     return self::UPLOAD_MULTIPART_TYPE;
   }
-
-
   public function nextChunk(Google_HttpRequest $req, $chunk=false) {
     if (false == $this->resumeUri) {
       $this->resumeUri = $this->getResumeUri($req);
     }
-
     if (false == $chunk) {
       $chunk = substr($this->data, $this->progress, $this->chunkSize);
     }
-
     $lastBytePos = $this->progress + strlen($chunk) - 1;
     $headers = array(
       'content-range' => "bytes $this->progress-$lastBytePos/$this->size",
@@ -225,7 +191,6 @@ class Google_MediaFileUpload {
       'content-length' => $this->chunkSize,
       'expect' => '',
     );
-
     $httpRequest = new Google_HttpRequest($this->resumeUri, 'PUT', $headers, $chunk);
     $response = Google_Client::$io->authenticatedRequest($httpRequest);
     $code = $response->getResponseHttpCode();
@@ -237,7 +202,6 @@ class Google_MediaFileUpload {
       return Google_REST::decodeHttpResponse($response);
     }
   }
-
   private function getResumeUri(Google_HttpRequest $httpRequest) {
     $result = null;
     $body = $httpRequest->getPostBody();
@@ -250,7 +214,6 @@ class Google_MediaFileUpload {
         'expect' => '',
       ));
     }
-
     $response = Google_Client::$io->makeRequest($httpRequest);
     $location = $response->getResponseHeader('location');
     $code = $response->getResponseHttpCode();

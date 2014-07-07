@@ -11,7 +11,6 @@
 	class Brafton_Taxonomy {
 		
 		public $brafton_options;
-
 		function __construct( $brafton_options){
 			$this->braftion_options = $brafton_options;
 		}
@@ -26,11 +25,9 @@
 		public function get_terms( $terms = null, $taxonomy, $video = null, $brafton_id = null, $client = null )
 		{
 			$term_array = array(); 
-
 			if( isset( $video ) ){
 				$term_array = $this->insert_video_terms( $client, $brafton_id );
 			}
-
 			if( $terms ){ 
 				brafton_log( array( 'message' => "Preparing to insert items in the following taxonomy " . $taxonomy . " items: " . var_export( $terms, true ) ) );
 				foreach( $terms as $t )
@@ -51,10 +48,8 @@
 			$include_custom = array_merge( $term_array, $custom_terms );
 			return $include_custom;	
 		}
-
 		public function insert_term( $term_name, $taxonomy )
 		{
-
 			$term = get_term_by( 'name', sanitize_text_field( $term_name ), $taxonomy );
 				//If term already exists	
 				if( ! $term == false )
@@ -78,28 +73,21 @@
 		{
 			$option = 'brafton_custom_' . $taxonomy;
 			
-
 			if ( $option == 'brafton_custom_category' && isset( $this->brafton_options->options['brafton_custom_category'] ) ) 
 				$custom_terms = $this->brafton_options->options['brafton_custom_category'];
 			if ( $option == 'brafton_custom_post_tag' && isset( $this->brafton_options->options['brafton_custom_post_tag'] ) )
 				$custom_terms = $this->brafton_options->options['brafton_custom_post_tag']; 
-
 			if( !isset( $custom_terms ) )
 				return false;				
-
 			$terms = explode( ' ', $custom_terms );
-
 			brafton_log( array( 'message' => "Preparing to insert items in the following taxonomy " . $taxonomy . " items: " . var_export( $terms, true ) ) );
-
 			foreach( $terms as $t )
 			{
 				$term_id = $this->insert_term( $t, $taxonomy );
-
 				$term_array[] = $term_id;
 			} 
 			return $term_array;
 		}
-
 		/**
 		 * Insert Video Terms
 		 */ 

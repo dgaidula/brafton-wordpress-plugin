@@ -101,13 +101,10 @@
 				return false;
 			}
 			$image_id = $photos->Get( $thisPhotos->items[0]->id )->sourcePhotoId;
-
 			$image_url = $photoClient->Photos()->GetScaleLocationUrl( $image_id, $scale_axis, $scale )->locationUri;
 			$image_url = strtok( $image_url, '?' );
-
 			$image_id = $thisPhotos->items[0]->id;
 			$images_array = compact( 'image_id', 'image_url' );
-
 			if( array_key_exists( 'caption', $photos->Get( $thisPhotos->items[0]->id )->fields ) )
 				$image_array['image_caption'] = $photos->Get( $thisPhotos->items[0]->id )->fields['caption'];
 			 	
@@ -149,14 +146,12 @@
 		     //some video images don't have caption set.
 		    if ( ! array_key_exists( 'image_caption', $images_array ) )
 		    	$images_array['image_caption'] = $title;
-
 		    $attachment = array(
 									'title' => $title,
 									'post_excerpt' => $images_array['image_caption'],
 									'alt' => 'inherit', 
 								);
 		   
-
 		    // validate and store the image.  
 		    $attachment_id = media_handle_sideload( $file_array, $post_id, $images_array['image_caption'], $attachment );
 		    add_post_meta( $post_id, '_thumbnail_id', $attachment_id );

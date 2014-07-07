@@ -14,12 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 require_once 'io/Google_HttpRequest.php';
 require_once 'io/Google_HttpStreamIO.php';
 require_once 'io/Google_CurlIO.php';
 require_once 'io/Google_REST.php';
-
 /**
  * Abstract IO class
  *
@@ -35,20 +33,17 @@ abstract class Google_IO {
    * @return Google_HttpRequest $request
    */
   abstract function authenticatedRequest(Google_HttpRequest $request);
-
   /**
    * Executes a apIHttpRequest and returns the resulting populated httpRequest
    * @param Google_HttpRequest $request
    * @return Google_HttpRequest $request
    */
   abstract function makeRequest(Google_HttpRequest $request);
-
   /**
    * Set options that update the transport implementation's behavior.
    * @param $options
    */
   abstract function setOptions($options);
-
   /**
    * @visible for testing.
    * Cache the response to an HTTP request if it is cacheable.
@@ -62,10 +57,8 @@ abstract class Google_IO {
       Google_Client::$cache->set($request->getCacheKey(), $request);
       return true;
     }
-
     return false;
   }
-
   /**
    * @visible for testing.
    * @param Google_HttpRequest $request
@@ -76,10 +69,8 @@ abstract class Google_IO {
     if (false == Google_CacheParser::isRequestCacheable($request)) {
       false;
     }
-
     return Google_Client::$cache->get($request->getCacheKey());
   }
-
   /**
    * @visible for testing
    * Process an http request that contains an enclosed entity.
@@ -89,28 +80,23 @@ abstract class Google_IO {
   protected function processEntityRequest(Google_HttpRequest $request) {
     $postBody = $request->getPostBody();
     $contentType = $request->getRequestHeader("content-type");
-
     // Set the default content-type as application/x-www-form-urlencoded.
     if (false == $contentType) {
       $contentType = self::FORM_URLENCODED;
       $request->setRequestHeaders(array('content-type' => $contentType));
     }
-
     // Force the payload to match the content-type asserted in the header.
     if ($contentType == self::FORM_URLENCODED && is_array($postBody)) {
       $postBody = http_build_query($postBody, '', '&');
       $request->setPostBody($postBody);
     }
-
     // Make sure the content-length header is set.
     if (!$postBody || is_string($postBody)) {
       $postsLength = strlen($postBody);
       $request->setRequestHeaders(array('content-length' => $postsLength));
     }
-
     return $request;
   }
-
   /**
    * Check if an already cached request must be revalidated, and if so update
    * the request with the correct ETag headers.
@@ -129,14 +115,12 @@ abstract class Google_IO {
       } elseif ($cached->getResponseHeader('date')) {
         $addHeaders['If-Modified-Since'] = $cached->getResponseHeader('date');
       }
-
       $request->setRequestHeaders($addHeaders);
       return true;
     } else {
       return false;
     }
   }
-
   /**
    * Update a cached request, using the headers from the last response.
    * @param Google_HttpRequest $cached A previously cached response.
@@ -148,7 +132,6 @@ abstract class Google_IO {
         self::$HOP_BY_HOP,
         explode(',', $responseHeaders['connection'])
       );
-
       $endToEnd = array();
       foreach($hopByHop as $key) {
         if (isset($responseHeaders[$key])) {

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Signs data.
  *
@@ -25,14 +24,12 @@
 class Google_P12Signer extends Google_Signer {
   // OpenSSL private key resource
   private $privateKey;
-
   // Creates a new signer from a .p12 file.
   function __construct($p12, $password) {
     if (!function_exists('openssl_x509_read')) {
       throw new Exception(
           'The Google PHP API library needs the openssl PHP extension');
     }
-
     // This throws on error
     $certs = array();
     if (!openssl_pkcs12_read($p12, $certs, $password)) {
@@ -50,13 +47,11 @@ class Google_P12Signer extends Google_Signer {
       throw new Google_AuthException("Unable to load private key in ");
     }
   }
-
   function __destruct() {
     if ($this->privateKey) {
       openssl_pkey_free($this->privateKey);
     }
   }
-
   function sign($data) {
     if(version_compare(PHP_VERSION, '5.3.0') < 0) {
       throw new Google_AuthException(
