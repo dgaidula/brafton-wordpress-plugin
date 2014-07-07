@@ -270,11 +270,16 @@
                     $output['message'] = 'The wp cron scheduler failed unexpectedly. Try enabling <a href="http://codex.wordpress.org/Editing_wp-config.php#Alternative_Cron">Alternate Cron</a> in your wp-config.php file.';
                     $output['class'] = 'error';
                 }
-                elseif (isset($cron['brafton_import_trigger_hook']))
+                elseif(isset($cron['brafton_import_trigger_hook']))
                 {
                     $output['message'] = 'Time now:' . " \t\t\t" . date(get_option('date_format')) . " " . date("H:i:s") . "<br />";
                     $output['message'] .= 'Import will be triggered:' . " \t" . date(get_option('date_format'), $timestamp) . " " . date("H:i:s", $timestamp) . "<br />";
                     $output['class'] = "updated";
+                }
+                elseif
+                {
+                    $output['message'] = 'First time here? Save settings before hourly automatic content publishing can begin.';
+                    $class = "updated";
                 }
                 
 
