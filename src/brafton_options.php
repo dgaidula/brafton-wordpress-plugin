@@ -258,7 +258,6 @@
          */
         public function next_scheduled_import(){
             $crons = _get_cron_array();
-                    var_dump( $crons );
 
             $output = array();
             foreach ($crons as $timestamp => $cron)
