@@ -2,7 +2,7 @@
 /*
 Plugin Name: Brafton WordPress Plugin
 Plugin URI: http://www.brafton.com/support/wordpress
-version: 1.4.3
+version: 1.4.4
 Requires at least: 3.8
 Tested up to: 3.9.1
 Description: Automates Brafton Inc,  ContentLEAD, and Castleford Media content publishing.  
@@ -107,7 +107,7 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         // Add the settings link to the plugins page
         function plugin_settings_link( $links )
         { 
-            $settings_link = '<a href="options-general.php?page=brafton_importer_options">Settings</a>'; 
+            $settings_link = '<a href="options-general.php?page=WP_Brafton_Article_Importer">Settings</a>'; 
             array_unshift( $links, $settings_link ); 
             return $links; 
         }
