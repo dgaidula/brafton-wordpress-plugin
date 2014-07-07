@@ -134,10 +134,10 @@ function brafton_admin_notice( $messages ) {
                 );
     //Brafton settings page notice
     if( isset( $_GET['page'] ) && $_GET['page'] == 'WP_Brafton_Article_Importer' ) { 
-
+        $next_scheduled_import = $brafton_options->next_scheduled_import();
         $notices[] = array(
-                        'message' => $brafton_options->next_scheduled_import(), 
-                        'class' => 'updated', 
+                        'message' => $next_scheduled_import['message'], 
+                        'class' => $next_scheduled_import['class'], 
                         'ignore' => true
                     );
         //Error Logging is enabled.

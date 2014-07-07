@@ -258,14 +258,27 @@
          */
         public function next_scheduled_import(){
             $crons = _get_cron_array();
+            $output = array();
             foreach ($crons as $timestamp => $cron)
             {
-                if (isset($cron['brafton_import_trigger_hook']))
-                {
-                    $output = 'Time now:' . " \t\t\t" . date(get_option('date_format')) . " " . date("H:i:s") . "<br />";
-                    $output .= 'Import will be triggered:' . " \t" . date(get_option('date_format'), $timestamp) . " " . date("H:i:s", $timestamp) . "<br />";
-                    $timestamp += 60;
+                $timestamp += 60;
+                if( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ){
+                    $output['message'] = 'Brafton plugin requires <strong>WP Cron</strong> to automate content publishing. Please enable either WP Cron or <a href="http://codex.wordpress.org/Editing_wp-config.php#Alternative_Cron">Alternate Cron</a> in your wp-config.php file.';
+                    $output['class'] = "error";                       
                 }
+                elseif( $timestamp < time() && isset($cron['brafton_import_trigger_hook']) ){
+                    $output['message'] = 'The wp cron scheduler failed unexpectedly. Try enabling <a href="http://codex.wordpress.org/Editing_wp-config.php#Alternative_Cron">Alternate Cron</a> in your wp-config.php file.';
+                    $output['class'] = 'error';
+                }
+                elseif (isset($cron['brafton_import_trigger_hook']))
+                {
+                    $output['message'] = 'Time now:' . " \t\t\t" . date(get_option('date_format')) . " " . date("H:i:s") . "<br />";
+                    $output['message'] .= 'Import will be triggered:' . " \t" . date(get_option('date_format'), $timestamp) . " " . date("H:i:s", $timestamp) . "<br />";
+                    $output['class'] = "updated";
+                }
+                
+
+
             }
 
             return $output;
