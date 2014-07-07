@@ -228,7 +228,6 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                 $brafton_article_importer->import_articles();
                 //Schedule importer to run the next hour.
                 brafton_schedule_import();
-                $brafton_options->update_option( "brafton_options", "brafton_import_trigger_count", $brafton_options->get_option( "brafton_options", "brafton_import_trigger_count") + 1, 0);
             }
         }
         
@@ -260,7 +259,6 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                         $brafton_options 
                         );
                     $brafton_video_importer->import_videos();
-                    $brafton_options->update_option( "brafton_options", "brafton_import_trigger_count", $brafton_options->get_option( "brafton_options", "brafton_import_trigger_count") + 1, 0);
                     
                     //Schedule importer.
                     brafton_schedule_import();
@@ -310,6 +308,8 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         run_video_import( $cron );
         brafton_log( array( 'message' => "Import successfully triggered by wp cron." ) );
         brafton_schedule_import();
+        $brafton_options->update_option( "brafton_options", "brafton_import_trigger_count", $brafton_options->get_option( "brafton_options", "brafton_import_trigger_count") + 1, 0);
+
         //update_option("brafton_import_trigger_count", get_option("brafton_import_trigger_count") + 1);
         // HACK: posts are duplicated due to a lack of cron lock resolution (see http://core.trac.wordpress.org/ticket/19700)
         // this is fixed in wp versions >= 3.4.

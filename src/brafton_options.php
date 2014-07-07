@@ -253,6 +253,23 @@
             delete_option( BRAFTON_ERROR_LOG );
             delete_option( BRAFTON_OPTIONS );
         }
+        /**
+         * Displays next scheduled import time.
+         */
+        public function next_scheduled_import(){
+            $crons = _get_cron_array();
+            foreach ($crons as $timestamp => $cron)
+            {
+                if (isset($cron['brafton_import_trigger_hook']))
+                {
+                    $output = 'Time now:' . " \t\t\t" . date(get_option('date_format')) . " " . date("H:i:s") . "<br />";
+                    $output .= 'Import will be triggered:' . " \t" . date(get_option('date_format'), $timestamp) . " " . date("H:i:s", $timestamp) . "<br />";
+                    $timestamp += 60;
+                }
+            }
+
+            return $output;
+        }
         public function link_to_product()
         {
             $product = $this->brafton_get_product(); 
