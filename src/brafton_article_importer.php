@@ -67,15 +67,27 @@ if ( !class_exists( 'Article_Importer' ) )
 					$keywords = $a->getKeywords();
 					
 					//prepare video article category id array
-					if( $this->brafton_options->options['brafton_enable_categories'] == "on" ){ 
+					if( $this->brafton_options->options['brafton_enable_categories'] == "on"  ){ 
 						$cats = $a->getCategories(); 
 						$post_category = $this->brafton_cats->get_terms( $cats, 'category', null, $brafton_id );  
 					}
 					//prepare article tag id array
-					if( $this->brafton_options->options['brafton_enable_tags'] == "on" ){
-						$tags = $a->getTags();
+					if( ! $this->brafton_options->options['brafton_enable_tags'] == "none" ){
+						switch ( $this->brafton_options->options['brafton_enable_tags'] ){
+							case 'tags' :
+								$tags = $a->getTags();
+								break;
+							case 'categories' : 
+								$tags = $cats;
+								break;
+							case 'keywords' :
+								$tags = $a->getKeywords();
+								break;
+						}
 						$input_tags = $this->brafton_tags->get_terms( $tags, 'post_tag', null, $brafton_id );
+
 					}
+
 					//Get more video article meta data
 					$post_author = $this->brafton_options->options['brafton_post_author']; 
 					if( isset( $by_line ) ) {
