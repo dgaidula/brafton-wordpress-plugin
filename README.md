@@ -1,3 +1,0 @@
-Brafton Content Importer
-==================
-#todo
