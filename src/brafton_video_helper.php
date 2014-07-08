@@ -188,8 +188,17 @@ EOT;
 						'key' => 'brafton_id', 
 						'value' => $brafton_id 
 					) 
+				),
+				'post_status' =>  array(
+					'publish', 
+					'pending', 
+					'draft', 
+					'auto-draft', 
+					'future', 
+					'private', 
+					'inherit' 
 				) 
-		);
+			);
 		$find = new WP_Query( $args );
 		$post_id = false;
 		if( $find->have_posts() ) {

@@ -28,8 +28,17 @@
 							'key' => 'brafton_id', 
 							'value' => $brafton_id 
 						) 
-					) 
-			);
+					),
+					'post_status' =>  array(
+						'publish', 
+						'pending', 
+						'draft', 
+						'auto-draft', 
+						'future', 
+						'private', 
+						'inherit' 
+					)
+				);
 			$find = new WP_Query( $args );
 			$post_id = false; 
 			if( $find->have_posts() ) {
@@ -188,7 +197,7 @@
 				$post_id = marpro_wp_insert_post( $article_array ); 
 				
 				//add custom meta field so we can find the article again later.
-				update_post_meta($post_id, 'brafton_id', $brafton_id );
+				update_post_meta( $post_id, 'brafton_id', $brafton_id );
 			}
 			else
 			{
