@@ -300,7 +300,7 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
     /**  
      * This is the scheduling hook for our plugin that is triggered by cron
      */
-    add_action('brafton_import_trigger_hook', 'brafton_run_hourly_import', 10, 2);
+    add_action('brafton_import_trigger_hook', 'brafton_run_hourly_import', 10, 0 );
     function brafton_run_hourly_import()
     {
         $cron = true;
