@@ -2,7 +2,7 @@
 /*
 Plugin Name: Brafton WordPress Plugin
 Plugin URI: http://www.brafton.com/support/wordpress
-version: 1.4.8
+version: 1.4.9
 Requires at least: 3.8
 Tested up to: 3.9.1
 Description: Automates Brafton Inc,  ContentLEAD, and Castleford Media content publishing.  
