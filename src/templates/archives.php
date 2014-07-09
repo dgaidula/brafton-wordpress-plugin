@@ -14,7 +14,7 @@
             <?php  do_settings_sections('Brafton_Archives'); ?>
             <?php   @submit_button(); ?>
 
-            <p>XML Archive file too large? Can't increase php memory limit? Use this <a href="http://tech.contentlead.com/terminati">tool</a> to split the archival history file into several smaller xml files. Copy the list of article id's below and paste into the Article List in the first field.</p>
+            <p>XML Archive file too large? Can't increase php memory limit? Use this <a href="http://tech.contentlead.com/terminati">tool</a> to split the archival history file into several smaller xml files. Copy the list of article id's below and paste into the Article List field.</p>
             <form action="">
 </form>
             <?php 
