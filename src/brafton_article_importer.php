@@ -59,20 +59,23 @@ if ( !class_exists( 'Article_Importer' ) )
 					$post_date = $this->brafton_article->get_publish_date( $a ); 
 					$post_title = $a->getHeadline();
 					$post_content = $a->getText(); 
+
+					//Pull author from byline field if set.
 					if( $this->brafton_options->options['enable_dynamic_authorship']  === 'on');
-					$by_line = $a->getByLine();
+						$by_line = $a->getByLine();
 					
 	
 					$post_excerpt = $a->getExtract(); 
-					$keywords = $a->getKeywords();
+					//Only make request category page if necessary. 
+					if( $this->brafton_options->options['brafton_enable_categories'] == "on" || $this->brafton_options->options['brafton_enable_tags'] == "categories" )
+						$cats = $a->getCategories(); 
 					
 					//prepare video article category id array
 					if( $this->brafton_options->options['brafton_enable_categories'] == "on"  ){ 
-						$cats = $a->getCategories(); 
 						$post_category = $this->brafton_cats->get_terms( $cats, 'category', null, $brafton_id );  
 					}
 					//prepare article tag id array
-					if( ! $this->brafton_options->options['brafton_enable_tags'] == "none" ){
+					if( $this->brafton_options->options['brafton_enable_tags'] != "none" ){
 						switch ( $this->brafton_options->options['brafton_enable_tags'] ){
 							case 'tags' :
 								$tags = $a->getTags();
@@ -84,8 +87,7 @@ if ( !class_exists( 'Article_Importer' ) )
 								$tags = $a->getKeywords();
 								break;
 						}
-						$input_tags = $this->brafton_tags->get_terms( $tags, 'post_tag', null, $brafton_id );
-
+						$tags_input = $this->brafton_tags->get_terms( $tags, 'post_tag', null, $brafton_id );
 					}
 
 					//Get more video article meta data
@@ -111,8 +113,10 @@ if ( !class_exists( 'Article_Importer' ) )
 						unset( $article['post_date'] );
 
 
-					if( isset( $input_tags) )
-						$article['tags_input'] = $input_tags;
+					if( isset( $tags_input ) ){
+						$article['tags_input'] = $tags_input;
+
+					}
 					//insert article to WordPress database
 					$post_id = $this->brafton_article->insert_article( $article );
 					
