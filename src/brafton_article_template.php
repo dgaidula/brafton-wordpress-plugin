@@ -65,7 +65,7 @@ if(!class_exists('Brafton_Article_Template'))
     				),
     				'public' => true,
     				'has_archive' => true,
-                    'taxonomies' => array('category'),
+                    'taxonomies' => array('category', 'post_tag' ),
                     'rewrite'            => array( 'slug' => $this->post_type_id ),
     				'description' => __("This is a sample post type meant only to illustrate a preferred structure of plugin development"),
     				'supports' => array(
