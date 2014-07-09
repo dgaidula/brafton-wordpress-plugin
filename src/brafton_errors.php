@@ -135,7 +135,7 @@ function brafton_admin_notice( $messages ) {
     //Brafton settings page notice
     if( isset( $_GET['page'] ) && $_GET['page'] == 'WP_Brafton_Article_Importer' ) { 
         $next_scheduled_import = $brafton_options->next_scheduled_import();
-        if( $brafton_options->options['brafton_import_articles'] == "on" || $brafton_options->options['brafton_import_videos'] )
+        if( $brafton_options->options['brafton_import_articles'] == "on" || $brafton_options->options['brafton_enable_video'] === "on" )
             $notices[] = array(
                         'message' => $next_scheduled_import['message'], 
                         'class' => $next_scheduled_import['class'], 
