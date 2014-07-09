@@ -33,8 +33,11 @@
 				foreach( $terms as $t )
 				{	
 					$term_name = $t->getName(); 
-					$term_id = $this->insert_term( $term_name, $taxonomy );
-					$term_array[] = $term_id;
+					if( $term_name ){
+						$term_id = $this->insert_term( $term_name, $taxonomy );
+						$term_array[] = $term_id;
+					}
+
 				}
 			}
 			else
@@ -90,6 +93,7 @@
 		}
 		/**
 		 * Insert Video Terms
+		 * Video feed only has categories. since 07-09-2014
 		 */ 
 		private function insert_video_terms( $categories, $brafton_id ){
 			
