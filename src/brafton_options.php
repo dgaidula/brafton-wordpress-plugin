@@ -11,7 +11,6 @@
         public $options; 
         //Array of plugin errors log
         public $errors; 
-        public $archives; 
         //Brafton_Options Object 
         private static $instance = null;
         //Let's hinder direct instantiation by cloning.  
@@ -217,8 +216,9 @@
            // validate feed key
            // validate custom taxonomies
         }
-        public function last_import_run()
+        public function next_import_time($scheduled_time, $time_now)
         {
+            return round( abs( strtotime( $time_now ) -  strtotime( $scheduled_time ) )/ 60,0 );
         }
         /**
          * @usedby WP_Brafton_Article_Importer
@@ -270,8 +270,11 @@
                     }
                     elseif( isset($cron['brafton_import_trigger_hook']) )
                     {
-                        $output['message'] = 'Time now:' . " \t\t\t" . date(get_option('date_format')) . " " . date("H:i:s") . "<br />";
-                        $output['message'] .= 'Import will be triggered:' . " \t" . date(get_option('date_format'), $timestamp) . " " . date("H:i:s", $timestamp) . "<br />";
+                        // $date = new DateTime();
+                        // $date->setTimezone( new DateTimeZone( 'New York' ) );
+                        // $date->setTimestamp( $timestamp );
+                        $next = $this->next_import_time( date( "Y-m-d H:i:s", $timestamp ), date( "Y-m-d H:i:s" ) );
+                        $output['message'] = "Hourly content importing enabled. " . $next ." minutes until next scan for new content.";
                         $output['class'] = "updated";
                     }                    
                 }
