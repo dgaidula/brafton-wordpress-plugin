@@ -366,6 +366,7 @@
          */ 
         function brafton_do_settings_sections($page) {
             global $wp_settings_sections, $wp_settings_fields;
+
             if ( !isset($wp_settings_sections) || !isset($wp_settings_sections[$page]) )
                 return;
             $count = 0;
@@ -387,8 +388,11 @@
         /**
          * See brafton_do_settings_sections
          */
-        function brafton_do_settings_fields($page, $section) {
+        function brafton_do_settings_fields($page, $section, $archive = null ) {
             global $wp_settings_fields;
+
+            if( $archive )
+                echo '<div class="tab-pane">';
             if ( !isset($wp_settings_fields) ||
                  !isset($wp_settings_fields[$page]) ||
                  !isset($wp_settings_fields[$page][$section]) )
@@ -403,6 +407,9 @@
                 call_user_func($field['callback'], $field['args']);
                 echo '</p></div>';
             }
+
+            if( $archive )
+                echo '</div>';
         }
         /**
          * This function provides text inputs for settings fields

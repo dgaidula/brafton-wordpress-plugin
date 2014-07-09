@@ -60,7 +60,7 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
             );
             add_settings_section(
                 'brafton_archives_section',
-                'Archives', 
+                '', 
                 array( &$this, 'settings_section_brafton_archives' ),
                 'Brafton_Archives'
             );
@@ -450,7 +450,7 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
              //    'brafton_dashboard', 
              //    array( &$this, 'plugin_dashboard_page' )
              //    );
-            add_submenu_page( 
+            $archive_page = add_submenu_page( 
                 'WP_Brafton_Article_Importer', 
                 'Archival Upload', 
                 'Archival Import', 
@@ -459,6 +459,8 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
                 array( &$this, 'brafton_archives_page' ) 
             );
             add_action( 'admin_print_scripts-' . $admin_page, array( &$this, 'scripts' ) );
+            add_action( 'admin_print_scripts-' . $archive_page, array( &$this, 'scripts' ) );
+
            if( $this->brafton_options->options['brafton_enable_errors'] == "on" ) { 
                 $error_page = add_submenu_page( 
                     'WP_Brafton_Article_Importer', 
