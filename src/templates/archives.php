@@ -8,20 +8,13 @@
     <h2> <?php echo $brafton_options->brafton_get_product(); ?>  Manual Archival Upload</h2>
     <form method="post" action="" enctype="multipart/form-data">
 
-        <h2 class="nav-tab-wrapper">
-            <a class="nav-tab" href="#archives">Import</a>
-            <a class="nav-tab" href="#history">History</a>
-        </h2>
             <p>If you wish to update existing content, enable overwrite</p>
              <?php  settings_fields( 'brafton_archives' ); ?>
             <?php @$brafton_options->brafton_do_settings_fields( $_GET['page'], 'Brafton_Archives_group', true); ?>
             <?php  do_settings_sections('Brafton_Archives'); ?>
             <?php   @submit_button(); ?>
 
-        </div>
-        <div class="tab-pane">
-            <p>Here's list of article id's for all successfully imported content.</p>
-
+            <p>XML Archive file too large? Can't increase php memory limit? Use this <a href="http://tech.contentlead.com/terminati">tool</a> to split the archival history file into several smaller xml files. Copy the list of article id's below and paste into the Article List in the first field.</p>
             <form action="">
 </form>
             <?php 
@@ -58,11 +51,10 @@
                     $history .= $c . ' ';
                 
 
-                $history .= '">';
+                $history .= '" readonly>';
                 echo $history;
             endif;
             ?>
-        </div>
             <?php
         if( $brafton_options->brafton_has_api_key() )
             echo '<div class="footer">Thank you for Partnering with ' . $brafton_options->link_to_product() .' </div>';
