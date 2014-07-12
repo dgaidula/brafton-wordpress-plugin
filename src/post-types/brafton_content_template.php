@@ -1,6 +1,7 @@
 <?php
 if(!class_exists('Brafton_Article_Template'))
-    include_once 'brafton_errors.php';
+    include_once ( plugin_dir_path( __FILE__ ) . '../brafton_errors.php' );
+
 {
 	/**
 	 * A PostTypeTemplate class that provides 3 additional meta fields

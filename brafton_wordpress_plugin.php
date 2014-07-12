@@ -34,13 +34,16 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
         {
             // Initialize Settings
             require_once( sprintf( "%s/src/brafton_errors.php", dirname( __FILE__ ) ) );
-            require_once( sprintf( "%s/src/brafton_options.php", dirname( __FILE__ ) ) );
+            require_once( sprintf( "%s/src/admin/brafton_options.php", dirname( __FILE__ ) ) );
+            require_once( sprintf( "%s/src/admin/brafton_fields.php", dirname( __FILE__ ) ) );
+            require_once( sprintf( "%s/src/admin/brafton_admin_notice.php", dirname( __FILE__ ) ) );
+            $brafton_fields = new Brafton_fields();
             $brafton_options = Brafton_options::get_instance();
-            require_once( sprintf( "%s/wp_brafton_article_importer_settings.php", dirname( __FILE__ ) ) );
-            $brafton_importer_settings = new WP_Brafton_Article_Importer_Settings( $brafton_options );
+            require_once( sprintf( "%s/src/admin/brafton_settings.php", dirname( __FILE__ ) ) );
+            $brafton_importer_settings = new WP_Brafton_Article_Importer_Settings( $brafton_options, $brafton_fields );
             
             // Register custom post types
-            require_once( sprintf( "%s/src/brafton_article_template.php", dirname( __FILE__ ) ) );
+            require_once( sprintf( "%s/src/post-types/brafton_content_template.php", dirname( __FILE__ ) ) );
             $article_post_type = $brafton_options->options['brafton_article_post_type'];
             $article_post_type_name = $brafton_options->brafton_get_post_type( $article_post_type );
             if( $article_post_type ){ 
@@ -118,7 +121,7 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         add_action( 'load-toplevel_page_WP_Brafton_Article_Importer', 'run_article_import' );
         add_action( 'load-toplevel_page_WP_Brafton_Article_Importer', 'run_video_import' );
         //Run video and article importers when archives form is saved
-        add_action( 'load-brafton_page_brafton_archives', 'brafton_run_hourly_import' );
+        add_action( 'load-brafton_page_brafton_archives', 'run_article_import' );
         require_once plugin_dir_path( __FILE__ ) . '/vendors/tgm-activation.php';
         add_action( 'load-brafton_page_WP_Brafton_Article_Importer', 'brafton_admin_notice' );
         add_action( 'tgmpa_register', 'brafton_setup_recommended_plugins' );
@@ -195,8 +198,8 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
          */
         function run_article_import( $cron = null ){
             //Wait until settings are saved or cron is triggered before attempting to import articles
-            if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true || isset( $_POST['option_page'] ) && $_POST['option_page'] == 'brafton_archives' || $cron )
-            {
+            if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true || isset( $_FILES['brafton-archive']['tmp_name'] ) || $cron )
+            {   var_dump( isset( $_FILES['brafton-archive']['tmp_name']  ) );
                 //Grab saved options.
                 $brafton_options = Brafton_options::get_instance();
                 //If article importing is disabled - do nothing

@@ -2,6 +2,7 @@
     // Initialize Settings
     require_once( sprintf(realpath(dirname(__FILE__) . '/..') .'/brafton_options.php'));
     $brafton_options = Brafton_options::get_instance(); 
+    $brafton_fields = new Brafton_Fields(); 
  ?>
 <div class="wrap">
     <div class="brafton-options">
@@ -21,7 +22,7 @@
                 
             ?>
             </h2><!-- end .ul-tabs-nav -->
-                <?php $brafton_options->brafton_do_settings_sections( $_GET['page'] ); ?>
+                <?php $brafton_fields->brafton_do_settings_sections( $_GET['page'] ); ?>
         </div><!-- end .ul-tabs-->
         <?php   @submit_button(); ?>
         <?php

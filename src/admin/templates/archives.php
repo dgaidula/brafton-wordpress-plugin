@@ -1,7 +1,10 @@
 <?php
 	// Initialize Settings
-    require_once( sprintf(realpath(dirname(__FILE__) . '/..') .'/brafton_options.php'));
+    require_once( sprintf( plugin_dir_path( __FILE__ ) .'/../brafton_options.php'));
+    require_once( sprintf( plugin_dir_path( __FILE__ ) .'/../brafton_fields.php'));
+
     $brafton_options = Brafton_options::get_instance(); 
+    $brafton_fields = new Brafton_Fields();
  ?>
 <div class="wrap">
     <div class="brafton-options">
@@ -10,7 +13,7 @@
 
             <p>If you wish to update existing content, enable overwrite</p>
              <?php  settings_fields( 'brafton_archives' ); ?>
-            <?php @$brafton_options->brafton_do_settings_fields( $_GET['page'], 'Brafton_Archives_group', true); ?>
+            <?php @$brafton_fields->brafton_do_settings_fields( $_GET['page'], 'Brafton_Archives_group', true); ?>
             <?php  do_settings_sections('Brafton_Archives'); ?>
             <?php   @submit_button(); ?>
 
