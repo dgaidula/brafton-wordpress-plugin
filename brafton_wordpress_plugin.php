@@ -199,7 +199,7 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         function run_article_import( $cron = null ){
             //Wait until settings are saved or cron is triggered before attempting to import articles
             if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true || isset( $_FILES['brafton-archive']['tmp_name'] ) || $cron )
-            {   var_dump( isset( $_FILES['brafton-archive']['tmp_name']  ) );
+            {   
                 //Grab saved options.
                 $brafton_options = Brafton_options::get_instance();
                 //If article importing is disabled - do nothing
