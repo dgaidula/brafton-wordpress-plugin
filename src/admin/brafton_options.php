@@ -22,7 +22,7 @@
                                         "brafton_post_status" => "publish", 
                                         "brafton_enable_video" => "off", 
                                         "brafton_enable_script" => "off", 
-                                        "brafton_player_css" => "off", 
+                                        // "brafton_player_css" => "off", 
                                         "brafton_enable_images" => "on", 
                                         "brafton_video_post_type" => "",
                                         "brafton_article_post_type" => "", 
@@ -35,8 +35,15 @@
                                         "brafton_player_css" => "",
                                         "brafton_video_player" => "",
                                         "brafton_video_public" => "",
+                                        "brafton_end_cta_button_text" => "",
                                         "brafton_video_secret" => "",
                                         "brafton_video_feed_num" => "",
+                                        "brafton_pause_cta_link" => "",
+                                        "brafton_pause_cta_text" => "",
+                                        "brafton_end_cta_button_text" => "",
+                                        "brafton_end_cta_title" => "", 
+                                        "brafton_end_cta_sub_title" => "", 
+                                        "brafton_end_cta_button_link" => "",
                                         "brafton_post_author" => "",
                                         "enable_dynamic_authorship" => "off",
                                         "brafton_enable_tags" => "",
@@ -337,10 +344,10 @@
         public function get_sections()
         {
             $sections = array(
-                'brafton-article-section' => 'Article Settings', 
-                'brafton-video-section' => 'Video Settings', 
-                'brafton-advanced-section' => 'Advanced Settings', 
-                'brafton-developer-section' => 'Developer Settings',
+                'brafton-article-section' => 'Articles', 
+                'brafton-video-section' => 'Videos', 
+                'brafton-advanced-section' => 'Advanced', 
+                'brafton-developer-section' => 'Developers',
                 ); 
             return $sections;
         }

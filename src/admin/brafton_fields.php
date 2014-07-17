@@ -60,7 +60,7 @@ public $brafton_options;
         //echo $value;
         if ( $value == '' && isset( $element['default'] ) ){
             $value = $element['default'];
-            $this->update_option( 'brafton_options', $element['name'], $element['default'] );
+            $this->brafton_options->update_option( 'brafton_options', $element['name'], $element['default'] );
         }
         
             foreach ($element['options'] as $key => $option)

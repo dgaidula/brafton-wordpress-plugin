@@ -223,18 +223,84 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
                 )
             );
             add_settings_field(
-                'WP_Brafton_Article_Importer_brafton_player_css', 
-                'Player CSS', 
-                array( &$this->brafton_fields, 'render_radio' ), 
+                'WP_Brafton_Article_Importer_brafton_pause_cta_text', 
+                'Pause CTA Text', 
+                array( &$this->brafton_fields, 'settings_field_input_text' ),  
                 'WP_Brafton_Article_Importer', 
                 'brafton_video_section',
                 array(
-                    'name' => 'brafton_player_css',
-                    'options' => array( 'off' => ' Off',
-                                        'on' => ' On' ), 
-                    'default' => 'off'
+                    'name' => 'pause-cta-text',
+                    'field' => 'brafton_pause_cta_text', 
                 )
             );
+            add_settings_field(
+                'WP_Brafton_Article_Importer_brafton_pause_cta_link', 
+                'Pause CTA Link', 
+                array( &$this->brafton_fields, 'settings_field_input_text' ),  
+                'WP_Brafton_Article_Importer', 
+                'brafton_video_section',
+                array(
+                    'name' => 'pause-cta-link',
+                    'field' => 'brafton_pause_cta_link', 
+                )
+            );   
+            add_settings_field(
+                'WP_Brafton_Article_Importer_brafton_end_cta_title', 
+                'End CTA Title', 
+                array( &$this->brafton_fields, 'settings_field_input_text' ),  
+                'WP_Brafton_Article_Importer', 
+                'brafton_video_section',
+                array(
+                    'name' => 'end-cta-title',
+                    'field' => 'brafton_end_cta_title', 
+                )
+            );  
+            add_settings_field(
+                'WP_Brafton_Article_Importer_brafton_end_cta_sub_title', 
+                'End CTA Sub-Title', 
+                array( &$this->brafton_fields, 'settings_field_input_text' ),  
+                'WP_Brafton_Article_Importer', 
+                'brafton_video_section',
+                array(
+                    'name' => 'end-cta-sub-title',
+                    'field' => 'brafton_end_cta_sub_title', 
+                )
+            );      
+            add_settings_field(
+                'WP_Brafton_Article_Importer_brafton_end_cta_button_text', 
+                'End CTA Button Text', 
+                array( &$this->brafton_fields, 'settings_field_input_text' ),  
+                'WP_Brafton_Article_Importer', 
+                'brafton_video_section',
+                array(
+                    'name' => 'end-cta-button-text',
+                    'field' => 'brafton_end_cta_button_text', 
+                )
+            );         
+            add_settings_field(
+                'WP_Brafton_Article_Importer_brafton_end_cta_button_link', 
+                'End CTA Button Link', 
+                array( &$this->brafton_fields, 'settings_field_input_text' ),  
+                'WP_Brafton_Article_Importer', 
+                'brafton_video_section',
+                array(
+                    'name' => 'end-cta-button-link',
+                    'field' => 'brafton_end_cta_button_link', 
+                )
+            );           
+            // add_settings_field(
+            //     'WP_Brafton_Article_Importer_brafton_player_css', 
+            //     'Player CSS', 
+            //     array( &$this->brafton_fields, 'render_radio' ), 
+            //     'WP_Brafton_Article_Importer', 
+            //     'brafton_video_section',
+            //     array(
+            //         'name' => 'brafton_player_css',
+            //         'options' => array( 'off' => ' Off',
+            //                             'on' => ' On' ), 
+            //         'default' => 'off'
+            //     )
+            // );
         }
         /**
          * Register advanced section fields 
@@ -451,14 +517,6 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
                 'WP_Brafton_Article_Importer', 
                 array( &$this, 'plugin_settings_page' )
                 );
-             // add_submenu_page(
-             //    'WP_Brafton_Article_Importer', 
-             //    'Brafton Dashboard', 
-             //    'Reports', 
-             //    'manage_options', 
-             //    'brafton_dashboard', 
-             //    array( &$this, 'plugin_dashboard_page' )
-             //    );
             $archive_page = add_submenu_page( 
                 'WP_Brafton_Article_Importer', 
                 'Archival Upload', 

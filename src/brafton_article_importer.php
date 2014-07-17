@@ -69,7 +69,6 @@ if ( !class_exists( 'Article_Importer' ) )
 					//Only make request category page if necessary. 
 					if( $this->brafton_options->options['brafton_enable_categories'] == "on" || $this->brafton_options->options['brafton_enable_tags'] == "categories" )
 						$cats = $a->getCategories(); 
-					
 					//prepare video article category id array
 					if( $this->brafton_options->options['brafton_enable_categories'] == "on"  ){ 
 						$post_category = $this->brafton_cats->get_terms( $cats, 'category', null, $brafton_id );  

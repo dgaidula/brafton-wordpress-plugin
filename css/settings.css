@@ -35,7 +35,7 @@
 	display: inline;
 }
 .brafton-import-articles:nth-of-type(1):hover:after {
-	content: " - Do you really want to manually approve posts? If something is broken email tech support <techsupport@brafton.com>";
+	content: " - Do you really want to stop importing content? If something is broken email tech support <techsupport@brafton.com>";
 	font-size: 11px;
 	display: inline;
 }

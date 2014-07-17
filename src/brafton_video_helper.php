@@ -137,6 +137,8 @@ class Brafton_Video_Helper
 		$player = $this->brafton_options->options['brafton_video_player'];
 		$width = $this->width; 
 		$height = $this->height; 
+		$cta = $this->get_cta();
+
 		if ( $player == 'atlantis' )
 		{
 			$this->embed_code = <<<EOT
@@ -152,7 +154,8 @@ class Brafton_Video_Helper
             <script type="text/javascript">
                     var atlantisVideo = AtlantisJS.Init({
                             videos: [{
-                                    id: "video-$brafton_id"
+                                    id: "video-$brafton_id" 
+                                    $cta
                             }]
                     });
             </script>
@@ -171,6 +174,54 @@ EOT;
 			</video>
 EOT;
 		}	
+	}
+
+	/**
+	 * Generates video pause call to action.
+	 */
+	public function get_cta() {
+		$pause_button_text = $this->brafton_options->options['brafton_pause_cta_text'];
+		$pause_button_link = $this->brafton_options->options['brafton_pause_cta_link'];
+
+		$cta = "";
+		if ( $pause_button_text != "" && $pause_button_link != "" )
+			$cta = <<<EOT
+                                    , 			
+                                    pauseCallToAction: {
+                                    	text: "<a href='$pause_button_link'>$pause_button_text</a>"
+                                    }					
+EOT;
+		$title = $this->brafton_options->options['brafton_end_cta_title']; 
+		$subtitle = $this->brafton_options->options['brafton_end_cta_sub_title'];
+		$end_button_link = $this->brafton_options->options['brafton_end_cta_button_link'];
+		$end_button_text = $this->brafton_options->options['brafton_end_cta_button_text'];
+		if( $title != "" && $end_button_link != "" && $end_button_text != "" )
+		$cta .= <<<EOT
+                                    , 		
+                                    endOfVideoOptions: {
+                                    	callToAction: {
+                                    		title: "$title",
+                                    		subtitle: "$subtitle", 
+                                    		button: {
+                                    			link: "$end_button_link", 
+                                    			text: "$end_button_text"
+                                    		}
+
+                                    	}
+                                    } 
+EOT;
+
+		return $cta;
+	}
+
+
+	/**
+	 * Generates video end call to action. 
+	 */
+	public function end_cta(){
+
+
+
 	}
 	/**
 	 * Checks if video article already exists in WordPress database. 

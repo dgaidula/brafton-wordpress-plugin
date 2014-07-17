@@ -107,6 +107,7 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
     // Add a link to the settings page onto the plugin page
     if( isset( $WP_Brafton_Article_Importer ) )
     {
+
         // Add the settings link to the plugins page
         function plugin_settings_link( $links )
         { 
@@ -126,9 +127,10 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         add_action( 'load-brafton_page_WP_Brafton_Article_Importer', 'brafton_admin_notice' );
         add_action( 'tgmpa_register', 'brafton_setup_recommended_plugins' );
         function brafton_setup_recommended_plugins(){
+            $brafton_options = Brafton_options::get_instance();
             $plugins = array(
                 array(
-                    'name'      => 'Brafton Analytics Dashboard', // The plugin name
+                    'name'      => $brafton_options->brafton_get_product() . ' Analytics Dashboard', // The plugin name
                     'slug'      => 'brafton-analytics-dashboard', // The plugin slug (typically the folder name)
                     'source'    => plugin_dir_path( __FILE__ ) . 'vendors/recommended-plugins/brafton-analytics-dashboard.zip', // The plugin source
                     'required'  => false, // If false, the plugin is only 'recommended' instead of required
@@ -170,12 +172,12 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                 'menu'         => 'tgmpa-install-plugins', // Menu slug.
                 'has_notices'  => true,                    // Show admin notices or not.
                 'dismissable'  => false,                    // If false, a user cannot dismiss the nag message.
-                'dismiss_msg'  => 'Brafton recommended plugins not installed.',                      // If 'dismissable' is false, this message will be output at top of nag.
+                'dismiss_msg'  => $brafton_options->brafton_get_product() . ' recommended plugins not installed.',                      // If 'dismissable' is false, this message will be output at top of nag.
                 'is_automatic' => true,                   // Automatically activate plugins after installation or not.
                 'message'      => 'Brafton Inc. recommends the following wp plugins.',                      // Message to output right before the plugins table.
                 'strings'      => array(
-                    'notice_can_install_required'    => _n_noop( 'Brafton plugin requires the following plugin: %1$s.', 'Brafton plugin requires the following plugins: %1$s.', 'tgmpa' ),
-                    'notice_can_install_recommended' => _n_noop( 'Brafton Inc. recommends the following plugin: %1$s.', 'Brafton Inc. recommends the following plugins: %1$s.', 'tgmpa' ),
+                    'notice_can_install_required'    => _n_noop( $brafton_options->brafton_get_product() .' plugin requires the following plugin: %1$s.', 'Brafton plugin requires the following plugins: %1$s.', 'tgmpa' ),
+                    'notice_can_install_recommended' => _n_noop( $brafton_options->brafton_get_product() . ' recommends the following plugin: %1$s.', 'Brafton Inc. recommends the following plugins: %1$s.', 'tgmpa' ),
                     'notice_cannot_install'           => _n_noop( 'Sorry, but you do not have the correct permissions to install the %s plugin. Contact the administrator of this site for help on getting the plugin installed.', 'Sorry, but you do not have the correct permissions to install the %s plugins. Contact the administrator of this site for help on getting the plugins installed.', 'tgmpa' ), // %1$s = plugin name(s).
                     'notice_can_activate_required'    => _n_noop( 'The following required plugin is currently inactive: %1$s.', 'The following required plugins are currently inactive: %1$s.', 'tgmpa' ), // %1$s = plugin name(s).
                     'notice_can_activate_recommended' => _n_noop( 'The following recommended plugin is currently inactive: %1$s.', 'The following recommended plugins are currently inactive: %1$s.', 'tgmpa' ), // %1$s = plugin name(s).
@@ -280,10 +282,9 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
             case $player = "atlantis":
                 wp_enqueue_script( 'jquery' );
                 wp_enqueue_script( 'atlantisjs', 'http://p.ninjacdn.co.uk/atlantisjs/v0.11.7/atlantis.js', array( 'jquery' ) );
-                wp_enqueue_script( 'videojs', '//vjs.zencdn.net/4.3/video.js', array( 'jquery' ) );
-                if( $brafton_options->options['brafton_player_css'] == 'on' )
+                //wp_enqueue_script( 'videojs', '//vjs.zencdn.net/4.3/video.js', array( 'jquery' ) );
                     wp_enqueue_style( 'atlantis', 'http://p.ninjacdn.co.uk/atlantisjs/v0.11.7/atlantisjs.css' );
-                    wp_enqueue_style( 'videocss', '//vjs.zencdn.net/4.3/video-js.css' );
+                    //wp_enqueue_style( 'videocss', '//vjs.zencdn.net/4.3/video-js.css' );
                 break;
         }
     }
