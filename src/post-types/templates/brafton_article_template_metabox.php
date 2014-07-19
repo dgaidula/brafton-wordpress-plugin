@@ -2,6 +2,7 @@
     // Initialize Settings
     include_once( plugin_dir_path( __FILE__ ) . '../../admin/brafton_options.php' );
     $brafton_options = Brafton_options::get_instance(); 
+
  ?>
 <table> 
     <tr valign="top">

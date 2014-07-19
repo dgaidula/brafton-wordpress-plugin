@@ -114,9 +114,11 @@ if(!class_exists('Brafton_Article_Template'))
             switch( $product ){
                 case 'Videos' :
                     add_action('add_meta_boxes', array(&$this, 'add_video_meta_boxes'));
+                    add_action('add_meta_boxes', array(&$this, 'add_default_video_meta_boxes'));
                     break;
                 case 'Articles' : 
                     add_action('add_meta_boxes', array(&$this, 'add_article_meta_boxes'));
+                    add_action('add_meta_boxes', array(&$this, 'add_default_article_meta_boxes'));
                     break; 
             }
                 
@@ -135,6 +137,20 @@ if(!class_exists('Brafton_Article_Template'))
                 'high'
             );
         }    
+        public function add_default_video_meta_boxes()
+        {
+            // Add this metabox to every selected post
+            $video = get_post_meta( get_the_ID(), 'video_embed_code', true );
+            if( $video   != "" )
+            add_meta_box( 
+                sprintf('WP_Brafton_Article_Importer_%s_section', 'post'),
+                sprintf('%s %s Information', ucwords( str_replace( "_", " ", $this->brafton_options->brafton_get_product() ) ), $this->product_names['singular'] ),
+                array(&$this, 'add_video_inner_meta_boxes'),
+                'post', 
+                'normal',
+                'high'
+            );
+        }    
     	/**
     	 * hook into WP's add_meta_boxes action hook to display article meta boxes in video menu.
     	 */
@@ -149,6 +165,23 @@ if(!class_exists('Brafton_Article_Template'))
                 'side'
     	    );					
     	} // END public function add_meta_boxes()
+        /**
+         * hook into WP's add_meta_boxes action hook to display article meta boxes in video menu.
+         */
+        public function add_default_article_meta_boxes()
+        {
+            // Add this metabox to every selected post
+            $video = get_post_meta( get_the_ID(), 'video_embed_code', true );
+            $brafton_id = get_post_meta( get_the_ID(), 'brafton_id', true );
+            if( $video   == "" && $brafton_id != "" )
+            add_meta_box( 
+                sprintf('WP_Brafton_Article_Importer_article_%s_section', 'post'),
+                sprintf('%s %s Information', ucwords( str_replace( "_", " ", $this->brafton_options->brafton_get_product() ) ), $this->product_names['singular'] ),
+                array(&$this, 'add_article_inner_meta_boxes'),
+                'post', 
+                'side'
+            );                  
+        } // END public function add_meta_boxes()
         /**
          * called off of the add video meta box
          */     

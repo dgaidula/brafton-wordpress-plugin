@@ -203,28 +203,20 @@ EOT;
 	 */
 	public function update_video_embed_code( $post_id, $post ){
 		$post_type = get_post_type_object( $post->post_type );
+		
 		if( !current_user_can( $post_type->cap->edit_post, $post_id ) )
 			return $post_id;
-
-
-		$update = $this->embed_code_is_updated( $post_id );
+		 
 		$brafton_id = get_post_meta( $post_id, 'brafton_id', true );
 		$presplash = get_post_meta( $post_id, 'brafton_video_presplash', true );
-
 		$width = get_post_meta( $post_id, 'brafton_video_width', true );
 		$height = get_post_meta( $post_id, 'brafton_video_height', true );
-
-		if( $update ){
-
+		if( $this->embed_code_is_updated( $post_id ) ){
 			$cta_attributes = $this->get_cta_attributes( $post_id );
 			$cta = $this->get_cta( $cta_attributes );
-
 			brafton_log( array( 'message' => "video cta section " . $cta  ) );
-
 			$video = $this->get_video_output( $brafton_id, $presplash, $cta, $width, $height );
-
 			brafton_log( array( 'message' => "updated video " . serialize( $video ) ) );
-
 			update_post_meta( $post_id, 'video_embed_code', $video );
 		}
 	}
