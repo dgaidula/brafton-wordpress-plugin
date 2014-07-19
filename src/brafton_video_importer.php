@@ -25,8 +25,6 @@ class Brafton_Video_Importer
 	
 		//grab image data for previously imported images
 		//and load the image class.
-		$this->brafton_image = $brafton_image;
-		
 		$this->brafton_cats = $brafton_cats;
 		$this->brafton_video = $brafton_video; 
 		$this->brafton_image = $brafton_image;
@@ -67,7 +65,6 @@ class Brafton_Video_Importer
 				if( $post_status === "draft" )
 					unset( $video_article['post_date'] );
 				$post_id = $this->brafton_video->insert_video_article( $video_article, $brafton_id );
-				
 		
 				$scale_axis = 500;
 				$scale = 500;
@@ -76,6 +73,15 @@ class Brafton_Video_Importer
 					$photos = $this->brafton_video->adfero_client->ArticlePhotos();
 					$this->brafton_image->insert_image( $photos, $post_id, $video = true, $scale_axis, $scale, $brafton_id );	
 				}
+
+				//Run any custom functions provided in theme functions.php
+				$brafton_helper_classes = array( 
+					'options' => $this->brafton_options, 
+					'video' => $this->brafton_video, 
+					'images' => $this->brafton_image, 
+					'taxonomy' => $this->brafton_cats 
+					);
+    			do_action( 'brafton_video_custom_hook', $post_id, $video_article, $brafton_helper_classes  );
 			}
 			else{
 				 	brafton_log( array( 'message' => 'Video already exists and overwrite is disabled. Video Title: ' . get_the_title( $post_exists ) . " Post ID: " . $post_exists ) );

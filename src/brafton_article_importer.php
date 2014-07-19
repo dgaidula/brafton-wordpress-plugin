@@ -124,6 +124,15 @@ if ( !class_exists( 'Article_Importer' ) )
 						$photos = $a->getPhotos(); 
 						$this->brafton_image->insert_image( $photos, $post_id );	
 					}
+
+					// Run any custom functions provided in theme functions.php
+					$brafton_helper_classes = array( 
+					'options' => $this->brafton_options, 
+					'article' => $this->brafton_article, 
+					'images' => $this->brafton_image, 
+					'taxonomy' => $this->brafton_cats 
+					);
+	        		do_action( 'brafton_article_custom_hook', $post_id, $article, $brafton_helper_classes );
 				}
 				else{
 				 	brafton_log( array( 'message' => 'Article already exists and overwrite is disabled. Check the ' . get_post_type( $post_exists ) . " post type in your wp_posts table. Article Title: " . get_the_title( $post_exists ) . " Post ID: " . $post_exists ) );
