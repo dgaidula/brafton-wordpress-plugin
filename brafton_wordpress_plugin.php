@@ -41,7 +41,8 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
             $brafton_options = Brafton_options::get_instance();
             require_once( sprintf( "%s/src/admin/brafton_settings.php", dirname( __FILE__ ) ) );
             $brafton_importer_settings = new WP_Brafton_Article_Importer_Settings( $brafton_options, $brafton_fields );
-            
+
+
             // Register custom post types
             require_once( sprintf( "%s/src/post-types/brafton_content_template.php", dirname( __FILE__ ) ) );
             $article_post_type = $brafton_options->options['brafton_article_post_type'];
@@ -55,7 +56,7 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
             $video_post_type = $brafton_options->options['brafton_video_post_type'];
             $video_post_type_name = $brafton_options->brafton_get_post_type( $video_post_type );
             if( $video_post_type ){ 
-                $brafton_Video_Template = new Brafton_Article_Template( $brafton_options, $video_post_type_name, array( 'singular' => 'Video', 'plural' => 'Videos' ), array( 'brafton_id', 'photo_id' ) );
+                $brafton_Video_Template = new Brafton_Article_Template( $brafton_options, $video_post_type_name, array( 'singular' => 'Video', 'plural' => 'Videos' ), array( 'brafton_id', 'photo_id', 'brafton_pause_cta_link', 'brafton_pause_cta_text', 'brafton_end_cta_title' , 'brafton_end_cta_subtitle', 'brafton_end_cta_button_text', 'brafton_end_cta_button_link', 'brafton_video_presplash' ) );
                 if( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == true )
                     brafton_log( array( 'message' => "Video post type is ready for more content. Video custom post type id: " . $video_post_type) );
             }
@@ -270,7 +271,17 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
             }
         }
         
+ 
         #run duplicate killer if version is not appropriate
+    }
+    /**
+     * Update video embed codes.
+     */
+    add_action( 'init', 'update_video_embed' );
+    function update_video_embed(){
+        $options = Brafton_Options::get_instance();
+        $brafton_video = new Brafton_Video_Helper( $options );
+        add_action( 'save_post', array( &$brafton_video , 'update_video_embed_code' ), 10, 2 );
     }
     //Add video player scripts and css to site <head>. Executive decision - only support Atlantis.js 
     //Include Video Js for legacy clients with videojs embed codes.

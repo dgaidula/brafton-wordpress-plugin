@@ -24,6 +24,17 @@ class Brafton_Video_Helper
 	public $brafton_options;
 	private $presplash;
 	public $post_type;
+
+	/**
+	 * CTA Variables. Strings
+	 */
+	public $pause_button_text;
+	public $pause_button_link;
+	public $title; 
+	public $subtitle;
+	public $end_button_link;
+	public $end_button_text;
+
 	function __construct( $brafton_options )
 	{
 		$this->brafton_options = $brafton_options;
@@ -32,12 +43,16 @@ class Brafton_Video_Helper
 			$this->post_type = $post_type; 
 		else
 			$this->post_type = 'post';
+		$this->get_video_clients();
+	}
+	
+
+	public function get_video_clients(){
 		$video_settings = $this->get_video_settings();
 		$adfero_video_client = new AdferoVideoClient( $this->base_url, $video_settings['video_public'], $video_settings['video_secret'] );
 		$this->adfero_client = new AdferoClient( $this->base_url, $video_settings['video_public'], $video_settings['video_secret'] );
 		$this->video_out_client = $adfero_video_client->videoOutputs();
 	}
-	
 	/**
 	 * Retrieves video settings from options table. 
 	 * 
@@ -68,8 +83,11 @@ class Brafton_Video_Helper
 	/**
 	 * Generates video output as html
 	 */
-	public function get_video_output( $brafton_id, $presplash )
+	public function get_video_output( $brafton_id, $presplash, $cta = null, $width = null, $height = null )
 	{
+
+		if( ! isset( $this->video_out_client) )
+			$this->get_video_clients();
 		$video_list = $this->video_out_client->ListForArticle( $brafton_id,0,10 );
 		$list = $video_list->items;
 		$this->presplash = $presplash;
@@ -79,7 +97,9 @@ class Brafton_Video_Helper
 			$this->format_video_output( $output, $type );
 		}
 		//Generate embed code string.
-		$this->create_embed_code( $brafton_id, $presplash );
+		$video = $this->create_embed_code( $brafton_id, $presplash, $cta, $width, $height );
+
+		return $video;
 	}	
 	/**
 	 * Helper function for get_video_output(). Returns an associative 
@@ -133,11 +153,11 @@ class Brafton_Video_Helper
 	 * @return void
 	 * 
 	 */
-	public function create_embed_code( $brafton_id, $presplash ){
+	public function create_embed_code( $brafton_id, $presplash, $cta = null, $width = null, $height = null ){
 		$player = $this->brafton_options->options['brafton_video_player'];
-		$width = $this->width; 
-		$height = $this->height; 
-		$cta = $this->get_cta();
+		$width = ( isset( $cta ) ) ? $width : $this->width; 
+		$height = ( isset( $cta ) ) ? $height : $this->height; 
+		$video_cta = ( isset( $cta ) ) ? $cta :  $this->get_cta();
 
 		if ( $player == 'atlantis' )
 		{
@@ -155,7 +175,7 @@ class Brafton_Video_Helper
                     var atlantisVideo = AtlantisJS.Init({
                             videos: [{
                                     id: "video-$brafton_id" 
-                                    $cta
+                                    $video_cta
                             }]
                     });
             </script>
@@ -174,37 +194,108 @@ EOT;
 			</video>
 EOT;
 		}	
+
+		return $this->embed_code;
 	}
 
 	/**
+	 * Updates Video embed code when post is edited 
+	 */
+	public function update_video_embed_code( $post_id, $post ){
+		$post_type = get_post_type_object( $post->post_type );
+		if( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+			return $post_id;
+
+
+		$update = $this->embed_code_is_updated( $post_id );
+		$brafton_id = get_post_meta( $post_id, 'brafton_id', true );
+		$presplash = get_post_meta( $post_id, 'brafton_video_presplash', true );
+
+		$width = get_post_meta( $post_id, 'brafton_video_width', true );
+		$height = get_post_meta( $post_id, 'brafton_video_height', true );
+
+		if( $update ){
+
+			$cta_attributes = $this->get_cta_attributes( $post_id );
+			$cta = $this->get_cta( $cta_attributes );
+
+			brafton_log( array( 'message' => "video cta section " . $cta  ) );
+
+			$video = $this->get_video_output( $brafton_id, $presplash, $cta, $width, $height );
+
+			brafton_log( array( 'message' => "updated video " . serialize( $video ) ) );
+
+			update_post_meta( $post_id, 'video_embed_code', $video );
+		}
+	}
+
+	function get_cta_attributes( $post_id ){
+		$brafton_pause_cta_link = get_post_meta( $post_id, 'brafton_pause_cta_link', true );
+		$brafton_pause_cta_text = get_post_meta( $post_id, 'brafton_pause_cta_text', true );
+		$brafton_end_cta_title = get_post_meta( $post_id, 'brafton_end_cta_title', true );
+		$brafton_end_cta_subtitle = get_post_meta( $post_id, 'brafton_end_cta_subtitle', true );
+		$brafton_end_cta_button_text = get_post_meta( $post_id, 'brafton_end_cta_button_text', true );
+		$brafton_end_cta_button_link = get_post_meta( $post_id, 'brafton_end_cta_button_link', true );
+
+		$cta_attributes = compact( 
+			'brafton_end_cta_button_link', 
+			'brafton_end_cta_button_text', 
+			'brafton_end_cta_subtitle', 
+			'brafton_end_cta_title', 
+			'brafton_pause_cta_text', 
+			'brafton_pause_cta_link' 
+			);
+
+		return $cta_attributes;
+	}
+
+	/**
+	 * Determins if video cta has been updated by editing post.
+	 * @return Bool 
+	 */
+	function embed_code_is_updated( $post_id ){
+
+		$cta_attributes = $this->get_cta_attributes( $post_id );
+		$embed_code = get_post_meta( $post_id, 'video_embed_code', true );
+		//var_dump( $cta_attributes );
+		foreach( $cta_attributes as $value => $key) { 
+			@$exists = strpos( $embed_code, $key );
+		
+				if( $exists != false )
+				return true;
+		}
+
+		return false;
+	}
+	/**
 	 * Generates video pause call to action.
 	 */
-	public function get_cta() {
-		$pause_button_text = $this->brafton_options->options['brafton_pause_cta_text'];
-		$pause_button_link = $this->brafton_options->options['brafton_pause_cta_link'];
+	public function get_cta( $cta_attributes = null) {
+		$this->pause_button_text = ( isset( $cta_attributes['brafton_pause_cta_text'] ) ) ? $cta_attributes['brafton_pause_cta_text'] : $this->brafton_options->options['brafton_pause_cta_text'];
+		$this->pause_button_link = ( isset( $cta_attributes['brafton_pause_cta_link'] ) ) ? $cta_attributes['brafton_pause_cta_link'] : $this->brafton_options->options['brafton_pause_cta_link'];
 
 		$cta = "";
-		if ( $pause_button_text != "" && $pause_button_link != "" )
+		if ( $this->pause_button_text != "" && $this->pause_button_link != "" )
 			$cta = <<<EOT
                                     , 			
                                     pauseCallToAction: {
-                                    	text: "<a href='$pause_button_link'>$pause_button_text</a>"
+                                    	text: "<a href='$this->pause_button_link'>$this->pause_button_text</a>"
                                     }					
 EOT;
-		$title = $this->brafton_options->options['brafton_end_cta_title']; 
-		$subtitle = $this->brafton_options->options['brafton_end_cta_sub_title'];
-		$end_button_link = $this->brafton_options->options['brafton_end_cta_button_link'];
-		$end_button_text = $this->brafton_options->options['brafton_end_cta_button_text'];
-		if( $title != "" && $end_button_link != "" && $end_button_text != "" )
+		$this->title = ( isset( $cta_attributes['brafton_end_cta_title'] ) ) ? $cta_attributes['brafton_end_cta_title'] : $this->brafton_options->options['brafton_end_cta_title']; 
+		$this->subtitle = ( isset( $cta_attributes['brafton_end_cta_subtitle'] ) ) ? $cta_attributes['brafton_end_cta_subtitle'] : $this->brafton_options->options['brafton_end_cta_sub_title'];
+		$this->end_button_link = ( isset( $cta_attribues['brafton_end_cta_button_link'] )) ? $cta_attribues['brafton_end_cta_button_link'] : $this->brafton_options->options['brafton_end_cta_button_link'];
+		$this->end_button_text = ( isset( $cta_attributes['brafton_end_cta_button_text'] ) ) ? isset( $cta_attributes['brafton_end_cta_button_text'] ) : $this->brafton_options->options['brafton_end_cta_button_text'];
+		if( $this->title != "" && $this->end_button_link != "" && $this->end_button_text != "" )
 		$cta .= <<<EOT
                                     , 		
                                     endOfVideoOptions: {
                                     	callToAction: {
-                                    		title: "$title",
-                                    		subtitle: "$subtitle", 
+                                    		title: "$this->title",
+                                    		subtitle: "$this->subtitle", 
                                     		button: {
-                                    			link: "$end_button_link", 
-                                    			text: "$end_button_text"
+                                    			link: "$this->end_button_link", 
+                                    			text: "$this->end_button_text"
                                     		}
 
                                     	}
@@ -296,6 +387,7 @@ EOT;
 		$this->get_video_output( $brafton_id, $this->presplash );
 		$video_article_array['post_type'] = $this->post_type; 
 		$post_exists = $this->exists( $brafton_id );
+
 		//if article does not exist
 		if ( $post_exists  == false )
 		{	//add the article to WordPress
@@ -304,6 +396,15 @@ EOT;
 			update_post_meta($post_id, 'brafton_id', $brafton_id );
 			//attach the video embed code to the article
 			update_post_meta($post_id, 'video_embed_code', $this->embed_code );
+			add_post_meta( $post_id, 'brafton_pause_cta_text', $this->pause_button_text );
+			add_post_meta( $post_id, 'brafton_pause_cta_link', $this->pause_button_link);
+			add_post_meta( $post_id, 'brafton_end_cta_title', $this->title );
+			add_post_meta( $post_id, 'brafton_end_cta_subtitle', $this->subtitle );
+			add_post_meta( $post_id, 'brafton_end_cta_button_text', $this->end_button_link );
+			add_post_meta( $post_id, 'brafton_end_cta_button_link', $this->end_button_text );
+			add_post_meta( $post_id, 'brafton_video_presplash', $this->presplash );
+			add_post_meta( $post_id, 'brafton_video_width', $this->width );
+			add_post_meta( $post_id, 'brafton_video_height', $this->height );
 		}
 		else
 		{

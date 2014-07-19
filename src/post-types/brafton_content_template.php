@@ -48,7 +48,7 @@ if(!class_exists('Brafton_Article_Template'))
     	{
     		// Initialize Post Type
     		$this->create_brafton_post_type();
-    		add_action('save_post', array(&$this, 'save_post'));
+    		add_action('save_post', array( &$this, 'save_post'));
     	} // END public function init()
     	/**
     	 * Create the post type
