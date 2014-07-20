@@ -7,10 +7,13 @@
 	include_once( dirname( plugin_dir_path( __FILE__ ) ) . '/vendors/RCClientLibrary/AdferoArticles/AdferoClient.php');
 	include_once( dirname( plugin_dir_path( __FILE__ ) ) . '/vendors/RCClientLibrary/AdferoPhotos/AdferoPhotoClient.php');
 	include_once( plugin_dir_path( __FILE__ ) . '/brafton_errors.php' );
+	include_once( plugin_dir_path( __FILE__ ) . '/brafton_validator.php' ); 
 	class Brafton_Image_Handler {
 		public $brafton_options;
-		function __construct( $brafton_options){
+		public $validator; 
+		function __construct( $brafton_options, Brafton_Validator $validator ){
 			$this->brafton_options = $brafton_options;
+			$this->validator = $validator; 
 		}
 		/**
 		 * Removes attached image and adds new post thumnail image to  an article.
@@ -71,17 +74,14 @@
 			$image_id = null; 
 			$image_url = null;
 			$image_caption = null;
-			if ( !empty( $photos ) )
-			{
-				//Large photo
-				$image = $photos[0]->getLarge();// uses XMLHandler and Photo returns PhotoInstance
-				if ( !empty( $image ) )
-				{
-					$image_url = $image->getUrl(); //necessary web request returns string
-					$image_caption = $photos[0]->getCaption();
-					$image_id = $photos[0]->getId(); //necessary 
-				}
-			}
+
+			if( ! $this->validator->is_valid( $photos[0]->getLarge()->getUrl(), 'url' ) )
+				return false;
+
+				$image_url = $photos[0]->getLarge()->getUrl(); //necessary web request returns string
+				$image_caption = $photos[0]->getCaption();
+				$image_id = $photos[0]->getId(); //necessary 
+
 				$images_array = compact( 'image_id', 'image_caption', 'image_url' );
 				return $images_array; 
 		}

@@ -4,16 +4,16 @@
  * Validator class for brafton wordpress plugin
  */
 
-require_once( plugin_dir_path() . "brafton_errors.php" );
+require_once( plugin_dir_path( __FILE__ ) . "/brafton_errors.php" );
 
 class Brafton_Validator {
 	/**
-	 * Type of thing to be validated
-	 * $string 
+	 * validation type
+	 * String 
 	 */ 
 	public $type; 
 	/**
-	 * Value being validated.
+	 * Variable being validated.
 	 */
 	public $value;
 	/**
@@ -21,6 +21,7 @@ class Brafton_Validator {
 	 */
 	public $valid; 
 	/**
+	 * Stack Trace used to add helpful debug information to brafton log message
 	 * Array
 	 */ 
 	public $trace; 
@@ -41,6 +42,8 @@ class Brafton_Validator {
 			case 'url' :
 				$this->validate_url; 
 				break;
+			case 'file' :
+				$this->validate_file;
 			case 'string' :
 				$this->validate_string; 
 				break; 
@@ -63,12 +66,24 @@ class Brafton_Validator {
 	 * Validates a url
 	 */
 	private function validate_url(){
-		if( strpos( $this->value, 'http://' ) !== false || strpos( $this->value, 'https://' ) !== false ){ 
-			$this->valid = true; 
+		if(  filter_var( $this->value , FILTER_VALIDATE_URL ) ){ 
+			if( strpos( $this->value, 'http://' ) !== false || strpos( $this->value, 'https://' ) !== false )
+				$this->valid = true; 
 		} else {
 			brafton_log( array( 'message' => "Invalid url: " . $this->value . " . Validate url called by {$this->trace[1]['class']} :: {$this->trace[1]['function']} " ) );
 		}
 	} 
+	/**
+	 * Validates a file location
+	 */ 
+	private function validate_file(){
+		if(  filter_var( $this->value , FILTER_VALIDATE_URL ) ){ 
+			if( strpos( $this->value, 'file://' ) !== false )
+				$this->valid = true; 
+		} else {
+			brafton_log( array( 'message' => "Invalid file: " . $this->value . " . Validate file called by {$this->trace[1]['class']} :: {$this->trace[1]['function']} " ) );
+		}
+	}
 	/**
 	 * Validates a given string.
 	 */
