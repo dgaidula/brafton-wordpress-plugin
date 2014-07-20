@@ -37,27 +37,26 @@ class Brafton_Validator {
 		$this->type = $type;
 		$this->valid = false; 
 		$this->trace = debug_backtrace();
-
 		switch ( $type ){
 			case 'url' :
-				$this->validate_url; 
+				$this->validate_url(); 
 				break;
 			case 'file' :
-				$this->validate_file;
+				$this->validate_file();
 			case 'string' :
-				$this->validate_string; 
+				$this->validate_string(); 
 				break; 
 			case 'html' :
-				$this->validate_html;
+				$this->validate_html();
 				break;
 			case 'xml' :
-				$this->validate_xml;
+				$this->validate_xml();
 				break; 
 			case 'api' :
-				$this->validate_api;
+				$this->validate_api();
 				break; 
 			case 'user' :
-				$this->validate_user;
+				$this->validate_user();
 				break; 
 		}
 		return $this->valid;
@@ -65,7 +64,7 @@ class Brafton_Validator {
 	/**
 	 * Validates a url
 	 */
-	private function validate_url(){
+	protected function validate_url(){
 		if(  filter_var( $this->value , FILTER_VALIDATE_URL ) ){ 
 			if( strpos( $this->value, 'http://' ) !== false || strpos( $this->value, 'https://' ) !== false )
 				$this->valid = true; 
@@ -76,7 +75,7 @@ class Brafton_Validator {
 	/**
 	 * Validates a file location
 	 */ 
-	private function validate_file(){
+	protected function validate_file(){
 		if(  filter_var( $this->value , FILTER_VALIDATE_URL ) ){ 
 			if( strpos( $this->value, 'file://' ) !== false )
 				$this->valid = true; 
@@ -87,8 +86,8 @@ class Brafton_Validator {
 	/**
 	 * Validates a given string.
 	 */
-	private function validate_string(){
-		if( gettype( $this->value ) === "string" ) { 
+	protected function validate_string( $element ){
+		if( gettype( $this->value ) === "string"  && $this->value->length !== null && $this->value->length !== '' ) { 
 			$this->valid = true;
 		} else{
 			brafton_log( array( 'message' => 'Invalid string: ' . $this->value . ". Validate string called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
@@ -97,7 +96,7 @@ class Brafton_Validator {
 	/**
 	 * Checks if given xml string is valid. 
 	 */
-	private function validate_xml(){
+	protected function validate_xml(){
 		libxml_use_internal_errors(true);
 
 		$doc = simplexml_load_string( $this->value );
@@ -118,7 +117,7 @@ class Brafton_Validator {
 	/**
 	 * Checks if a given string is valid html.
 	 */
-	private function validate_html(){
+	protected function validate_html(){
 		libxml_use_internal_errors(true);
 
 		$doc = new DOMDocument();
@@ -139,7 +138,7 @@ class Brafton_Validator {
 	/**
 	 * Checks if a given api key is valid.
 	 */
-	private function validate_api(){
+	protected function validate_api(){
 		if(preg_match("/^[a-zA-Z0-9]+$/", $this->value ) == 1) {
 			$this->valid = true; 
 		} else {
@@ -148,16 +147,23 @@ class Brafton_Validator {
 	}
 	/**
 	 * Checks if a given display name matches any registered wordpress users.
+	 * @param String $byline
 	 */
-	private function validate_user(){
+	protected function validate_user( $byline ){
 		$blogusers = get_users( array( 'fields' => array( 'display_name' ) ) );
 		foreach ( $blogusers as $user ) {
-			if( $user->display_name = $this->value ) { 
+			if( $user->display_name == $this->value ) { 
+				brafton_log( array( 'message' => $this->value . " is a registered " .  get_bloginfo() .  " blog user" ) );
 				$this->valid = true; 
-			} else {
-				brafton_log( array( 'message' => $this->value . ' display name does not match any registered wordpress users for this blog: ' . get_bloginfo() . " Validate user called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
-			}
+				return true;
+			} 
+		}
+		if( ! $this->valid ) { 
+			brafton_log( array( 'message' => $this->value . ' display name does not match any registered wordpress users for this blog: ' . get_bloginfo() ) );
+			return false;
 		}
 	}
+
+
 }
 ?>

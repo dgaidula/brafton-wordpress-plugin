@@ -7,17 +7,20 @@
  * @package SamplePHPApi
  */
 include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_errors.php' );
+include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_xmlhandler_validator.php' );
 class XMLHandler {
 	/** @var Document */
 	private $doc;
   	static $ch;
   	public $count = 0;
-	
+	public $validate;
 		/**
 	 * @param String $url
 	 * @return XMLHandler
 	 */
 	function __construct($url){
+
+		$this->validate = new Brafton_XMLHandler_Validator();
 		$this->count++;
 		if(!preg_match('/^http:\/\//', $url)){
 	      $url = 'file://' . $url;
@@ -56,7 +59,6 @@ class XMLHandler {
     
 		if(!$this->doc->loadXML($feed_string)) {
 			throw new XMLLoadException($url);
-			echo 'doc isnot xml file';
 		}
 		
 	}
@@ -74,23 +76,35 @@ class XMLHandler {
 	 * @param String $element
 	 * @return String
 	 */
-	function getValue($element){
-		$result = $this->doc->getElementsByTagName($element);
-		if($result->length != null) return $this->doc->getElementsByTagName($element)->item(0)->nodeValue;
-		else return null;
+	function getValue( $element ){
+
+		$result = $this->doc->getElementsByTagName( $element );
+		$value = '';
+		if( $result->length != null ){
+			$value = $this->doc->getElementsByTagName( $element )->item( 0 )->nodeValue;
+			//brafton_log( array( 'message' => 'Article '  . $element . ' : ' . $value ) );
+		} 
+		//Add some helpful error reporting with validator class.
+		$this->validate->is_attribute( $value, $element );
+
+		if( $result->length == null )
+			return null;
+		else
+			return $this->doc->getElementsByTagName( $element )->item( 0 )->nodeValue;
 	}
 	/**
 	 * @param String $element
 	 * @return String
 	 */
-	function getHrefValue($element){
+	function getHrefValue( $element ){
 		if( $element == "news" && $this->count == 1 && $this->doc->getElementsByTagName($element)->length == 0  ) {
-			brafton_log( array( 'message' => "Your brafton feed doesn't appear to have news articles. Make sure your Api key and product are valid" ) );
-			$log = get_option('brafton_error_log' );
-			echo "Something went wrong. Try enabling brafton errors.";
+			#brafton_log( array( 'message' => "Your brafton feed doesn't appear to have news articles. Make sure your Api key and product are valid" ) );
+			echo "Either provided XML file or api key  invalid. Try enabling brafton errors.";
 			exit;
 		}
-		return $this->doc->getElementsByTagName($element)->item(0)->getAttribute('href');
+		$value = $this->doc->getElementsByTagName($element)->item(0)->getAttribute('href');
+		#brafton_log( array( 'message' => "Href value found on feed : " . $element . " value: "  . $value ) );
+		return $value; 
 	}
 	/**
 	 * @param String $element
@@ -98,7 +112,10 @@ class XMLHandler {
 	 * @return String
 	 */
 	function getAttributeValue($element, $attribute){
-		return $this->doc->getElementsByTagName($element)->item(0)->getAttribute($attribute);
+		$value = $this->doc->getElementsByTagName($element)->item(0)->getAttribute($attribute);
+		
+		#brafton_log( array( 'message' => 'Attribute found on feed '  . $attribute . ' : value - ' . $value  . ' element : ' . $element ) );
+		return $value; 
 	}
 	/**
 	 * @param String $element
@@ -106,6 +123,8 @@ class XMLHandler {
 	 */
 	function getNodes($element){
 		return $this->doc->getElementsByTagName($element);
+		#$this->validate->is_attribute( $value, $element );
+		
 	}
 	/**
 	 * @param String $element

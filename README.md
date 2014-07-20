@@ -1,6 +1,8 @@
 Brafton Content Importer
 ==================
 
+We have the feed why so many settings options. If youc an figure out whether an option should be enabled based on feed, go ahead and make it happen.
+
 Dependencies: 
 PHP 5.3 or newer, cURL and DOMXML libraries, and MYSQL 5.0 database or newer. 
 

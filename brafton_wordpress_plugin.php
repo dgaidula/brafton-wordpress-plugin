@@ -24,6 +24,7 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_errors.php' );
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_video_helper.php' );
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_video_importer.php' );
+    include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_validator.php' );
     class WP_Brafton_Article_Importer
     {   
         public $brafton_options; 
@@ -219,10 +220,10 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                 brafton_log( array( 'message' => 'Starting to import articles.' ) );
                 
                 
-                                
+                $validator = new Brafton_Validator();
                 $brafton_cats = new Brafton_Taxonomy( $brafton_options );
                 $brafton_tags = new Brafton_Taxonomy( $brafton_options );
-                $brafton_image = new Brafton_Image_Handler( $brafton_options );
+                $brafton_image = new Brafton_Image_Handler( $brafton_options, $validator );
                 $brafton_article = new Brafton_Article_Helper( $brafton_options );
                 $brafton_article_importer = new Brafton_Article_Importer(
                     $brafton_image, 

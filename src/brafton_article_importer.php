@@ -61,9 +61,10 @@ if ( !class_exists( 'Article_Importer' ) )
 					$post_content = $a->getText(); 
 
 					//Pull author from byline field if set.
-					if( $this->brafton_options->options['enable_dynamic_authorship']  === 'on');
+					//if( $this->brafton_options->options['enable_dynamic_authorship']  === 'on');
 						$by_line = $a->getByLine();
-					
+						
+						$by_line = 'foo';
 	
 					$post_excerpt = $a->getExtract(); 
 					//Only make request category page if necessary. 
