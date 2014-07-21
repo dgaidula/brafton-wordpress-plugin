@@ -22,15 +22,17 @@ class Brafton_XMLHandler_Validator extends Brafton_Validator {
         $this->brafton_options = Brafton_options::get_instance();
 	}
 
-	public function is_attribute( $value, $type){
+	public function is_attribute( $value, $type, $log = null ){
 		$this->value = $value;
 		$this->type = $type;
 		$this->valid = false; 
 		$this->trace = debug_backtrace();
+		$this->log = ( isset( $log ) ) ? $log : true; 
 
 		switch ( $type ){
 			case 'byline' :
-				$this->validate_byline(); 
+				$user_id = $this->validate_byline();
+				return $user_id; 
 				break;
 			case 'photos' :
 				$this->validate_photos();
@@ -62,11 +64,14 @@ class Brafton_XMLHandler_Validator extends Brafton_Validator {
 	protected function validate_byline(){
 		brafton_log( array( 'message' => 'Validating byline ' . $this->value ) );
 		if( $this->brafton_options->options['enable_dynamic_authorship'] === 'on' && $this->value === '' ) {
-			brafton_log( array( 'message' => 'Dynamic authorship is enabled however, byline field is not active.' ) );
+			if( $this->log )
+				brafton_log( array( 'message' => 'Dynamic authorship is enabled however, byline field is not active.' ) );
 		} elseif(  $this->value !== "" ){ 
-			$this->validate_user( $this->value );
+			$user_id = $this->validate_user( $this->value );
+			return $user_id;  
 		} else {
-			brafton_log( array( 'message' => 'Dynamic authorship is off and byline field is disabled.' ) );
+			if( $this->log )
+				brafton_log( array( 'message' => 'Dynamic authorship is off and byline field is disabled.' ) );
 		} 
 	}
 	/**

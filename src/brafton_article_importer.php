@@ -6,6 +6,8 @@ if ( !class_exists( 'Article_Importer' ) )
 	include_once 'brafton_taxonomy.php';
 	include_once 'brafton_image_handler.php';
 	include_once 'brafton_errors.php';
+	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_xmlhandler_validator.php' );
+	
 	/**
 	 * @package WP Brafton Article Importer 
 	 *
@@ -15,6 +17,7 @@ if ( !class_exists( 'Article_Importer' ) )
 		 public $brafton_article;
 		 public $brafton_images;
 		 public $brafton_options;
+		 public $validator; 
 		//Initialize 
 		function __construct ( 
 						Brafton_Image_Handler $brafton_image = Null, 
@@ -30,6 +33,7 @@ if ( !class_exists( 'Article_Importer' ) )
 			$this->brafton_tags = $brafton_tags; 
 			$this->brafton_article = $brafton_article; 
 			$this->brafton_image = $brafton_image;
+			$this->validator = new Brafton_XMLHandler_Validator();
 		}
 		/**
 		 * @uses Brafton_Article_Helper to retrieve an articles array containing NewsItem objects.
@@ -62,9 +66,7 @@ if ( !class_exists( 'Article_Importer' ) )
 
 					//Pull author from byline field if set.
 					//if( $this->brafton_options->options['enable_dynamic_authorship']  === 'on');
-						$by_line = $a->getByLine();
-						
-						$by_line = 'foo';
+					$by_line = $a->getByLine();
 	
 					$post_excerpt = $a->getExtract(); 
 					//Only make request category page if necessary. 
@@ -90,11 +92,17 @@ if ( !class_exists( 'Article_Importer' ) )
 						$tags_input = $this->brafton_tags->get_terms( $tags, 'post_tag', null, $brafton_id );
 					}
 
-					//Get more video article meta data
+					//Set Post Author
 					$post_author = $this->brafton_options->options['brafton_post_author']; 
 					if( isset( $by_line ) ) {
-						$post_author = $this->brafton_article->get_blog_user_id( $by_line ); 
+						$user_id = $this->validator->is_attribute( $by_line, 'byline' );
+
+						if( gettype( $user_id ) === 'integer' )
+							$post_author = $user_id; 
 					}
+
+					echo '$post_author is ' . $post_author;
+
 					$post_status = $this->brafton_options->options['brafton_post_status'];
 					//prepare single article meta data array
 					$article = compact(

@@ -1,12 +1,15 @@
 <?php
 	include_once ( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPIClientLibrary/ApiHandler.php');
 	include_once ( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPIClientLibrary/marpro-utility.php');
+	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_xmlhandler_validator.php' );
 	class Brafton_Article_Helper {
 		public $post_type;
 		public $brafton_options;
+		public $validator;
 		// Require Client Libraries 
 		function __construct( Brafton_Options $brafton_options ){
 			$this->brafton_options = $brafton_options;
+			$this->validator = new Brafton_XMLHandler_Validator();
 			$post_type = $this->brafton_options->options['brafton_article_post_type']; 
 			if( $this->brafton_options->options['brafton_article_post_type'] != "" )
 				$this->post_type = $post_type; 
@@ -93,43 +96,6 @@
 				}
 			}
 			return $articles; 
-		}
-		/** Handles dynamic authorship based on byline field.
-		 *  Carefull it uses the display name rather than username since the
-		 *  former doesn't have to be unique. First, last, or full name must
-		 *  match the user's display name in the databse.
-		 *  need to refactor this contains a loop inside of the article import loop. Not good.
-		 *  @author Ali 3-21-2014
-		 */
-		function get_blog_user_id( $byLine ) 
-		{
-			//find this blog's users who have authorship rights.
-			$blog_id = get_current_blog_id();
-		    $args = array(  'blog_id' => $blog_id, 
-		                    'orderby' => 'display_name',
-		                    'who' => 'authors',
-		        );
-		    $blogusers = get_users( $args );
-		    $author_set = false; 
-		    // compare each user with byLine field. 
-		    foreach ($blogusers as $user) {
-		    	//byline is either first or last name and display name is full name
-		    	$first_or_last = stripos( $user->display_name, $byLine ); 
-		    	if( $author_set == false) 
-		    		//we have a direct match. 
-		    		if( $byLine == $user->display_name ){
-						$user_id = $user->ID;
-						$author_set = true; 
-			        }
-			        //the byLine is just first or last name and this 
-			        //substring is found in User display name
-					elseif( gettype( $first_or_last ) == 'integer' )
-					{
-						$user_id = $user->ID; 
-						$author_set = true; 
-					}
-		    }
-		    return $user_id; 
 		}
 		/**
 		 * //Article publish date

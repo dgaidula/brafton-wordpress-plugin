@@ -25,6 +25,12 @@ class Brafton_Validator {
 	 * Array
 	 */ 
 	public $trace; 
+
+	/**
+	 * Log validation results 
+	 * Bool $log
+	 */
+	public $log;
 	/**
 	 * Determins whether given value is valid.
 	 * 
@@ -32,10 +38,11 @@ class Brafton_Validator {
 	 * @param $type  
 	 * @return Bool $valid
 	 */
-	public function is_valid( $value, $type ){
+	public function is_valid( $value, $type, $log = null ){
 		$this->value = $value;
 		$this->type = $type;
 		$this->valid = false; 
+		$this->log = ( isset( $log ) ) ? $log : true; 
 		$this->trace = debug_backtrace();
 		switch ( $type ){
 			case 'url' :
@@ -69,7 +76,8 @@ class Brafton_Validator {
 			if( strpos( $this->value, 'http://' ) !== false || strpos( $this->value, 'https://' ) !== false )
 				$this->valid = true; 
 		} else {
-			brafton_log( array( 'message' => "Invalid url: " . $this->value . " . Validate url called by {$this->trace[1]['class']} :: {$this->trace[1]['function']} " ) );
+			if( $this->log )
+				brafton_log( array( 'message' => "Invalid url: " . $this->value . " . Validate url called by {$this->trace[1]['class']} :: {$this->trace[1]['function']} " ) );
 		}
 	} 
 	/**
@@ -80,7 +88,8 @@ class Brafton_Validator {
 			if( strpos( $this->value, 'file://' ) !== false )
 				$this->valid = true; 
 		} else {
-			brafton_log( array( 'message' => "Invalid file: " . $this->value . " . Validate file called by {$this->trace[1]['class']} :: {$this->trace[1]['function']} " ) );
+			if( $this->log )
+				brafton_log( array( 'message' => "Invalid file: " . $this->value . " . Validate file called by {$this->trace[1]['class']} :: {$this->trace[1]['function']} " ) );
 		}
 	}
 	/**
@@ -90,7 +99,8 @@ class Brafton_Validator {
 		if( gettype( $this->value ) === "string"  && $this->value->length !== null && $this->value->length !== '' ) { 
 			$this->valid = true;
 		} else{
-			brafton_log( array( 'message' => 'Invalid string: ' . $this->value . ". Validate string called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
+			if( $this->log )
+				brafton_log( array( 'message' => 'Invalid string: ' . $this->value . ". Validate string called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
 		}	 
 	}
 	/**
@@ -108,7 +118,8 @@ class Brafton_Validator {
 		    $errors = libxml_get_errors();
 
 		    foreach ( $errors as $error ) {
-		        brafton_log(  array( 'message' => "Invalid xml string. PHP resolved this error: " . display_xml_error( $error, $xml ) . " Validate xml called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
+				if( $this->log )
+		        	brafton_log(  array( 'message' => "Invalid xml string. PHP resolved this error: " . display_xml_error( $error, $xml ) . " Validate xml called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
 		    }
 
 		    libxml_clear_errors();
@@ -129,7 +140,8 @@ class Brafton_Validator {
 		    $errors = libxml_get_errors();
 
 		    foreach ( $errors as $error ) {
-		        brafton_log(  array( 'message' => "Invalid html string. PHP resolved this error: " . display_xml_error( $error, $xml ) . " Validate html called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
+				if( $this->log )
+		        	brafton_log(  array( 'message' => "Invalid html string. PHP resolved this error: " . display_xml_error( $error, $xml ) . " Validate html called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
 		    }
 
 		    libxml_clear_errors();
@@ -142,28 +154,55 @@ class Brafton_Validator {
 		if(preg_match("/^[a-zA-Z0-9]+$/", $this->value ) == 1) {
 			$this->valid = true; 
 		} else {
-			brafton_log( array( 'message' => 'Provided api key is invalid: ' . $this->value . " Api tokens only include: numbers 0-9, lower and uppercase letters, and hyphens" ) );
+			if( $this->log )
+				brafton_log( array( 'message' => 'Provided api key is invalid: ' . $this->value . " Api tokens only include: numbers 0-9, lower and uppercase letters, and hyphens" ) );
 		}
 	}
 	/**
 	 * Checks if a given display name matches any registered wordpress users.
+	 * 
+	 * returns $user_id on successs and false on failure to find user. 
 	 * @param String $byline
+	 * @return Mixed $user_id
 	 */
 	protected function validate_user( $byline ){
-		$blogusers = get_users( array( 'fields' => array( 'display_name' ) ) );
+		//find this blog's users who have authorship rights.
+		$blog_id = get_current_blog_id();
+	    $args = array(  'blog_id' => $blog_id, 
+	                    'orderby' => 'display_name',
+	                    'who' => 'authors',
+	        );
+	    $blogusers = get_users( $args );
+	    //Byline field contains only first or last name. 
+	    // compare each user with byLine field.
 		foreach ( $blogusers as $user ) {
-			if( $user->display_name == $this->value ) { 
-				brafton_log( array( 'message' => $this->value . " is a registered " .  get_bloginfo() .  " blog user" ) );
+	    	$first_or_last = stripos( $user->display_name, $this->value );
+
+			//we have a direct match.
+			if( $user->display_name === $this->value ) { 
+				$user_id = $user->ID; 
+				$author_set = true; 
+				if( $this->log )
+					brafton_log( array( 'message' => $this->value . " is a registered " .  get_bloginfo() .  " blog user" ) );
 				$this->valid = true; 
-				return true;
 			} 
+	        //the byLine is just first or last name and this 
+	        //substring is found in User display name
+			elseif( gettype( $first_or_last ) == 'integer' )
+			{
+				$user_id = $user->ID; 
+				if( $this->log )
+					brafton_log( array( 'message' => $this->value . " is a registered " .  get_bloginfo() .  " blog user" ) );
+				$this->valid = true; 
+			}
 		}
+		//Return false and log result if logger is not disabled.
 		if( ! $this->valid ) { 
-			brafton_log( array( 'message' => $this->value . ' display name does not match any registered wordpress users for this blog: ' . get_bloginfo() ) );
+			if( $this->log )
+				brafton_log( array( 'message' => $this->value . ' display name does not match any registered wordpress users for this blog: ' . get_bloginfo() ) );
 			return false;
 		}
+		return $user_id;
 	}
-
-
 }
 ?>
