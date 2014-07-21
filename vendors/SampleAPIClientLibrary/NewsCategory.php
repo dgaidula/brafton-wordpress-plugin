@@ -33,6 +33,7 @@ class NewsCategory {
             $c->name = $n->getElementsByTagName("name")->item(0)->textContent;
             $catList[]=$c;
         }
+        // if $caList is empty article has no categories
         return $catList;
     }
     

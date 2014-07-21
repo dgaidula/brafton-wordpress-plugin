@@ -1,7 +1,7 @@
 <?php
 	include_once ( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPIClientLibrary/ApiHandler.php');
 	include_once ( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPIClientLibrary/marpro-utility.php');
-	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_xmlhandler_validator.php' );
+	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_article_validator.php' );
 	class Brafton_Article_Helper {
 		public $post_type;
 		public $brafton_options;
@@ -9,7 +9,7 @@
 		// Require Client Libraries 
 		function __construct( Brafton_Options $brafton_options ){
 			$this->brafton_options = $brafton_options;
-			$this->validator = new Brafton_XMLHandler_Validator();
+			$this->validator = new Brafton_Article_Validator();
 			$post_type = $this->brafton_options->options['brafton_article_post_type']; 
 			if( $this->brafton_options->options['brafton_article_post_type'] != "" )
 				$this->post_type = $post_type; 

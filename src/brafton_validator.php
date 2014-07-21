@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Brafton Inc.
- * Validator class for brafton wordpress plugin
+ * Validator class for brafton wordpress plugin. 
  */
 
 require_once( plugin_dir_path( __FILE__ ) . "/brafton_errors.php" );
@@ -19,7 +19,12 @@ class Brafton_Validator {
 	/**
 	 * Bool
 	 */
-	public $valid; 
+	public $valid;
+
+	/**
+	 * String
+	 */ 
+	public $brafton_id; 
 	/**
 	 * Stack Trace used to add helpful debug information to brafton log message
 	 * Array

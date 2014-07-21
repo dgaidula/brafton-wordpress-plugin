@@ -7,7 +7,7 @@
  * @package SamplePHPApi
  */
 include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_errors.php' );
-include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_xmlhandler_validator.php' );
+include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_article_validator.php' );
 class XMLHandler {
 	/** @var Document */
 	private $doc;
@@ -20,7 +20,7 @@ class XMLHandler {
 	 */
 	function __construct($url){
 
-		$this->validate = new Brafton_XMLHandler_Validator();
+		$this->validate = new Brafton_Article_Validator();
 		$this->count++;
 		if(!preg_match('/^http:\/\//', $url)){
 	      $url = 'file://' . $url;
@@ -82,10 +82,11 @@ class XMLHandler {
 		$value = '';
 		if( $result->length != null ){
 			$value = $this->doc->getElementsByTagName( $element )->item( 0 )->nodeValue;
-			//brafton_log( array( 'message' => 'Article '  . $element . ' : ' . $value ) );
 		} 
+		brafton_log( array( 'message' => 'Article '  . $element . ' : ' . $value ) );
+
 		//Add some helpful error reporting with validator class.
-		$this->validate->is_attribute( $value, $element );
+		$this->validate->is_found( $value, $element );
 
 		if( $result->length == null )
 			return null;
@@ -103,7 +104,7 @@ class XMLHandler {
 			exit;
 		}
 		$value = $this->doc->getElementsByTagName($element)->item(0)->getAttribute('href');
-		#brafton_log( array( 'message' => "Href value found on feed : " . $element . " value: "  . $value ) );
+		brafton_log( array( 'message' => "Href value found on feed : " . $element . " value: "  . $value ) );
 		return $value; 
 	}
 	/**
@@ -114,7 +115,7 @@ class XMLHandler {
 	function getAttributeValue($element, $attribute){
 		$value = $this->doc->getElementsByTagName($element)->item(0)->getAttribute($attribute);
 		
-		#brafton_log( array( 'message' => 'Attribute found on feed '  . $attribute . ' : value - ' . $value  . ' element : ' . $element ) );
+		brafton_log( array( 'message' => 'Attribute found on feed '  . $attribute . ' : value - ' . $value  . ' element : ' . $element ) );
 		return $value; 
 	}
 	/**
@@ -123,8 +124,7 @@ class XMLHandler {
 	 */
 	function getNodes($element){
 		return $this->doc->getElementsByTagName($element);
-		#$this->validate->is_attribute( $value, $element );
-		
+		#$this->validate->is_found( $value, $element );
 	}
 	/**
 	 * @param String $element

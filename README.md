@@ -1,7 +1,16 @@
 Brafton Content Importer
 ==================
+We have the feed why so many settings options. If you can figure out whether an option should be enabled based on feed, go ahead and make it happen silently. Makes use of redundant curl calls.
 
-We have the feed why so many settings options. If youc an figure out whether an option should be enabled based on feed, go ahead and make it happen.
+todo: 
+Remove unnecessary settings with validation. 
+Add priority to log errors in preparation for dynamic email alerts. 
+Add Video Validation class and validate video feed fields.
+Reassign brafton_log statements in article and video importer classes to validation class for readability.
+Add brafton content class to join duplicate code found in article and video classes.
+Make sure images are not duplicated.
+Clean up code for consistency.
+
 
 Dependencies: 
 PHP 5.3 or newer, cURL and DOMXML libraries, and MYSQL 5.0 database or newer. 

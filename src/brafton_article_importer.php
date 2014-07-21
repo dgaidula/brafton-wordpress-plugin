@@ -6,7 +6,7 @@ if ( !class_exists( 'Article_Importer' ) )
 	include_once 'brafton_taxonomy.php';
 	include_once 'brafton_image_handler.php';
 	include_once 'brafton_errors.php';
-	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_xmlhandler_validator.php' );
+	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_article_validator.php' );
 	
 	/**
 	 * @package WP Brafton Article Importer 
@@ -33,7 +33,7 @@ if ( !class_exists( 'Article_Importer' ) )
 			$this->brafton_tags = $brafton_tags; 
 			$this->brafton_article = $brafton_article; 
 			$this->brafton_image = $brafton_image;
-			$this->validator = new Brafton_XMLHandler_Validator();
+			$this->validator = new Brafton_Article_Validator();
 		}
 		/**
 		 * @uses Brafton_Article_Helper to retrieve an articles array containing NewsItem objects.
@@ -95,13 +95,11 @@ if ( !class_exists( 'Article_Importer' ) )
 					//Set Post Author
 					$post_author = $this->brafton_options->options['brafton_post_author']; 
 					if( isset( $by_line ) ) {
-						$user_id = $this->validator->is_attribute( $by_line, 'byline' );
+						$user_id = $this->validator->is_found( $by_line, 'byline' );
 
 						if( gettype( $user_id ) === 'integer' )
 							$post_author = $user_id; 
 					}
-
-					echo '$post_author is ' . $post_author;
 
 					$post_status = $this->brafton_options->options['brafton_post_status'];
 					//prepare single article meta data array

@@ -83,6 +83,7 @@ class Photo {
 			}
 			$photoList[] = $p;
 		}
+		// if photoList is empty we have no images 
 		return $photoList;
 	}
 	/**

@@ -154,6 +154,7 @@ class NewsItem	{
 				echo implode("<br />", $exceptionList) . "<br /><br />";
 			}
 		}
+		// if $newsList is empty we have no articles on feed validate.
 		return $newsList;
 	}
 	/** @return String **/
@@ -194,6 +195,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->categories = NewsCategory::getCategories($xh->getHrefValue(CATEGORIES));
 		}
+		// if $this->categories is empty we have no categories. validate
 		return $this->categories;
 	}
   
@@ -203,6 +205,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->keywords = $xh->getValue(KEYWORDS);
 		}
+		// if $this->keywords is empty we have no keywords validate
 		return $this->keywords;
   }
 	/** @return String **/
@@ -229,6 +232,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->photos = Photo::getPhotos($xh->getHrefValue(PHOTOS));
 		}
+		// if $this->photos is empty we have no images validate
 		return $this->photos;
 	}
 	/** @return String **/
@@ -245,6 +249,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->extract = $xh->getValue(EXTRACT);
 		}
+		// if $this->extract is empty we have no extract validate.
 		return $this->extract;
 	}
 	/** @return String **/
@@ -262,6 +267,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->byLine = $xh->getValue(BY_LINE);
 		}
+		// if $this->byLine is empty we have no byline validate
 		return $this->byLine;
 	}
 	/** @return String **/
@@ -287,6 +293,7 @@ class NewsItem	{
 			$this->state = $xh->getValue(STATE);
 			if(empty($this->state))throw new XMLNodeException("Element " . STATE . " for " . NEWS_LIST_ITEM . " with id: " . $this->id . "<br />\n");
 		}
+		// if $this->state is empty we have no post status validate.
 		return $this->state;
 	}
 	/** @return String **/
@@ -303,6 +310,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->htmlTitle = $xh->getValue(HTML_TITLE);
 		}
+		//If $this->htmlTitle is empty we have no title validate.
 		return $this->htmlTitle;
 	}
 	/** @return String **/
@@ -319,6 +327,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->htmlMetaKeywords = $xh->getValue(HTML_META_KEYWORDS);
 		}
+		// if $this->htmlMetaKeywords is empty we have no keywords validate
 		return $this->htmlMetaKeywords;
 	}
 	/** @return String **/
@@ -327,6 +336,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->htmlMetaLanguage = $xh->getValue(HTML_META_LANGUAGE);
 		}
+		// If $this->htmlMetaLanguage is empty we have no htmlMetaLanguage validate
 		return $this->htmlMetaLanguage;
 	}
 	/** @return String **/
@@ -335,6 +345,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->tags = $xh->getValue(TAGS);
 		}
+		//if $this->tags is empty we have no tags validate.
 		return $this->tags;
 	}
 	/** @return int **/

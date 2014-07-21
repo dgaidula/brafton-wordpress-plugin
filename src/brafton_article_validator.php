@@ -4,12 +4,15 @@
  * 
  * Validator class used to provide better log information when field attributes 
  * necessary for specific settings are not found in xml feed.
+ * 
+ * Also helps reduce article settings complexity by dynamically enabling 
+ * supported features if feed values are set properly.
  */
 include_once( plugin_dir_path( __FILE__ ) . '/brafton_errors.php' );
 include_once( plugin_dir_path( __FILE__ ) . '/admin/brafton_options.php' );
 include_once( plugin_dir_path( __FILE__ ) . '/brafton_validator.php' );
 include_once( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPICLientLibrary/NewsItem.php' );
-class Brafton_XMLHandler_Validator extends Brafton_Validator {
+class Brafton_Article_Validator extends Brafton_Validator {
 	/**
 	 * Brafton settings.
 	 */
@@ -21,8 +24,10 @@ class Brafton_XMLHandler_Validator extends Brafton_Validator {
 	function __construct(){
         $this->brafton_options = Brafton_options::get_instance();
 	}
-
-	public function is_attribute( $value, $type, $log = null ){
+	/**
+	 * This is the only cla
+	 */ 
+	public function is_found( $value, $type, $log = null ){
 		$this->value = $value;
 		$this->type = $type;
 		$this->valid = false; 
@@ -37,7 +42,7 @@ class Brafton_XMLHandler_Validator extends Brafton_Validator {
 			case 'photos' :
 				$this->validate_photos();
 			case 'categories' :
-				$this->validate_html();
+				$this->validate_categories();
 				break;
 			case 'tags' :
 				$this->validate_tags();
@@ -58,11 +63,10 @@ class Brafton_XMLHandler_Validator extends Brafton_Validator {
 		return $this->valid;
 	}
 	/**
-	 * Ensures byline field is enabled when dynamic
-	 * authorship is setting is enabled.
+	 * Validates byline field when dynamic
+	 * authorship setting is enabled.
 	 */ 
 	protected function validate_byline(){
-		brafton_log( array( 'message' => 'Validating byline ' . $this->value ) );
 		if( $this->brafton_options->options['enable_dynamic_authorship'] === 'on' && $this->value === '' ) {
 			if( $this->log )
 				brafton_log( array( 'message' => 'Dynamic authorship is enabled however, byline field is not active.' ) );
@@ -75,21 +79,20 @@ class Brafton_XMLHandler_Validator extends Brafton_Validator {
 		} 
 	}
 	/**
-	 * Makes sure images exist on the client's feed 
-	 * when images are enabled in Brafton Settings.
+	 * Validates photos field when images 
+	 * setting is enabled.
 	 * @todo
 	 */
 	protected function validate_photos(){
 	}
 	/**
-	 * Makes sure tags field exists on the client's feed 
-	 * when tags as tags are enabled in Brafton Settings.
+	 * Validates tags when tags field 
+	 * is enabled
 	 * @todo
 	 */
 	protected function validate_tags(){
 
 	}
-
 	/**
 	 * Makes sure keywords field exists on the client's feed
 	 * when keywords as tags are enabled in Brafton Settings.
@@ -107,13 +110,8 @@ class Brafton_XMLHandler_Validator extends Brafton_Validator {
 
 	}
 	/**
-	 * Makes sure html
-	 */ 
-	protected function validate_html(){
-
-	}
-	/**
 	 * Validates text field on the client's feed. 
+	 * Determins if post content is valid html.
 	 */
 	protected function validate_text(){
 
