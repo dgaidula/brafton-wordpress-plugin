@@ -75,7 +75,7 @@
 			$image_url = null;
 			$image_caption = null;
 
-			if( ! isset( $photos[0] ) || ! $this->validator->is_valid( $photos[0]->getLarge()->getUrl(), 'url' ) )
+			if( ! isset( $photos[0] ) || ! $this->validator->is_found( $photos[0]->getLarge()->getUrl(), 'url', null, null ) )
 				return false;
 
 				$image_url = $photos[0]->getLarge()->getUrl(); //necessary web request returns string

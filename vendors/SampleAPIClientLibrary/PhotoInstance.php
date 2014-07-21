@@ -13,11 +13,11 @@ class PhotoInstance  {
      */
     private $width; 
     /**
-     * @var int $width
+     * @var int $height
      */
     private $height;
     /**
-     * @var string $width
+     * @var string $url
      */
     private $url;
     /**

@@ -43,8 +43,8 @@ class Brafton_Validator {
 	 * @param $type  
 	 * @return Bool $valid
 	 */
-	public function is_valid( $value, $type, $log = null ){
-		$this->value = $value;
+	public function is_found( $value, $type, $log = null, $brafton_id ){
+		$this->value = ( gettype( $value ) === 'array' ) ? implode( " ", $value ) : $value;
 		$this->type = $type;
 		$this->valid = false; 
 		$this->log = ( isset( $log ) ) ? $log : true; 
@@ -70,6 +70,9 @@ class Brafton_Validator {
 			case 'user' :
 				$this->validate_user();
 				break; 
+			case 'state' :
+				$this->validate_state();
+				break;
 		}
 		return $this->valid;
 	}
@@ -100,13 +103,11 @@ class Brafton_Validator {
 	/**
 	 * Validates a given string.
 	 */
-	protected function validate_string( $element ){
-		if( gettype( $this->value ) === "string"  && $this->value->length !== null && $this->value->length !== '' ) { 
-			$this->valid = true;
-		} else{
-			if( $this->log )
-				brafton_log( array( 'message' => 'Invalid string: ' . $this->value . ". Validate string called by {$this->trace[1]['class']} :: {$this->trace[1]['function']}" ) );
-		}	 
+	protected function validate_string($value ){
+		if( isset( $value ) &&  $value !== "" && gettype( $value ) === "string" ) { 
+			return true;
+		} 
+		return false;
 	}
 	/**
 	 * Checks if given xml string is valid. 
@@ -137,7 +138,7 @@ class Brafton_Validator {
 		libxml_use_internal_errors(true);
 
 		$doc = new DOMDocument();
-		$doc::loadHTML( $this->value );
+		@$doc::loadHTML( $this->value );
 
 		if( $doc === true ) {
 			$this->valid = true;
@@ -170,7 +171,7 @@ class Brafton_Validator {
 	 * @param String $byline
 	 * @return Mixed $user_id
 	 */
-	protected function validate_user( $byline ){
+	protected function validate_user( ){
 		//find this blog's users who have authorship rights.
 		$blog_id = get_current_blog_id();
 	    $args = array(  'blog_id' => $blog_id, 
@@ -208,6 +209,13 @@ class Brafton_Validator {
 			return false;
 		}
 		return $user_id;
+	}
+	/**
+	 * Checks if post status is draft or live on feed. 
+	 */ 
+	protected function validate_state(){
+		$link = $this->brafton_options->get_article_link( $brafton_id );
+		brafton_log( array( 'message' => 'State ' . $this->value . sprintf( ' exists on the <a href="%s" target="_blank">feed</a>', $link ) ) );
 	}
 }
 ?>

@@ -6,6 +6,7 @@
  * Include Files
  */
 include_once 'PhotoInstance.php';
+include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_article_validator.php' );
 /**
  * class Photo models a photo object and has a static method to parse 
  * a set of photos and return them as a collection of Photo objects
@@ -43,7 +44,14 @@ class Photo {
 	 * @var String
 	 */
 	private $orientation;
-  
+  	/**
+  	 * @var String
+  	 */ 
+  	public $brafton_id;
+  	/**
+  	 * Brafton_Article_Validator obj
+  	 */ 
+  	public $validator;
   
   /**
 	 * @var String
@@ -54,36 +62,53 @@ class Photo {
 		$this->large = new PhotoInstance();
 		$this->hiRes = new PhotoInstance();
 		$this->custom = new PhotoInstance();
+		$this->validator = new Brafton_Article_Validator();
 	}
 	/**
 	 * @param String $url
 	 * @param int $id
+	 * @param String $brafton_id
 	 * @return Photo[]
 	 */
-	public static function getPhotos($url){
+	public static function getPhotos($url, $brafton_id = null){
 		$xh = new XMLHandler($url);
 		$photoItems = $xh->getNodes("photo");
 		$photoList  = array();
 		foreach($photoItems as $photoNode){
 			$p = new Photo();
+        	$p->brafton_id = ( isset( $brafton_id ) ) ? $brafton_id : null; 
+
 			$p->setId($photoNode->getElementsByTagName("id")->item(0)->textContent);
 			if( $photoNode->getElementsByTagName("htmlAlt")->length != 0 )
 				$p->setAlt($photoNode->getElementsByTagName("htmlAlt")->item(0)->textContent);
 			//$p->setOrientation($photoNode->getElementsByTagName("orientation")->item(0)->textContent);
-      $p->setCaption($photoNode->getElementsByTagName("caption")->item(0)->textContent);
+      		$p->setCaption($photoNode->getElementsByTagName("caption")->item(0)->textContent);
+
 			//set thumbnail pic and large pic
 			$photoInstancesNode = $photoNode->getElementsByTagName("instance");
 			foreach ($photoInstancesNode as $pi){
 				$type = $pi->getElementsByTagName("type")->item(0)->textContent;
 				/* @var $pi DomElement */
-				if( $type == "Thumbnail" || $type == "Small")$p->getThumb()->parsePhotoInstance($pi);
-				elseif ($type == "Large" || $type == "Medium")$p->getLarge()->parsePhotoInstance($pi);
-				elseif ($type == "HighRes")$p->getHiRes()->parsePhotoInstance($pi);
-				elseif ($type == "Custom")$p->getCustom()->parsePhotoInstance($pi);
+				if( $type == "Thumbnail" || $type == "Small"){
+					$p->getThumb()->parsePhotoInstance($pi);
+					$p->validator->is_found( $pi->getElementsByTagName("url")->item(0)->nodeValue, 'photo', null, $p->brafton_id );
+				} elseif ($type == "Large" || $type == "Medium") {
+					$p->getLarge()->parsePhotoInstance($pi);
+					//Validate image url
+					$p->validator->is_found( $pi->getElementsByTagName("url")->item(0)->nodeValue, 'photo', null, $p->brafton_id );
+				} elseif ($type == "HighRes"){ 
+					$p->getHiRes()->parsePhotoInstance($pi);
+					$p->validator->is_found( $pi->getElementsByTagName("url")->item(0)->nodeValue, 'photo', null, $p->brafton_id );
+				}elseif ($type == "Custom"){ 
+					$p->getCustom()->parsePhotoInstance($pi);
+					$p->validator->is_found( $pi->getElementsByTagName("url")->item(0)->nodeValue, 'photo', null, $p->brafton_id );
+				}
+
 			}
 			$photoList[] = $p;
 		}
 		// if photoList is empty we have no images 
+		// if $this->photos is empty we have no images validate
 		return $photoList;
 	}
 	/**

@@ -12,6 +12,8 @@ include_once( plugin_dir_path( __FILE__ ) . '/brafton_errors.php' );
 include_once( plugin_dir_path( __FILE__ ) . '/admin/brafton_options.php' );
 include_once( plugin_dir_path( __FILE__ ) . '/brafton_validator.php' );
 include_once( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPICLientLibrary/NewsItem.php' );
+include_once( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPICLientLibrary/NewsCategory.php' );
+include_once( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPICLientLibrary/PhotoInstance.php' );
 class Brafton_Article_Validator extends Brafton_Validator {
 	/**
 	 * Brafton settings.
@@ -27,20 +29,21 @@ class Brafton_Article_Validator extends Brafton_Validator {
 	/**
 	 * This is the only cla
 	 */ 
-	public function is_found( $value, $type, $log = null ){
+	public function is_found( $value, $type, $log = null, $brafton_id = null ){
 		$this->value = $value;
 		$this->type = $type;
 		$this->valid = false; 
 		$this->trace = debug_backtrace();
 		$this->log = ( isset( $log ) ) ? $log : true; 
-
+		$this->brafton_id = ( isset( $brafton_id ) ) ? $brafton_id : null;
 		switch ( $type ){
 			case 'byline' :
 				$user_id = $this->validate_byline();
 				return $user_id; 
 				break;
-			case 'photos' :
+			case 'photo' :
 				$this->validate_photos();
+				break;
 			case 'categories' :
 				$this->validate_categories();
 				break;
@@ -84,6 +87,23 @@ class Brafton_Article_Validator extends Brafton_Validator {
 	 * @todo
 	 */
 	protected function validate_photos(){
+		$link = $this->brafton_options->get_article_link( $this->brafton_id ) . '/photos';
+		if( $this->validate_string( $this->value ) ){
+			$this->valid = true;
+			if( $this->log )
+				brafton_log( array( 'message' => sprintf( '%s Photo <a href="%s" target="_blank">Instance</a> found on the <a href="%s" target="_blank">feed</a>', $this->type, $this->value, $link ) ) );
+		} else {
+			if( $this->log ) 
+				brafton_log( array( 'message' =>  sprintf( 'Photo not found on the <a href="%s" target="_blank">feed</a>', $link ) ) );
+		}
+	}
+	/**
+	 * Validates categories field when categories are enabled.
+	 * $this->value is NewsCategory Object
+	 */
+	protected function validate_categories(){
+		$link = $this->brafton_options->get_article_link( $this->brafton_id ) . '/categories';
+		brafton_log( array( 'message' => 'Category: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
 	}
 	/**
 	 * Validates tags when tags field 
@@ -91,7 +111,8 @@ class Brafton_Article_Validator extends Brafton_Validator {
 	 * @todo
 	 */
 	protected function validate_tags(){
-
+		$link = $this->brafton_options->get_article_link( $this->brafton_id );
+		brafton_log( array( 'message' => 'Tags: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
 	}
 	/**
 	 * Makes sure keywords field exists on the client's feed
@@ -99,7 +120,8 @@ class Brafton_Article_Validator extends Brafton_Validator {
 	 * @todo
 	 */
 	protected function validate_keywords(){
-
+		$link = $this->brafton_options->get_article_link( $this->brafton_id );
+		brafton_log( array( 'message' => 'Keywords: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
 	}
 	/**
 	 * Makes sure htmlMetaKeywords field exists on the client's
@@ -107,14 +129,16 @@ class Brafton_Article_Validator extends Brafton_Validator {
 	 * @todo
 	 */
 	protected function validate_htmlMetaKeywords(){
-
+		$link = $this->brafton_options->get_article_link( $this->brafton_id );
+		brafton_log( array( 'message' => 'Html Meta Keywords: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
 	}
 	/**
 	 * Validates text field on the client's feed. 
 	 * Determins if post content is valid html.
 	 */
 	protected function validate_text(){
-
+		$link = $this->brafton_options->get_article_link( $this->brafton_id );
+		brafton_log( array( 'message' => 'Article Content: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
 	}
 }
 ?>

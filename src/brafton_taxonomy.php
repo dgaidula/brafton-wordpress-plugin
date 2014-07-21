@@ -29,7 +29,7 @@
 				$term_array = $this->insert_video_terms( $client, $brafton_id );
 			}
 			if( $terms ){ 
-				brafton_log( array( 'message' => "Preparing to insert items in the following taxonomy " . $taxonomy . " items: " . var_export( $terms, true ) ) );
+				#brafton_log( array( 'message' => "Preparing to insert items in the following taxonomy " . $taxonomy . " items: " . var_export( $terms, true ) ) );
 				foreach( $terms as $t )
 				{	
 					$term_name = $t->getName(); 

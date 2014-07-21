@@ -83,10 +83,10 @@ class XMLHandler {
 		if( $result->length != null ){
 			$value = $this->doc->getElementsByTagName( $element )->item( 0 )->nodeValue;
 		} 
-		brafton_log( array( 'message' => 'Article '  . $element . ' : ' . $value ) );
+		#brafton_log( array( 'message' => 'Article '  . $element . ' : ' . $value ) );
 
 		//Add some helpful error reporting with validator class.
-		$this->validate->is_found( $value, $element );
+		#$this->validate->is_found( $value, $element );
 
 		if( $result->length == null )
 			return null;

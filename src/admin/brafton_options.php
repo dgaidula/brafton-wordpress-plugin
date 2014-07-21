@@ -332,13 +332,13 @@
             $output = sprintf('<a href="%s/%snews">%s %s</a>', $url, $api_key, $product, $api_key  ); 
             return $output;   
         }
-        public function get_article_link()
+        public function get_article_link( $brafton_id = null )
         {
             $feed = $this->options['brafton_api_key'];
             $product = $this->options['brafton_domain'];
-            $post_id = get_the_ID();
-            $brafton_id = get_post_meta($post_id, 'brafton_id', true);
-            $feed_url = sprintf('http://%s%s/news/%s', $product, $feed, $brafton_id);
+            $post_id = ( isset( $brafton_id ) ) ? null : get_the_ID();
+            $brafton_id = ( isset( $brafton_id ) ) ? $brafton_id : get_post_meta($post_id, 'brafton_id', true );
+            $feed_url = sprintf('http://%s%s/news/%s', $product, $feed, $brafton_id );
             return $feed_url; 
         }
         public function get_sections()

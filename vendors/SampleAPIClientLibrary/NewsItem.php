@@ -8,6 +8,7 @@
 include_once 'NewsCategory.php';
 include_once 'Photo.php';
 include_once 'NewsComment.php';
+include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_article_validator.php' );
 /**
  * Constant Definitions for XML elements and attributes
  */
@@ -96,8 +97,11 @@ class NewsItem	{
 	private $categories;
 	/* @var NewsComment[] */
 	private $comments;
+
+	public $validator; 
 	/** @return NewsItem **/
 	function __construct(){
+		$this->validator = new Brafton_Article_Validator();
 	}
 	/** @return XMLHandler **/
 	private function getFullNewsXML(){
@@ -187,15 +191,15 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->headline = $xh->getValue(HEADLINE);
 		}
+		$this->validator->is_found( $this->headline, 'string', null, $this->id );
 		return $this->headline;
 	}
 	/** @return String **/
 	public function getCategories() {
 		if(empty($this->categories)){
 			$xh = $this->getFullNewsXML();
-			$this->categories = NewsCategory::getCategories($xh->getHrefValue(CATEGORIES));
+			$this->categories = NewsCategory::getCategories( $xh->getHrefValue(CATEGORIES), $this->id );
 		}
-		// if $this->categories is empty we have no categories. validate
 		return $this->categories;
 	}
   
@@ -206,6 +210,7 @@ class NewsItem	{
 			$this->keywords = $xh->getValue(KEYWORDS);
 		}
 		// if $this->keywords is empty we have no keywords validate
+		$this->validator->is_found( $this->keywords, 'keywords', null, $this->id );
 		return $this->keywords;
   }
 	/** @return String **/
@@ -230,9 +235,9 @@ class NewsItem	{
 	public function getPhotos() {
 		if(empty($this->photos)){
 			$xh = $this->getFullNewsXML();
-			$this->photos = Photo::getPhotos($xh->getHrefValue(PHOTOS));
+			$this->photos = Photo::getPhotos( $xh->getHrefValue(PHOTOS), $this->id );
 		}
-		// if $this->photos is empty we have no images validate
+		
 		return $this->photos;
 	}
 	/** @return String **/
@@ -250,6 +255,7 @@ class NewsItem	{
 			$this->extract = $xh->getValue(EXTRACT);
 		}
 		// if $this->extract is empty we have no extract validate.
+		$this->validator->is_found( $this->extract, 'string', null, $this->id );
 		return $this->extract;
 	}
 	/** @return String **/
@@ -259,6 +265,7 @@ class NewsItem	{
 			$this->text = $xh->getValue(TEXT);
 			//if(empty($this->text))throw new XMLNodeException("Element " . TEXT . " for " . NEWS_LIST_ITEM . " with id: " . $this->id . "<br />\n");
 		}
+		$this->validator->is_found( $this->text, 'html', null, $this->id );
 		return $this->text;
 	}
 	/** @return String **/
@@ -268,6 +275,7 @@ class NewsItem	{
 			$this->byLine = $xh->getValue(BY_LINE);
 		}
 		// if $this->byLine is empty we have no byline validate
+		$this->validator->is_found( $this->byLine, 'byline', null, $this->id );
 		return $this->byLine;
 	}
 	/** @return String **/
@@ -294,6 +302,7 @@ class NewsItem	{
 			if(empty($this->state))throw new XMLNodeException("Element " . STATE . " for " . NEWS_LIST_ITEM . " with id: " . $this->id . "<br />\n");
 		}
 		// if $this->state is empty we have no post status validate.
+		$this->validator->is_found( $this->byLine, 'state', null, $this->id );
 		return $this->state;
 	}
 	/** @return String **/
@@ -328,6 +337,7 @@ class NewsItem	{
 			$this->htmlMetaKeywords = $xh->getValue(HTML_META_KEYWORDS);
 		}
 		// if $this->htmlMetaKeywords is empty we have no keywords validate
+		$this->validator->is_found( $this->htmlMetaKeywords, 'htmlMetaKeywords', null, $this->id );
 		return $this->htmlMetaKeywords;
 	}
 	/** @return String **/
@@ -346,6 +356,7 @@ class NewsItem	{
 			$this->tags = $xh->getValue(TAGS);
 		}
 		//if $this->tags is empty we have no tags validate.
+		$this->validator->is_found( $this->tags, 'tags', null, $this->id );
 		return $this->tags;
 	}
 	/** @return int **/
