@@ -11,9 +11,9 @@
 include_once( plugin_dir_path( __FILE__ ) . '/brafton_errors.php' );
 include_once( plugin_dir_path( __FILE__ ) . '/admin/brafton_options.php' );
 include_once( plugin_dir_path( __FILE__ ) . '/brafton_validator.php' );
-include_once( dirname( plugin_dir_path( __FILE__ ) ) . '/vendors/SampleAPICLientLibrary/NewsItem.php' );
-include_once( dirname( plugin_dir_path( __FILE__ ) ) . '/vendors/SampleAPICLientLibrary/NewsCategory.php' );
-include_once( dirname( plugin_dir_path( __FILE__ ) ) . '/vendors/SampleAPICLientLibrary/PhotoInstance.php' );
+include_once( dirname( plugin_dir_path( __FILE__ ) ) . '/vendors/SampleAPIClientLibrary/NewsItem.php' );
+include_once( dirname( plugin_dir_path( __FILE__ ) ) . '/vendors/SampleAPIClientLibrary/NewsCategory.php' );
+include_once( dirname( plugin_dir_path( __FILE__ ) ) . '/vendors/SampleAPIClientLibrary/PhotoInstance.php' );
 class Brafton_Article_Validator extends Brafton_Validator {
 	/**
 	 * Brafton settings.

@@ -27,11 +27,42 @@ jQuery( document ).ready( function() {
 	    return pane;
 	}
 
+
+	function hide_video_cta_options(){
+		jQuery(".settings-form-row:nth-of-type(7)").hide();
+		jQuery(".settings-form-row:nth-of-type(8)").hide();
+		jQuery(".settings-form-row:nth-of-type(9)").hide();
+		jQuery(".settings-form-row:nth-of-type(10)").hide();
+		jQuery(".settings-form-row:nth-of-type(11)").hide();
+		jQuery(".settings-form-row:nth-of-type(12)").hide();
+	}
+	/**
+	 * Importer status dialog
+	 */
 	if ( jQuery('#dialog').children().length > 0 ) { 
 		jQuery(function() {
 			/** Status dialog box. */
 	   		jQuery( "#dialog" ).dialog( { modal: true,  minWidth: 800, title: "Brafton Import Status" } );
 	   	});
     }
+
+
+    jQuery('.brafton-video-player:nth-of-type(2)').click( function() { 
+		hide_video_cta_options();
+    	});
+
+      jQuery('.brafton-video-player:nth-of-type(1)').click( function() { 
+			jQuery(".settings-form-row:nth-of-type(7)").show();
+			jQuery(".settings-form-row:nth-of-type(8)").show();
+			jQuery(".settings-form-row:nth-of-type(9)").show();
+			jQuery(".settings-form-row:nth-of-type(10)").show();
+			jQuery(".settings-form-row:nth-of-type(11)").show();
+			jQuery(".settings-form-row:nth-of-type(12)").show();
+
+    	});
+
+      if ( jQuery("input[name='brafton_options[brafton_video_player]']:nth-of-type(2)").attr("checked", "checked")){
+      	hide_video_cta_options();
+      }
  
 } );

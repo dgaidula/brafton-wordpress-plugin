@@ -347,8 +347,8 @@
             $sections = array(
                 'brafton-article-section' => 'Articles', 
                 'brafton-video-section' => 'Videos', 
-                'brafton-advanced-section' => 'Advanced', 
-                'brafton-developer-section' => 'Developers',
+                'brafton-advanced-section' => 'General', 
+                'brafton-developer-section' => 'Advanced',
                 ); 
             return $sections;
         }

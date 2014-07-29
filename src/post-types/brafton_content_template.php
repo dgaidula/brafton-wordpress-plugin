@@ -93,11 +93,14 @@ if(!class_exists('Brafton_Article_Template'))
             
     		if( isset($_POST['post_type']) == $this->post_type_id && current_user_can('edit_post', $post_id))
     		{
-    			foreach($this->_meta as $field_name)
-    			{
-    				// Update the post's meta field
-    				update_post_meta($post_id, $field_name, $_POST[$field_name]);
-    			}
+
+                if( isset( $this->_meta['brafton_id'] ) ){ 
+        			foreach($this->_meta as $field_name)
+        			{
+        				// Update the post's meta field
+        				update_post_meta($post_id, $field_name, $_POST[$field_name]);
+        			}
+                }
     		}
     		else
     		{

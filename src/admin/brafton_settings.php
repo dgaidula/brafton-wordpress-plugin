@@ -57,13 +57,13 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
             );
             add_settings_section(
                 'brafton_advanced_section', 
-                'Advanced Settings', 
+                'General Settings', 
                 array( &$this, 'settings_section_brafton_advanced' ), 
                 'WP_Brafton_Article_Importer'
             );
             add_settings_section(
                 'brafton_developer_section', 
-                'Developer Settings', 
+                'Advanced Settings', 
                 array( &$this, 'settings_section_brafton_developer' ), 
                 'WP_Brafton_Article_Importer'
             );
@@ -83,7 +83,7 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
         {
             add_settings_field(
                 'WP_Brafton_Article_Importer_brafton_import_article', 
-                'Articles', 
+                'Article Importing', 
                 array( &$this->brafton_fields, 'render_radio' ), 
                 'WP_Brafton_Article_Importer', 
                 'brafton_article_section',
@@ -151,7 +151,7 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
         {
             add_settings_field(
                 'WP_Brafton_Article_Importer_brafton_enable_video', 
-                'Videos', 
+                'Video Importing', 
                 array( &$this->brafton_fields, 'render_radio' ), 
                 'WP_Brafton_Article_Importer', 
                 'brafton_video_section',
@@ -186,7 +186,7 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
             );
             add_settings_field(
                 'WP_Brafton_Article_Importer_brafton_video_feed_num', 
-                'Feed Number', 
+                'Feed ID', 
                 array( &$this->brafton_fields, 'settings_field_input_text' ),  
                 'WP_Brafton_Article_Importer', 
                 'brafton_video_section',
@@ -532,7 +532,7 @@ if( !class_exists('WP_Brafton_Article_Importer_Settings' ) )
                 $error_page = add_submenu_page( 
                     'WP_Brafton_Article_Importer', 
                     'Brafton Errors', 
-                    'Error Log', 
+                    'Status Log', 
                     'edit_files', 
                     'brafton_errors', 
                     array( &$this, 'brafton_errors_page' ) 
