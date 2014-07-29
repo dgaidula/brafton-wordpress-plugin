@@ -45,16 +45,16 @@ class Brafton_Article_Validator extends Brafton_Validator {
 				$this->validate_photos();
 				break;
 			case 'categories' :
-				$this->validate_categories();
+				$this->validate_tags();
 				break;
 			case 'tags' :
 				$this->validate_tags();
 				break; 
 			case 'keywords' :
-				$this->validate_keywords();
+				$this->validate_tags();
 				break; 
 			case 'htmlMetaKeywords' :
-				$this->validate_htmlMetaKeywords();
+				$this->validate_string_text();
 				break; 
 			case 'html' :
 				$this->validate_html(); 
@@ -62,7 +62,10 @@ class Brafton_Article_Validator extends Brafton_Validator {
 			case 'text' :
 				$this->validate_text();
 				break;
-		}
+			case 'headline' : 
+				$this->validate_string_text();
+				break;
+		}		
 		return $this->valid;
 	}
 	/**
@@ -94,51 +97,32 @@ class Brafton_Article_Validator extends Brafton_Validator {
 				brafton_log( array( 'message' => sprintf( '%s Photo <a href="%s" target="_blank">Instance</a> found on the <a href="%s" target="_blank">feed</a>', $this->type, $this->value, $link ) ) );
 		} else {
 			if( $this->log ) 
-				brafton_log( array( 'message' =>  sprintf( 'Photo not found on the <a href="%s" target="_blank">feed</a>', $link ) ) );
+				brafton_log( array( 'message' =>  sprintf( 'Photo not found on the <a href="%s" target="_blank">feed</a> %s', $link, $this->value ) ) );
 		}
 	}
+
 	/**
-	 * Validates categories field when categories are enabled.
-	 * $this->value is NewsCategory Object
-	 */
-	protected function validate_categories(){
-		$link = $this->brafton_options->get_article_link( $this->brafton_id ) . '/categories';
-		brafton_log( array( 'message' => 'Category: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
-	}
-	/**
-	 * Validates tags when tags field 
-	 * is enabled
-	 * @todo
+	 * Determins whether to use catetgories, tags, or keywords as tags
+	 * @return String $this->type
 	 */
 	protected function validate_tags(){
 		$link = $this->brafton_options->get_article_link( $this->brafton_id );
-		brafton_log( array( 'message' => 'Tags: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
-	}
-	/**
-	 * Makes sure keywords field exists on the client's feed
-	 * when keywords as tags are enabled in Brafton Settings.
-	 * @todo
-	 */
-	protected function validate_keywords(){
-		$link = $this->brafton_options->get_article_link( $this->brafton_id );
-		brafton_log( array( 'message' => 'Keywords: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
-	}
-	/**
-	 * Makes sure htmlMetaKeywords field exists on the client's
-	 * feed when dynamic cta's are enabled.
-	 * @todo
-	 */
-	protected function validate_htmlMetaKeywords(){
-		$link = $this->brafton_options->get_article_link( $this->brafton_id );
-		brafton_log( array( 'message' => 'Html Meta Keywords: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
-	}
-	/**
-	 * Validates text field on the client's feed. 
-	 * Determins if post content is valid html.
-	 */
-	protected function validate_text(){
-		$link = $this->brafton_options->get_article_link( $this->brafton_id );
-		brafton_log( array( 'message' => 'Article Content: ' . $this->value . sprintf( ' exist on the <a href="%s" target="_blank">feed</a>', $link ) ) );
+
+		$option = $this->brafton_options->options['brafton_enable_tags'];
+		if( $option === $this->type ) {
+				$tag_option_exists_on_feed = $this->validate_string( $this->value );
+			if( $tag_option_exists_on_feed ) { 
+				brafton_log( array( 'message' => sprintf( 'Using %s as tags for this <a href="%s" target="_blank">article.</a>', $this->type, $link ) ) );
+				return $this->type;
+			} elseif( !$tag_option_exists_on_feed ) { 
+				brafton_log( array( 'message' => sprintf( 'Brafton %s as tags is enabled but there are no %s for this <a href="%s" target="_blank">article - %s </a>.', $option, $this->type, $link, $this->value ) ) );
+				return false;
+			}else { 
+				brafton_log( array('message' => 'Tags setting disabled.') );
+				return false;
+			}
+		}
+		
 	}
 }
 ?>

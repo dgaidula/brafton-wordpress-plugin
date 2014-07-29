@@ -114,3 +114,8 @@
 .tab-pane  { display: none; }
 .tab-pane-active { display: block; }
 .simplePagerNav li { display: inline; padding-right: 5px; }
+
+.importer-status {
+	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+	font-size: 62.5%;
+}

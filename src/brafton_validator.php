@@ -109,6 +109,15 @@ class Brafton_Validator {
 		} 
 		return false;
 	}
+	protected function validate_string_text( $string = null ){
+		if( isset( $string ) ) $this->value = $string; 
+		$link = $this->brafton_options->get_article_link( $this->brafton_id );
+		if( $this->validate_string( $this->value ) )
+			brafton_log( array( 'message' => sprintf( '%s %s found on the <a href="%s" target="_blank">feed</a>', $this->type, $this->value, $link ) ) );
+		else
+			brafton_log( array( 'messsage' => sprintf( '%s field not set on the feed for this <a href="%s" target="_blank">article</a>', $this->type, $link ) ) );
+
+	}
 	/**
 	 * Checks if given xml string is valid. 
 	 */

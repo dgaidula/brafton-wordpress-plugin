@@ -2,6 +2,8 @@
 	include_once ( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPIClientLibrary/ApiHandler.php');
 	include_once ( plugin_dir_path( __FILE__ ) . '../vendors/SampleAPIClientLibrary/marpro-utility.php');
 	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_article_validator.php' );
+	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_hooks.php' );
+
 	class Brafton_Article_Helper {
 		public $post_type;
 		public $brafton_options;
@@ -69,6 +71,7 @@
 				$article_array['edit_date']  = true; 
 			}
 			$post_id = marpro_wp_update_post( $article_array ); 
+			brafton_article_update_hook( $post_id, $article_array, $this->brafton_options );
 			return $post_id;
 		}
 		/**
@@ -164,6 +167,7 @@
 				
 				//add custom meta field so we can find the article again later.
 				update_post_meta( $post_id, 'brafton_id', $brafton_id );
+				brafton_log( array( 'message' => sprintf( 'Successfully imported article "<a href="%s" target="_blank">%s</a>".', get_edit_post_link( $post_id ), get_the_title( $post_id ) ), 'priority' => 2 ) );
 			}
 			else
 			{
@@ -172,10 +176,9 @@
 					$post_id = $this->update_post( $article_array, $post_exists ); 
 				
 			}
-			if( is_wp_error( $post_id) )
+			if( is_wp_error( $post_id ) ){ 
 				brafton_log( array( 'message' => 'Failed to import article with brafton_id: ' . $brafton_id . ' titled: ' . $article_array['post_title'] . '. WP returned error: ' . $post_id->get_error_message() ) );
-			else
-				brafton_log( array( 'message' => 'Successfully imported article with brafton_id: ' . $brafton_id . ' titled: ' . $article_array['post_title'] ) );
+			}
 			
 			return $post_id;
 			//not returning post_id here because if post already exists and overwrite 

@@ -25,6 +25,8 @@
 		public function get_terms( $terms = null, $taxonomy, $video = null, $brafton_id = null, $client = null )
 		{
 			$term_array = array(); 
+			//When terms is a string convert it to an array.
+
 			if( isset( $video ) ){
 				$term_array = $this->insert_video_terms( $client, $brafton_id );
 			}
@@ -63,6 +65,22 @@
 					$term_id = wp_insert_term( sanitize_text_field( $term_name ), $taxonomy);
 				}
 				return $term_id;
+		}
+		/**
+		 * Inserts terms when given array of strings.
+		 * 
+		 *  @param $terms[String]
+		 */
+		public function insert_terms( $terms, $taxonomy )
+		{
+			if( count( $terms ) > 0 ) { 
+				$terms_array = array();
+				foreach( $terms as $term ){ 
+					$terms_array[] = $this->insert_term( $term, $taxonomy ); 	
+				}
+				return $terms_array;
+			}
+			return false; 
 		}
 		/**
 		 * Retrieves custom terms from options table. Returns Array of custom terms. 

@@ -19,7 +19,7 @@ class NewsCategory {
      * @var String
      */
     private $name;
-    public $validator;
+    private $validator;
 
     public $brafton_id; 
     function __construct(){

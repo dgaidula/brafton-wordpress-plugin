@@ -62,6 +62,7 @@
                     )
                 {
                     brafton_initialize_log( 'brafton_error_log' );
+
                     continue;
                 }    
                 $brafton_options[$key] = $value;

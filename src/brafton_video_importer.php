@@ -32,6 +32,12 @@ class Brafton_Video_Importer
 	public function import_videos()
 	{
 		$video_articles = $this->brafton_video->get_video_articles();
+
+		if ( empty( $video_array) ){ 
+				brafton_log( array( 'message'=>  "No videos found on the feed. Check to see if any exist: " ) );
+				return;
+		}
+
 		$categories = $this->brafton_video->adfero_client->Categories();
 		foreach( $video_articles->items as $video )
 		{
@@ -81,7 +87,7 @@ class Brafton_Video_Importer
 					'images' => $this->brafton_image, 
 					'taxonomy' => $this->brafton_cats 
 					);
-    			do_action( 'brafton_video_custom_hook', $post_id, $video_article, $brafton_helper_classes  );
+    			brafton_video_save_hook( 'brafton_video_custom_hook', $post_id, $video_article, $brafton_helper_classes  );
 			}
 			else{
 				 	brafton_log( array( 'message' => 'Video already exists and overwrite is disabled. Video Title: ' . get_the_title( $post_exists ) . " Post ID: " . $post_exists ) );

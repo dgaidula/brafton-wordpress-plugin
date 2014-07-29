@@ -9,6 +9,7 @@ include_once 'NewsCategory.php';
 include_once 'Photo.php';
 include_once 'NewsComment.php';
 include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_article_validator.php' );
+include_once( plugin_dir_path( __FILE__ ) . '../../src/brafton_errors.php' );
 /**
  * Constant Definitions for XML elements and attributes
  */
@@ -89,8 +90,8 @@ class NewsItem	{
 	private $priority;
 	/* @var String */
 	private $format;
-  /* @var String */
-  private $keywords;
+  	/* @var String */
+  	private $keywords;
 	/* @var photos[] */
 	private $photos;
 	/* @var NewsCategory[] */
@@ -191,7 +192,7 @@ class NewsItem	{
 			$xh = $this->getFullNewsXML();
 			$this->headline = $xh->getValue(HEADLINE);
 		}
-		$this->validator->is_found( $this->headline, 'string', null, $this->id );
+		$this->validator->is_found( $this->headline, 'headline', null, $this->id );
 		return $this->headline;
 	}
 	/** @return String **/
@@ -205,11 +206,10 @@ class NewsItem	{
   
   /** @return String **/
   public function getKeywords() {
-    if(empty($this->categories)){
+    if(empty($this->keywords)){
 			$xh = $this->getFullNewsXML();
 			$this->keywords = $xh->getValue(KEYWORDS);
 		}
-		// if $this->keywords is empty we have no keywords validate
 		$this->validator->is_found( $this->keywords, 'keywords', null, $this->id );
 		return $this->keywords;
   }

@@ -25,6 +25,7 @@ if( !class_exists( 'WP_Brafton_Article_Importer' ) )
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_video_helper.php' );
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_video_importer.php' );
     include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_validator.php' );
+    include_once( plugin_dir_path( __FILE__ ) . '/src/brafton_hooks.php' );
     class WP_Brafton_Article_Importer
     {   
         public $brafton_options; 
@@ -206,6 +207,7 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
             {   
                 //Grab saved options.
                 $brafton_options = Brafton_options::get_instance();
+
                 //If article importing is disabled - do nothing
                 if( $brafton_options->options['brafton_import_articles'] === 'off' ) {
                         brafton_log( array( 'message' => "Article importing is disabled." ) );
@@ -219,7 +221,6 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                 //if brafton error reporting is enabled - log importing.
                 brafton_log( array( 'message' => 'Starting to import articles.' ) );
                 
-                
                 $validator = new Brafton_Validator();
                 $brafton_cats = new Brafton_Taxonomy( $brafton_options );
                 $brafton_tags = new Brafton_Taxonomy( $brafton_options );
@@ -232,7 +233,22 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                     $brafton_article, 
                     $brafton_options
                     );
+                //run anything attached to this hook.
+                brafton_before_article_import_hook( $brafton_article_importer );
+                $log = array(
+                        'count' => 0, //number of reports stored. Empty initially.
+                        'limit' => 2000, //ingeger -limit log entries capacity
+                        'priority' => 0, //0 - log entries only when brafton errors enabled; 1 -log entries always
+                        'entries' => array() //array of report objects
+                    );
+                brafton_initialize_log( 'brafton_import_status', $log );
+
+                //Import articles.
                 $brafton_article_importer->import_articles();
+                //run anything attached to this hook.
+                brafton_after_article_import_hook( $brafton_article_importer );
+
+                echo brafton_render_log( array(2), 'brafton_import_status' );
                 //Schedule importer to run the next hour.
                 brafton_schedule_import();
             }
@@ -265,8 +281,9 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
                         $brafton_video, 
                         $brafton_options 
                         );
+                    brafton_before_video_import_hook( $brafton_video_importer );
                     $brafton_video_importer->import_videos();
-                    
+                    brafton_before_video_import_hook( $Brafton_Video_Importer );
                     //Schedule importer.
                     brafton_schedule_import();
             }

@@ -159,6 +159,7 @@ class Brafton_Video_Helper
 		$height = ( isset( $cta ) ) ? $height : $this->height; 
 		$video_cta = ( isset( $cta ) ) ? $cta :  $this->get_cta();
 
+		brafton_video_embed_hook( $brafton_id, $width, $height, $presplash, $video_cta );
 		if ( $player == 'atlantis' )
 		{
 			$this->embed_code = <<<EOT
@@ -360,6 +361,7 @@ EOT;
 			$video_article_array['edit_date']  = true; 
 		//Update the article
 		$post_id = wp_update_post( $video_article_array ); 
+		brafton_video_update_hook( $post_id, $video_article_array, $this->brafton_options );
 		return $post_id;
 	}
 	/**
@@ -409,7 +411,7 @@ EOT;
 		if( is_wp_error( $post_id) )
 			brafton_log( array( 'message' => 'Failed to import video with brafton_id: ' . $brafton_id . ' titled: ' . $video_article_array['post_title'] . ". WP could't resolve this error: " . $post_id->get_error_message() ) );
 		else
-			brafton_log( array( 'message' => 'Successfully imported video with brafton_id: ' . $brafton_id . ' titled: ' . $video_article_array['post_title'] ) );
+			brafton_log( array( 'message' => sprintf( 'Successfully imported video "<a href="%s" target="_blank">%s</a>".', get_edit_post_link( $post_id ), get_the_title( $post_id ) ), 'priority' => 2 ) );
 		return $post_id;
 					
 	}

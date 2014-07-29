@@ -10,6 +10,7 @@ Reassign brafton_log statements in article and video importer classes to validat
 Add brafton content class to join duplicate code found in article and video classes.
 Make sure images are not duplicated.
 Clean up code for consistency.
+add update setting to settings page
 
 
 Dependencies: 

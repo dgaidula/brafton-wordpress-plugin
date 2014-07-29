@@ -7,6 +7,7 @@ if ( !class_exists( 'Article_Importer' ) )
 	include_once 'brafton_image_handler.php';
 	include_once 'brafton_errors.php';
 	include_once ( plugin_dir_path( __FILE__ ) . '/brafton_article_validator.php' );
+	include_once 'brafton_hooks.php';
 	
 	/**
 	 * @package WP Brafton Article Importer 
@@ -50,8 +51,10 @@ if ( !class_exists( 'Article_Importer' ) )
 		public function import_articles(){
 			//Retrieve articles from feed
 			$article_array = $this->brafton_article->get_articles();
-			if ( empty( $article_array) )
+			if ( empty( $article_array) ) { 
 				brafton_log( array( 'message'=>  "No articles found on the feed. Check to see if any exist: " . $this->brafton_options->article_list() ) );
+				return;
+			}
 			//Retrieve article import log
 			foreach( $article_array as $a ){
 				//Get article meta data from feed
@@ -59,7 +62,6 @@ if ( !class_exists( 'Article_Importer' ) )
 				$post_exists = $this->brafton_article->exists( $brafton_id );
 				if( $post_exists == false || $this->brafton_options->options['brafton_overwrite'] == 'on' )
 				{
-					brafton_log( array( 'message' => 'Attempting to import article with brafton_id: ' . $brafton_id ) );
 					$post_date = $this->brafton_article->get_publish_date( $a ); 
 					$post_title = $a->getHeadline();
 					$post_content = $a->getText(); 
@@ -77,19 +79,22 @@ if ( !class_exists( 'Article_Importer' ) )
 						$post_category = $this->brafton_cats->get_terms( $cats, 'category', null, $brafton_id );  
 					}
 					//prepare article tag id array
+					//prepare article tag id array
 					if( $this->brafton_options->options['brafton_enable_tags'] != "none" ){
 						switch ( $this->brafton_options->options['brafton_enable_tags'] ){
 							case 'tags' :
-								$tags = $a->getTags();
+								$tags = explode( ', ', $a->getTags() );
+								$tags_input = $this->brafton_tags->insert_terms( $tags, 'post_tag' );
 								break;
 							case 'categories' : 
 								$tags = $cats;
+								$tags_input = $this->brafton_tags->get_terms( $tags, 'post_tag', null, $brafton_id );
 								break;
 							case 'keywords' :
-								$tags = $a->getKeywords();
+								$tags = explode( ', ', $a->getKeywords() );
+								$tags_input = $this->brafton_tags->insert_terms( $tags, 'post_tag' );
 								break;
 						}
-						$tags_input = $this->brafton_tags->get_terms( $tags, 'post_tag', null, $brafton_id );
 					}
 
 					//Set Post Author
@@ -139,11 +144,11 @@ if ( !class_exists( 'Article_Importer' ) )
 					'images' => $this->brafton_image, 
 					'taxonomy' => $this->brafton_cats 
 					);
-	        		do_action( 'brafton_article_custom_hook', $post_id, $article, $brafton_helper_classes );
+	        		brafton_article_save_hook( $post_id, $article, $brafton_helper_classes );
 				}
 				else{
-				 	brafton_log( array( 'message' => 'Article already exists and overwrite is disabled. Check the ' . get_post_type( $post_exists ) . " post type in your wp_posts table. Article Title: " . get_the_title( $post_exists ) . " Post ID: " . $post_exists ) );
-				 } 
+				 	brafton_log( array( 'message' => sprintf('Article "<a href="%s" target="_blank">%s</a>" already exists and overwrite is disabled.', get_edit_post_link( $post_exists ), get_the_title( $post_exists ) )  ) );
+				} 
 			}
 		}
 	}

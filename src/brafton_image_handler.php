@@ -55,7 +55,7 @@
 			if ( $images_array == false ) return;
 			if( $this->brafton_options->options['brafton_overwrite'] == 'on' )
 				$attachment_id = $this->update_image( $images_array, $post_id ); 
-			
+
 			else
 				$attachment_id = $this->download_image( $images_array, $post_id ); 
 			return $attachment_id;
@@ -91,7 +91,7 @@
 		 * @return Array images_array['image_id', 'image_caption', 'image_url']
 		 */
 		private function get_video_images( $photos, $scale_axis, $scale, $brafton_id ){
-			
+
 			$photoURI = "http://pictures.video.brafton.com/v2/";
 			$photoClient = new AdferoPhotoClient( $photoURI );
 			$thisPhotos = $photos->ListForArticle($brafton_id, 0, 100);
@@ -107,7 +107,7 @@
 			$images_array = compact( 'image_id', 'image_url' );
 			if( array_key_exists( 'caption', $photos->Get( $thisPhotos->items[0]->id )->fields ) )
 				$image_array['image_caption'] = $photos->Get( $thisPhotos->items[0]->id )->fields['caption'];
-			 	
+
 			return $images_array; 
 		}
 		/**
@@ -151,7 +151,7 @@
 									'post_excerpt' => $images_array['image_caption'],
 									'alt' => 'inherit', 
 								);
-		   
+
 		    // validate and store the image.  
 		    $attachment_id = media_handle_sideload( $file_array, $post_id, $images_array['image_caption'], $attachment );
 		    add_post_meta( $post_id, '_thumbnail_id', $attachment_id );

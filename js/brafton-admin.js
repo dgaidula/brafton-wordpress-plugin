@@ -26,4 +26,12 @@ jQuery( document ).ready( function() {
 	    var pane = '.tab-pane:nth-of-type( '+index+' )';
 	    return pane;
 	}
+
+	if ( jQuery('#dialog').children().length > 0 ) { 
+		jQuery(function() {
+			/** Status dialog box. */
+	   		jQuery( "#dialog" ).dialog( { modal: true,  minWidth: 800, title: "Brafton Import Status" } );
+	   	});
+    }
+ 
 } );

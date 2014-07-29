@@ -2,7 +2,7 @@
 /**
  * 
  * Plugin error handling and import failure debugging methods. 
- * Developer option Errors must be enabled to use these.
+ * Developer option Errors must be enabled in plugin settings to use these.
  * @author Ali <techsupport@brafton.com>
  * @package Brafton Importer
  * 
@@ -20,7 +20,7 @@ function brafton_log( $report ) {
     $brafton_default_report = array(
                         'option' => 'brafton_error_log', //option name errors are stored in wp
                         'notice' => '',  //admin notice message
-                        'priority' => 0, //0 - log only when brafton errors enabled; 1- log regardless if errors are enabled
+                        'priority' => 0, //priority
                         'message' => '',  //log entry message.
                     );
     // Parse and merge given $report with $defaults
@@ -41,6 +41,11 @@ function brafton_log( $report ) {
             case 1: 
                 add_brafton_log_entry( $log, $report );
                 break;
+            case 2: 
+                $log = get_option( 'brafton_import_status' );
+                $report['option'] = 'brafton_import_status'; 
+                add_brafton_log_entry( $log, $report );
+                break; 
         }
     }    
 	else 
@@ -84,7 +89,7 @@ function add_brafton_log_entry($log, $report) {
  */
 function brafton_initialize_log($option, $log = NULL ){
     //retrieve old log if one exists.
-    $log = get_option( $option , $log );
+    $log = ( isset($log) )? $log : get_option( $option , $log );
     $brafton_default_log = array(
                             'count' => 0, //number of reports stored. Empty initially.
                             'limit' => 2000, //ingeger -limit log entries capacity
@@ -97,4 +102,22 @@ function brafton_initialize_log($option, $log = NULL ){
     $option_value =  update_option( $option, $log );
 }
 
+/**
+ * Display errors from a specific priority.
+ * @param $priority[int]
+ * @param String $log_option 
+ */ 
+function brafton_render_log( $priority = array( 0 ), $log_option ){
+    $log = get_option( $log_option );
+    $count = count(  $log['entries'] ); 
+    $output = '<ul id="dialog" class="brafton-import-status">';
+    foreach( $log['entries'] as $entry ) : $count--; 
+        if( in_array( $entry['priority'], $priority ) ){ 
+
+            $output .= sprintf( '<li class="error-%s">%s</li>', $count, substr($entry['message'], ($pos = strpos($entry['message'], ' - ')) !== false ? $pos + 1 : 0) );
+        }
+    endforeach; 
+    $output .= "</ul>";
+    return $output;
+}
 ?>
