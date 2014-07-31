@@ -124,7 +124,7 @@ if ( !class_exists( 'Article_Importer' ) )
 						unset( $article['post_date'] );
 
 
-					if( isset( $tags_input ) ){
+					if( $tags_input !== false ){
 						$article['tags_input'] = $tags_input;
 
 					}
