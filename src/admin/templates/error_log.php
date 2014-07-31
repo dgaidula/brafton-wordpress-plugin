@@ -7,7 +7,7 @@
  ?>
 <div class="wrap">
 	<div class="brafton-error-page">
-		<h1>Brafton Error Log</h1>
+		<h1>Brafton Importer Status Log</h1>
 		<ul class="brafton-errors">
 		<?php $count = count( $log_entries ); foreach( $log_entries as $entry ) : $count--; ?>
 		 		<li ="error-<?php echo $count ?>">
