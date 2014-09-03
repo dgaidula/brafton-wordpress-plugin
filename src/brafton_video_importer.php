@@ -33,7 +33,7 @@ class Brafton_Video_Importer
 	{
 		$video_articles = $this->brafton_video->get_video_articles();
 
-		if ( empty( $video_array) ){ 
+		if ( empty( $video_articles) ){ 
 				brafton_log( array( 'message'=>  "No videos found on the feed. Check to see if any exist: " ) );
 				return;
 		}
