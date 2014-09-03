@@ -11,9 +11,9 @@
 	class Brafton_Image_Handler {
 		public $brafton_options;
 		public $validator; 
-		function __construct( $brafton_options, Brafton_Validator $validator ){
+		function __construct( $brafton_options ){
 			$this->brafton_options = $brafton_options;
-			$this->validator = $validator; 
+			//$this->validator = $validator; 
 		}
 		/**
 		 * Removes attached image and adds new post thumnail image to  an article.
