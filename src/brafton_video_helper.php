@@ -11,7 +11,7 @@ class Brafton_Video_Helper
 	private $video_out_client; 
 	public $adfero_video_client; 
 	public $adfero_client; 
-	private $base_url = 'http://api.video.brafton.com/v2/';
+	private $base_url = 'http://livevideo.api.brafton.com/v2/';
 	private $mp4;
 	private $ogg;
 	private $flv;

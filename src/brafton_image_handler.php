@@ -92,7 +92,7 @@
 		 */
 		private function get_video_images( $photos, $scale_axis, $scale, $brafton_id ){
 
-			$photoURI = "http://pictures.video.brafton.com/v2/";
+			$photoURI = "http://pictures.brafton.com/v2/";
 			$photoClient = new AdferoPhotoClient( $photoURI );
 			$thisPhotos = $photos->ListForArticle($brafton_id, 0, 100);
 			//If Video doesn't include an image.
