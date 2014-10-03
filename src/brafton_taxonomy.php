@@ -92,17 +92,17 @@
 		 */
 		public function get_custom_terms(  $taxonomy )
 		{
+			$options = get_option( 'brafton_options' );
 			$option = 'brafton_custom_' . $taxonomy;
-			
-			if ( $option == 'brafton_custom_category' && isset( $this->brafton_options->options['brafton_custom_category'] ) ) 
-				$custom_terms = $this->brafton_options->options['brafton_custom_category'];
-			if ( $option == 'brafton_custom_post_tag' && isset( $this->brafton_options->options['brafton_custom_post_tag'] ) )
+			if ( $option == 'brafton_custom_category' && isset( $options['brafton_custom_category'] ) ) 
+				$custom_terms = $options[$option];
+			if ( $option == 'brafton_custom_post_tag' && isset( $options['brafton_custom_post_tag'] ) )
 				$custom_terms = $this->brafton_options->options['brafton_custom_post_tag']; 
 			if( !isset( $custom_terms ) )
 				return false;	
 
 			//do a pattern match later.			
-			$terms = explode( ' ', $custom_terms );
+			$terms = explode( ', ', $custom_terms );
 			brafton_log( array( 'message' => "Preparing to insert items in the following taxonomy " . $taxonomy . " items: " . var_export( $terms, true ) ) );
 			foreach( $terms as $t )
 			{
