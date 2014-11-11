@@ -6,8 +6,8 @@
 /**
  * Change a brafton post after successfully added to wp.
  */
-function brafton_article_save_hook( $post_id, $article, $brafton_helper_classes ) {
-	do_action( 'brafton_article_custom_hook', $post_id, $article, $brafton_helper_classes );
+function brafton_article_save_hook( $post_id, $article, $brafton_helper_classes, $a ) {
+	do_action( 'brafton_article_custom_hook', $post_id, $article, $brafton_helper_classes, $a );
 }
 /**
  * Change a brafton video after successfully added to wp
