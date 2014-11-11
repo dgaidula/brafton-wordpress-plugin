@@ -144,7 +144,7 @@ if ( !class_exists( 'Article_Importer' ) )
 					'images' => $this->brafton_image, 
 					'taxonomy' => $this->brafton_cats 
 					);
-	        		brafton_article_save_hook( $post_id, $article, $brafton_helper_classes );
+	        		brafton_article_save_hook( $post_id, $article, $brafton_helper_classes, $a );
 				}
 				else{
 				 	brafton_log( array( 'message' => sprintf('Article "<a href="%s" target="_blank">%s</a>" already exists and overwrite is disabled.', get_edit_post_link( $post_exists ), get_the_title( $post_exists ) )  ) );
