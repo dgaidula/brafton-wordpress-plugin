@@ -38,7 +38,7 @@
 				{	
 					$term_name = $t->getName(); 
 					if( $term_name ){
-						$term_id = $this->insert_term( sanitize_title_for_query( $term_name ), $taxonomy );
+						$term_id = $this->insert_term(  $term_name, $taxonomy );
 						if( isset( $term_id) )
 						$term_array[] = $term_id;
 					}
@@ -57,7 +57,8 @@
 		}
 		public function insert_term( $term_name, $taxonomy )
 		{
-			$term = get_term_by( 'name', sanitize_text_field( $term_name ), $taxonomy );
+			$term = get_term_by( 'name', htmlspecialchars( $term_name ), $taxonomy );
+			brafton_log( array( 'message' => 'category: ' . htmlspecialchars( $term_name ) ) );
 				
 				//If term already exists	
 				if( ! $term == false ){ 
@@ -69,7 +70,7 @@
 					brafton_log( array( 'message' => 'Category' . $term_name . ' does not exist yet. Adding to db '));
 
 					// todo: check if term has a parent taxonomy.
-					$term_id = wp_insert_term( sanitize_text_field( $term_name, $taxonomy ) );
+					$term_id = wp_insert_term( sanitize_text_field( $term_name ), $taxonomy);
 
 					if( is_wp_error( $term_id ))
 						brafton_log( array( 'message' => "Couldn't add category " . $term_name . ". WordPress returned the following error. " . $term_id->get_error_message() )); 
@@ -92,6 +93,7 @@
 			}
 			return false; 
 		}
+
 		/**
 		 * Retrieves custom terms from options table. Returns Array of custom terms. 
 		 * If no terms are defined, returns false.
