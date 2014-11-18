@@ -27,26 +27,28 @@
 			$term_array = array(); 
 			//When terms is a string convert it to an array.
 
+			brafton_log( array( 'message' => "brafton categories on the feed: " . $this->print_cats($terms) ));
+
 			if( isset( $video ) ){
 				$term_array = $this->insert_video_terms( $client, $brafton_id );
 			}
-			if( $terms ){ 
+			elseif( ! empty( $terms )  ){ 
 				#brafton_log( array( 'message' => "Preparing to insert items in the following taxonomy " . $taxonomy . " items: " . var_export( $terms, true ) ) );
 				foreach( $terms as $t )
 				{	
 					$term_name = $t->getName(); 
 					if( $term_name ){
-						$term_id = $this->insert_term( $term_name, $taxonomy );
+						$term_id = $this->insert_term( sanitize_title_for_query( $term_name ), $taxonomy );
+						if( isset( $term_id) )
 						$term_array[] = $term_id;
 					}
-
 				}
 			}
 			else
 				brafton_log( array( 'message' => 'No ' . $taxonomy .' found for this article on the feed. Brafton ID: ' . $brafton_id ) );
 			 
 			$custom_terms = $this->get_custom_terms( $taxonomy );
-			if( $custom_terms == false ) {
+			if( $custom_terms == "" ) {
 				brafton_log( array( 'message' => ' Custom ' . $taxonomy . ' is not set. ') );
 				return $term_array;
 			}
@@ -56,13 +58,21 @@
 		public function insert_term( $term_name, $taxonomy )
 		{
 			$term = get_term_by( 'name', sanitize_text_field( $term_name ), $taxonomy );
+				
 				//If term already exists	
-				if( ! $term == false )
+				if( ! $term == false ){ 
 					$term_id = $term->term_id;
+					brafton_log( array( 'message' => 'Found category ' . $term_name . ". adding it to the post."));  
+				}
 				//Insert new term
 				else{
+					brafton_log( array( 'message' => 'Category' . $term_name . ' does not exist yet. Adding to db '));
+
 					// todo: check if term has a parent taxonomy.
-					$term_id = wp_insert_term( sanitize_text_field( $term_name ), $taxonomy);
+					$term_id = wp_insert_term( sanitize_text_field( $term_name, $taxonomy ) );
+
+					if( is_wp_error( $term_id ))
+						brafton_log( array( 'message' => "Couldn't add category " . $term_name . ". WordPress returned the following error. " . $term_id->get_error_message() )); 
 				}
 				return $term_id;
 		}
@@ -98,7 +108,7 @@
 				$custom_terms = $options[$option];
 			if ( $option == 'brafton_custom_post_tag' && isset( $options['brafton_custom_post_tag'] ) )
 				$custom_terms = $this->brafton_options->options['brafton_custom_post_tag']; 
-			if( !isset( $custom_terms ) )
+			if( $custom_terms == "" )
 				return false;	
 
 			//do a pattern match later.			
@@ -126,6 +136,19 @@
 				);
 				return $post_category;
 			}
+		}
+
+		/**
+		 * Helper function to log categories found on the feed.
+		 * @param array of category objects
+		 * @return string
+		 */
+		private function print_cats( $cats ){
+			$cats_string = '';
+			foreach( $cats as $c ){
+				$cats_string .=  $c->getName() . " "; 
+			}
+			return $cats_string; 
 		}
 	}	
 ?>
