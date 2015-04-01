@@ -308,7 +308,7 @@ if( class_exists( 'WP_Brafton_Article_Importer' ) )
         //support atlantisjs embed codes
         $player = $brafton_options->options['brafton_video_player'];
         switch( $player ) {
-            case $player = "atlantis":
+            case "atlantis":
                 wp_enqueue_script( 'jquery' );
                 wp_enqueue_script( 'atlantisjs', 'http://p.ninjacdn.co.uk/atlantisjs/v0.11.7/atlantis.js', array( 'jquery' ) );
                 //wp_enqueue_script( 'videojs', '//vjs.zencdn.net/4.3/video.js', array( 'jquery' ) );
